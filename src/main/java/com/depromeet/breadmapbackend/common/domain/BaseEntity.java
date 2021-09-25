@@ -1,4 +1,4 @@
-package com.depromeet.breadmapbackend.domain;
+package com.depromeet.breadmapbackend.common.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
