@@ -1,7 +1,7 @@
 package com.depromeet.breadmapbackend.filters.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
-import com.depromeet.breadmapbackend.domain.mapping.ReviewsFiltersMap;
+import com.depromeet.breadmapbackend.reviews.domain.ReviewsFiltersMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
