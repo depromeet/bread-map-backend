@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.reviews.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.breadShops.domain.BreadShops;
+import com.depromeet.breadmapbackend.common.domain.Images;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,5 +47,7 @@ public class Reviews extends BaseEntity {
     @Column(nullable = false)
     private Integer rating;
 
-    private List<String> reviewImgPaths = new ArrayList<>();
+    @OneToMany(mappedBy = "Reviews")
+    @JoinColumn(name = "image_id")
+    private List<Images> reviewImgPathList = new ArrayList<>();
 }
