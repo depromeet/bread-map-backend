@@ -1,16 +1,13 @@
 package com.depromeet.breadmapbackend.filters.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
+import com.depromeet.breadmapbackend.common.enumerate.FilterType;
 import com.depromeet.breadmapbackend.reviews.domain.ReviewsFiltersMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +25,9 @@ public class Filters extends BaseEntity {
     @Column(name = "filter_id")
     private Long id;
 
+    @Enumerated
     @Column(nullable = false)
-    private String type;
+    private FilterType filterType;
 
     @Column(nullable = false)
     private String name;
