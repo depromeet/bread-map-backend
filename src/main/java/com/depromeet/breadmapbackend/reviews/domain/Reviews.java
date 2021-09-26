@@ -48,6 +48,5 @@ public class Reviews extends BaseEntity {
     private Integer rating;
 
     @OneToMany(mappedBy = "Reviews")
-    @JoinColumn(name = "image_id")
     private List<Images> reviewImgPathList = new ArrayList<>();
 }

@@ -37,11 +37,9 @@ public class BreadShops extends BaseEntity {
     private String address;
 
     @OneToMany(mappedBy = "BreadShops")
-    @JoinColumn(name = "image_id")
     private List<Images> exteriorImgPathList = new ArrayList<>();
 
     @OneToMany(mappedBy = "BreadShops")
-    @JoinColumn(name = "image_id")
     private List<Images> interiorImgPathList = new ArrayList<>();
 
 }
