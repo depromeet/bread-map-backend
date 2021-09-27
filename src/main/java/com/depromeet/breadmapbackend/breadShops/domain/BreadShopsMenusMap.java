@@ -19,10 +19,10 @@ public class BreadShopsMenusMap extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bread_shops_id")
+    @JoinColumn(name = "bread_shop_id")
     private BreadShops breadShops;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menus_id")
+    @JoinColumn(name = "menu_id")
     private Menus menus;
 }
