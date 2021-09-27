@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.breadShops.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
+import com.depromeet.breadmapbackend.common.domain.Images;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +36,11 @@ public class BreadShops extends BaseEntity {
 
     private String address;
 
-    private List<String> exteriorImgPath = new ArrayList<>();
+    @OneToMany(mappedBy = "BreadShops")
+    private List<Images> exteriorImgPathList = new ArrayList<>();
 
-    private List<String> interiorImgPath = new ArrayList<>();
+    @OneToMany(mappedBy = "BreadShops")
+    private List<Images> interiorImgPathList = new ArrayList<>();
 
     @OneToMany(mappedBy = "BreadShops")
     private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();
