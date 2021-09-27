@@ -1,34 +1,28 @@
 package com.depromeet.breadmapbackend.breadShops.domain;
 
+
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menus extends BaseEntity {
+public class BreadShopsMenusMap extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menus_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bread_shops_id")
+    private BreadShops breadShops;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShop;
-
-    @OneToMany(mappedBy = "Menus")
-    private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();
-
-
+    @JoinColumn(name = "menus_id")
+    private Menus menus;
 }
