@@ -25,7 +25,7 @@ public class Menus extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShop;
+    private BreadShops breadShops;
 
     @OneToMany(mappedBy = "menus")
     private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();

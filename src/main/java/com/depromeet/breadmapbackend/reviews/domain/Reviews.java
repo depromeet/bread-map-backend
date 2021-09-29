@@ -32,11 +32,11 @@ public class Reviews extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Members member;
+    private Members members;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShop;
+    private BreadShops breadShops;
 
     @OneToMany(mappedBy = "reviews")
     private List<ReviewsFiltersMap> reviewsFiltersMaps = new ArrayList<>();
