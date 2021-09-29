@@ -47,5 +47,5 @@ public class Bakeries extends BaseEntity {
     private List<Images> interiorImgPathList = new ArrayList<>();
 
     @OneToMany(mappedBy = "bakeries")
-    private List<BakeriesMenusMap> breadShopsMenusMaps = new ArrayList<>();
+    private List<BakeriesMenusMap> bakeriesMenusMapList = new ArrayList<>();
 }

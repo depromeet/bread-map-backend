@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class BakeryDetailResponse {
 
-    private Long breadShopId;
-    private String breadShopName;
+    private Long bakeryId;
+    private String bakeryName;
     private String address;
     private Integer flagsCount;
     private List<String> exteriorImgPathList;

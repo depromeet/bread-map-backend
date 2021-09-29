@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BakeryListResponse {
 
-    private Long breadShopId;
-    private String breadShopName;
+    private Long bakeryId;
+    private String bakeryName;
     private Integer flagsCount;
     private Double latitude;
     private Double longitude;
