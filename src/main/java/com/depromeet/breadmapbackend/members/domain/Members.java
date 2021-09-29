@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.members.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.breadShops.domain.BreadShops;
+import com.depromeet.breadmapbackend.flags.domain.Flags;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,9 @@ public class Members extends BaseEntity {
 
     @OneToMany(mappedBy = "members")
     private List<BreadShops> breadShopsList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "members")
+    private List<Flags> flagsList = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;
