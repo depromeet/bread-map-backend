@@ -15,8 +15,8 @@ public class ModifyReviewsRequest {
     private Long reviewId;
     private String contents;
     private Integer rating;
-    private String filterName;
-    private FilterType filterType;
+    private List<FilterType> filterTypeList;
+    private List<String> filterNameList;
     private List<String> reviewImgPathList;
 
 }
