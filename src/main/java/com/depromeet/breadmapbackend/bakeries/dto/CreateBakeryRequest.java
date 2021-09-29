@@ -1,4 +1,4 @@
-package com.depromeet.breadmapbackend.breadShops.dto;
+package com.depromeet.breadmapbackend.bakeries.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.depromeet.breadmapbackend.breadShops.domain;
+package com.depromeet.breadmapbackend.bakeries.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.domain.Images;
@@ -16,17 +16,17 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class BreadShops extends BaseEntity {
+public class Bakeries extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bread_shop_id")
+    @Column(name = "bakery_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Members members;
 
-    @OneToMany(mappedBy = "breadShops")
+    @OneToMany(mappedBy = "bakeries")
     private List<Flags> flagsList = new ArrayList<>();
 
     @Column(nullable = false)
@@ -40,12 +40,12 @@ public class BreadShops extends BaseEntity {
 
     private String address;
 
-    @OneToMany(mappedBy = "breadShops")
+    @OneToMany(mappedBy = "bakeries")
     private List<Images> exteriorImgPathList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "breadShops")
+    @OneToMany(mappedBy = "bakeries")
     private List<Images> interiorImgPathList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "breadShops")
-    private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();
+    @OneToMany(mappedBy = "bakeries")
+    private List<BakeriesMenusMap> breadShopsMenusMaps = new ArrayList<>();
 }

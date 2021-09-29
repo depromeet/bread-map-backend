@@ -1,7 +1,7 @@
 package com.depromeet.breadmapbackend.reviews.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
-import com.depromeet.breadmapbackend.breadShops.domain.BreadShops;
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.domain.Images;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
@@ -35,8 +35,8 @@ public class Reviews extends BaseEntity {
     private Members members;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShops;
+    @JoinColumn(name = "bakery_id")
+    private Bakeries bakeries;
 
     @OneToMany(mappedBy = "reviews")
     private List<ReviewsFiltersMap> reviewsFiltersMaps = new ArrayList<>();

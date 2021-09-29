@@ -1,4 +1,4 @@
-package com.depromeet.breadmapbackend.breadShops.domain;
+package com.depromeet.breadmapbackend.bakeries.domain;
 
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
@@ -12,15 +12,15 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class BreadShopsMenusMap extends BaseEntity {
+public class BakeriesMenusMap extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShops;
+    @JoinColumn(name = "bakery_id")
+    private Bakeries bakeries;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
