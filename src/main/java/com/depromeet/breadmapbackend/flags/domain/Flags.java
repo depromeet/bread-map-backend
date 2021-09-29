@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.Entity;
 
-@Entity
+//@Entity
 @Getter
 public class Flags {
 }

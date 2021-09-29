@@ -36,12 +36,12 @@ public class BreadShops extends BaseEntity {
 
     private String address;
 
-    @OneToMany(mappedBy = "BreadShops")
+    @OneToMany(mappedBy = "breadShops")
     private List<Images> exteriorImgPathList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "BreadShops")
+    @OneToMany(mappedBy = "breadShops")
     private List<Images> interiorImgPathList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "BreadShops")
+    @OneToMany(mappedBy = "breadShops")
     private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();
 }

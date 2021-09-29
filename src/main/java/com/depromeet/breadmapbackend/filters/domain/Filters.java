@@ -32,6 +32,6 @@ public class Filters extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "Filters")
+    @OneToMany(mappedBy = "filters")
     private List<ReviewsFiltersMap> reviewsFiltersMapList = new ArrayList<>();
 }

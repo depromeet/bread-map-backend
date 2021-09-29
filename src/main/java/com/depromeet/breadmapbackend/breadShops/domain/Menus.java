@@ -27,7 +27,7 @@ public class Menus extends BaseEntity {
     @JoinColumn(name = "bread_shop_id")
     private BreadShops breadShop;
 
-    @OneToMany(mappedBy = "Menus")
+    @OneToMany(mappedBy = "menus")
     private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();
 
 

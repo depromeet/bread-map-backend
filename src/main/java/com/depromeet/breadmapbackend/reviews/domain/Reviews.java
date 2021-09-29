@@ -38,7 +38,7 @@ public class Reviews extends BaseEntity {
     @JoinColumn(name = "bread_shop_id")
     private BreadShops breadShop;
 
-    @OneToMany(mappedBy = "Reviews")
+    @OneToMany(mappedBy = "reviews")
     private List<ReviewsFiltersMap> reviewsFiltersMaps = new ArrayList<>();
 
     @Column(nullable = false)
@@ -47,6 +47,6 @@ public class Reviews extends BaseEntity {
     @Column(nullable = false)
     private Integer rating;
 
-    @OneToMany(mappedBy = "Reviews")
+    @OneToMany(mappedBy = "reviews")
     private List<Images> reviewImgPathList = new ArrayList<>();
 }
