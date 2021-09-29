@@ -1,4 +1,4 @@
-package com.depromeet.breadmapbackend.breadShops.domain;
+package com.depromeet.breadmapbackend.bakeries.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -24,11 +24,11 @@ public class Menus extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShops;
+    @JoinColumn(name = "bakery_id")
+    private Bakeries bakeries;
 
     @OneToMany(mappedBy = "menus")
-    private List<BreadShopsMenusMap> breadShopsMenusMaps = new ArrayList<>();
+    private List<BakeriesMenusMap> bakeriesMenusMapList = new ArrayList<>();
 
 
 }

@@ -1,6 +1,6 @@
 package com.depromeet.breadmapbackend.flags.domain;
 
-import com.depromeet.breadmapbackend.breadShops.domain.BreadShops;
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class Flags extends BaseEntity {
     private Members members;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bread_shop_id")
-    private BreadShops breadShops;
+    @JoinColumn(name = "bakery_id")
+    private Bakeries bakeries;
 
 }

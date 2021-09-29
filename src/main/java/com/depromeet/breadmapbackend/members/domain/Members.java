@@ -1,7 +1,7 @@
 package com.depromeet.breadmapbackend.members.domain;
 
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
-import com.depromeet.breadmapbackend.breadShops.domain.BreadShops;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,11 +22,11 @@ public class Members extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "member_id") // 임의로 이름 정했습니다!
+    @Column(name = "member_id")
     private Long id;
 
     @OneToMany(mappedBy = "members")
-    private List<BreadShops> breadShopsList = new ArrayList<>();
+    private List<Bakeries> bakeriesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "members")
     private List<Flags> flagsList = new ArrayList<>();
