@@ -13,7 +13,7 @@ import java.util.List;
 public class ReviewsListResponse {
 
     private Long reviewId;
-    private Long breadShopId;
+    private Long bakeryId;
     private String contents;
     private Integer rating;
     private List<FilterType> filterTypeList;

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateReviewsRequest {
 
-    private Long breadShopId;
+    private Long bakeryId;
     private String contents;
     private Integer rating;
     private List<FilterType> filterTypeList;

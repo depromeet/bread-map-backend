@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateFlagsRequest {
 
-    private Long breadShopId;
+    private Long bakeryId;
 
 }
