@@ -25,7 +25,7 @@ public class Filters extends BaseEntity {
     @Column(name = "filter_id")
     private Long id;
 
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private FilterType filterType;
 
