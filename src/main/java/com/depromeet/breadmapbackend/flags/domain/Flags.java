@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.flags.domain;
 
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
+import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,4 +28,7 @@ public class Flags extends BaseEntity {
     @JoinColumn(name = "bakery_id")
     private Bakeries bakeries;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private FlagType flagType;
 }
