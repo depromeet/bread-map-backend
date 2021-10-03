@@ -41,4 +41,6 @@ public class Members extends BaseEntity {
     private String email;
 
     private Integer breadTestResult;
+
+    // TODO memberType 생성 (ex> google:id_token)
 }
