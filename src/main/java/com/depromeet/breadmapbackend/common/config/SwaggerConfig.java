@@ -1,31 +1,20 @@
 package com.depromeet.breadmapbackend.common.config;
 
-import io.swagger.annotations.Info;
-import io.swagger.annotations.SwaggerDefinition;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Configuration
-//@Profile({"!prod"}) //TODO prod 환경에서 swagger가 동작하지 않도록 하기 위한 옵션(profile prod 지정 시, 404 에러 발생할 것이므로 에러 핸들링 필요)
+@Profile({"dev"}) //dev 환경에서만 Swagger 동작하도록 설정
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
