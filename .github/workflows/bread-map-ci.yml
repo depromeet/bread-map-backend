@@ -20,6 +20,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.POSTGRE_SQL_PASSWORD }}
       DB_PORT: 5432
 
+
     steps:
       - uses: actions/checkout@v2
 
