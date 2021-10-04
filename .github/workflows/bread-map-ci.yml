@@ -13,13 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DB_NAME: daedongbread
-      DB_HOST: ${{ secrets.POSTGRE_SQL_HOST }}
-      DB_USER: ${{ secrets.POSTGRE_SQL_USERNAME }}
-      DB_PASSWORD: ${{ secrets.POSTGRE_SQL_PASSWORD }}
-      DB_PORT: 5432
-
 
     steps:
       - uses: actions/checkout@v2
@@ -34,9 +27,9 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build -x test
-
-      - name: Test with Gradle
-        run: ./gradlew test
+#
+#      - name: Test with Gradle
+#        run: ./gradlew test
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
