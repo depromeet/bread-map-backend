@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:~/test
+    url: jdbc:h2:tcp://localhost/~/daedongBreadShop
     username: sa
     password:
     driver-class-name: org.h2.Driver
