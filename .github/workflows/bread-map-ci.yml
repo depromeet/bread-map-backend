@@ -25,6 +25,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Setup Database
+      - uses: harmon758/postgresql-action@v1
+        with:
+          character set server: 'utf8'
+          postgre database: 'daedongbread'
+          postgre user: ${{ secrets.POSTGRE_SQL_USERNAME }}
+          postgre password: ${{ secrets.POSTGRE_SQL_PASSWORD }}
+
       - name: Build with Gradle
         run: ./gradlew build -x test
 
