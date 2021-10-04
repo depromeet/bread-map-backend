@@ -13,6 +13,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DB_NAME: daedongbread
+      DB_HOST: ${{ secrets.POSTGRE_SQL_HOST }}
+      DB_USER: ${{ secrets.POSTGRE_SQL_USERNAME }}
+      DB_PASSWORD: ${{ secrets.POSTGRE_SQL_PASSWORD }}
+      DB_PORT: 5432
 
     steps:
       - uses: actions/checkout@v2
@@ -24,14 +30,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Setup Database
-        uses: harmon758/postgresql-action@v1
-        with:
-          character set server: 'utf8'
-          postgre database: 'daedongbread'
-          postgre user: ${{ secrets.POSTGRE_SQL_USERNAME }}
-          postgre password: ${{ secrets.POSTGRE_SQL_PASSWORD }}
 
       - name: Build with Gradle
         run: ./gradlew build -x test
