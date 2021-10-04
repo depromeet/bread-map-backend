@@ -1,8 +1,16 @@
 spring:
   profiles:
+    active: test
+
+  config:
+    import:
+      - optional:classpath:application-test.yml
+---
+spring:
+  profiles:
     active: dev
+    include: oauth
 
   config:
     import:
       - optional:classpath:application-dev.yml
-
