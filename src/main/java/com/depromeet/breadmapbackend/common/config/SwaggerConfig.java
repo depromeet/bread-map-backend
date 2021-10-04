@@ -38,19 +38,12 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket restAPI() {
-        List<ResponseMessage> responseMessageList = new ArrayList<>();
-        responseMessageList.add(new ResponseMessageBuilder().code(200).message("OK").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(500).message("Server Error").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(404).message("No Page").build());
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.depromeet.breadmapbackend")) // 대상 패키지 설정
                 .paths(PathSelectors.any()) // 모든 path에 대해 swagger 설정(security 필터 사용 시, swagger permitAll() 필요) TODO security 설정 시 해당 부분에 대해서는 예외 처리 필요
-                .build()
-                .useDefaultResponseMessages(false)
-                .globalResponseMessage(RequestMethod.GET, responseMessageList);
+                .build();
     }
 
     private ApiInfo apiInfo() {
