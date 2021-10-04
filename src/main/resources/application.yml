@@ -6,3 +6,7 @@ spring:
     import:
       - optional:classpath:application-dev.yml
 
+swagger-info:
+  title: Daedong BreadMap REST API
+  description: Depromeet 10th Team 7
+  version: 1.0.0
