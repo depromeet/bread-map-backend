@@ -21,7 +21,7 @@ public class AuthController {
     /**
      *
      * @param kakaoAuthRequest
-     * @return
+     * @return ResponseEntity
      */
     @PostMapping(value = "/kakao")
     public ResponseEntity kakaoAuthRequest(@RequestBody KakaoAuthRequest kakaoAuthRequest) {
