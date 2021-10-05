@@ -1,7 +1,1 @@
-spring:
-  profiles:
-    active: dev
 
-  config:
-    import:
-      - optional:classpath:application-dev.yml
