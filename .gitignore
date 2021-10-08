@@ -37,4 +37,5 @@ out/
 .vscode/
 
 ### Config ###
-application-dev.yml
+application-dev.ym
+application-oauth.yml
