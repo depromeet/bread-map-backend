@@ -2,3 +2,8 @@ spring:
   profiles:
       group:
         dev: dev, oauth
+
+---
+spring:
+  profiles:
+    active: test
