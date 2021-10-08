@@ -52,5 +52,12 @@ public class Members extends BaseEntity {
     @Column
     private Integer breadTestResult;
 
-    // TODO memberType 생성 (ex> google:id_token)
+    @Column(nullable = false)
+    private Long socialId; // social id
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberProvider memberProvider;
+
+    private String token;
 }

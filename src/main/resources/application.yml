@@ -1,1 +1,4 @@
-
+spring:
+  profiles:
+      group:
+        dev: dev, oauth
