@@ -3,8 +3,14 @@ spring:
       group:
         dev: dev, oauth
 
----
-spring:
-  profiles:
-    group:
-      test: test
+app:
+  auth:
+    tokenSecret: secretkeysecretkeysecretkey
+    tokenExpiry: 604800000 # 7일
+    refreshTokenExpiry: 7776000000 # 90일
+#
+#---
+#spring:
+#  profiles:
+#    group:
+#      test: test
