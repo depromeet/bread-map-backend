@@ -1,5 +1,10 @@
 package com.depromeet.breadmapbackend.auth.jwt;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +22,18 @@ public class AuthToken {
 
     private static final String AUTHORITIES_KEY = "role";
 
-    AuthToken(String id, Date expiry, Key key) {
+    AuthToken(Long socialId, Date expiry, Key key) {
         this.key = key;
-        this.token = createAuthToken(id, expiry);
+        this.token = createAuthToken(socialId, expiry);
     }
 
-    AuthToken(String id, String role, Date expiry, Key key) {
+    AuthToken(Long socialId, String role, Date expiry, Key key) {
         this.key = key;
-        this.token = createAuthToken(id, role, expiry);
+        this.token = createAuthToken(socialId, role, expiry);
     }
 
-    private String createAuthToken(String id, Date expiry) { // id: social id, name: nickname
+    private String createAuthToken(Long socialId, Date expiry) {
+        String id = String.valueOf(socialId);
         return Jwts.builder()
                 .setSubject(id)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -35,7 +41,8 @@ public class AuthToken {
                 .compact();
     }
 
-    private String createAuthToken(String id, String role, Date expiry) {
+    private String createAuthToken(Long socialId, String role, Date expiry) {
+        String id = String.valueOf(socialId);
         return Jwts.builder()
                 .setSubject(id)
                 .claim(AUTHORITIES_KEY, role)

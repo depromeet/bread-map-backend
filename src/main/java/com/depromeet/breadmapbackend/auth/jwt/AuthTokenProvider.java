@@ -1,9 +1,8 @@
 package com.depromeet.breadmapbackend.auth.jwt;
+
 import com.depromeet.breadmapbackend.auth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,24 +24,49 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AuthTokenProvider {
 
-    private Key key;
-    private String AUTHORITIES_KEY = "role";
+    @Value("${app.auth.tokenExpiry}")
+    private String expiry;
 
-    public AuthTokenProvider(String secret) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    @Value("${app.auth.refreshTokenExpiry}")
+    private String refreshExpiry;
+
+    private final Key key;
+    private static final String AUTHORITIES_KEY = "role";
+
+    public AuthTokenProvider(@Value("${app.auth.tokenSecret}") String secretKey) {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public AuthToken createAuthToken(String id, Date expiry) {
-        return new AuthToken(id, expiry, key);
+    public AuthToken createAppToken(Long id) {
+        return createToken(id, expiry);
     }
 
-    public AuthToken createAuthToken(String id, String role, Date expiry) {
-        return new AuthToken(id, role, expiry, key);
+    public AuthToken createRefreshToken(Long id) {
+        return createToken(id, refreshExpiry);
     }
 
     public AuthToken convertAuthToken(String token) {
         return new AuthToken(token, key);
     }
+
+    public static Date getExpiryDate(String expiry) {
+        return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
+    }
+
+//    public Claims getClaims(String token) {
+//        return Jwts.parserBuilder()
+//                .setSigningKey(secretKey)
+//                .build()
+//                .parseClaimsJwt(token)
+//                .getBody();
+//    }
+//
+//    public void verifyToken(String token) {
+//        Jwts.parserBuilder()
+//                .setSigningKey(secretKey)
+//                .build()
+//                .parseClaimsJwt(token);
+//    }
 
     public Authentication getAuthentication(AuthToken authToken) {
 

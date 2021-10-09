@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.auth.client;
 
 import com.depromeet.breadmapbackend.auth.dto.KakaoUserResponse;
 import com.depromeet.breadmapbackend.members.domain.Members;
+import com.depromeet.breadmapbackend.members.enumerate.MemberProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;

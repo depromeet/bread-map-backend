@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(value = {AuditingEntityListener.class})
-public class BaseEntity {
+public abstract class BaseEntity {
 
     // 임의로 이름 지정
     @CreatedDate
@@ -21,6 +21,6 @@ public class BaseEntity {
     private LocalDateTime createdDateTime;
 
     @LastModifiedDate
-    @Column(name = "lastModifiedDateTime")
+    @Column(name = "last_modified_date_time")
     private LocalDateTime lastModifiedDateTime;
 }

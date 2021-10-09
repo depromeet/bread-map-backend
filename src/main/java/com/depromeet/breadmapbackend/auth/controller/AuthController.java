@@ -1,13 +1,12 @@
 package com.depromeet.breadmapbackend.auth.controller;
 
 import com.depromeet.breadmapbackend.auth.dto.AuthRequest;
-import com.depromeet.breadmapbackend.auth.jwt.AuthTokenProvider;
+import com.depromeet.breadmapbackend.auth.dto.AuthResponse;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.members.service.MemberService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,32 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @Value("${app.auth.tokenSecret}")
-    private String secretKey;
-
-    @Value("{app.auth.tokenExpiry}")
-    private String expiry;
-
-    @Value("{app.auth.refreshTokenExpiry}")
-    private String refreshExpiry;
-
-    //private final AuthTokenProvider tokenProvider;
     private final static String REFRESH_TOKEN = "refresh_token";
-
     private final MemberService memberService;
-
-    private final AuthTokenProvider authTokenProvider;
 
     /**
      * 사용자 로그인 기능
      * @return ApiResponse<HttpStatus>
      */
     @ApiOperation(value = "카카오 로그인", notes = "카카오 엑세스 토큰을 이용하여 사용자 정보 받아 저장하고 앱의 토큰 반환")
-    @PostMapping(value = "/kakao") // 회원가입 또는 AppToken expire
-    public ApiResponse<HttpStatus> kakaoAuthRequest(@RequestBody AuthRequest authRequest) {
-        memberService.login(authRequest); // userinfo get + save + social id -> create token => return token to body
-        return ApiResponse.created(); // 201
+    @PostMapping(value = "/kakao")
+    public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestBody AuthRequest authRequest) {
+        return ApiResponse.created(memberService.login(authRequest));
     }
+
 
     /**
      * 개발예정
