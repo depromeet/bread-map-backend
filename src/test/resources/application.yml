@@ -1,5 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/daedongBreadShop
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
 app:
   auth:
-    tokenSecret: secretkeysecretkeysecretkey
+    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
     tokenExpiry: 604800000 # 7일
     refreshTokenExpiry: 7776000000 # 90일
