@@ -4,6 +4,7 @@ import com.depromeet.breadmapbackend.auth.dto.AuthRequest;
 import com.depromeet.breadmapbackend.auth.jwt.AuthTokenProvider;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.members.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,9 +36,9 @@ public class AuthController {
 
     /**
      * 사용자 로그인 기능
-     * @param authRequest
-     * @return ResponseEntity
+     * @return ApiResponse<HttpStatus>
      */
+    @ApiOperation(value = "카카오 로그인", notes = "카카오 엑세스 토큰을 이용하여 사용자 정보 받아 저장하고 앱의 토큰 반환")
     @PostMapping(value = "/kakao") // 회원가입 또는 AppToken expire
     public ApiResponse<HttpStatus> kakaoAuthRequest(@RequestBody AuthRequest authRequest) {
         memberService.login(authRequest); // userinfo get + save + social id -> create token => return token to body
