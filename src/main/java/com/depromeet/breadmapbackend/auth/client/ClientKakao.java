@@ -17,18 +17,13 @@ public class ClientKakao implements ClientProxy {
 
     @Override
     public Members getUserData(String accessToken) {
-        KakaoUserResponse kakaoUserResponse = webClient.get() // WebClient (HTTP GET)
+        KakaoUserResponse kakaoUserResponse = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .headers(h -> h.setBearerAuth(accessToken))
-                .retrieve() // response 어떻게 추출할지 명시하는데 사용
-                //.onStatus(HttpStatus::is4xxClientError, response -> ...) // TODO 에러 핸들링 필요 (WebClient deafult 4xx, 5xx: WebClientResponseException)
-                //.onStatus(HttpStatus::is5xxServerError, response -> ...)
-                .bodyToMono(KakaoUserResponse.class) // body부분 받아오기
-                .block(); // synchronous
-
-        log.info("KakaoUserResponse: " + kakaoUserResponse.getProperties().getNickname());
-        log.info("KakaoUserResponse: " + kakaoUserResponse.getKakaoAccount().getGender());
-        log.info("KakaoUserResponse: " + kakaoUserResponse.getKakaoAccount().getEmail());
+                .retrieve()
+                // TODO 에러 핸들링 필요 (WebClient default 4xx, 5xx: WebClientResponseException)
+                .bodyToMono(KakaoUserResponse.class)
+                .block();
 
         return Members.builder()
                 .socialId(kakaoUserResponse.getId())
