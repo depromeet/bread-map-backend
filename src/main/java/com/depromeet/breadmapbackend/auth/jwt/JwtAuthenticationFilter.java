@@ -24,14 +24,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain)  throws ServletException, IOException {
 
-        String tokenStr = JwtHeaderUtil.getAccessToken(request);
-        AuthToken token = tokenProvider.convertAuthToken(tokenStr);
+        final String authorizationHeader = request.getHeader("Authorization");
 
-        if (token.validate()) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        // TODO header에 bearer 있을때만 validate하도록
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String tokenStr = JwtHeaderUtil.getAccessToken(request);
+            AuthToken token = tokenProvider.convertAuthToken(tokenStr);
+
+            if (token.validate()) {
+                Authentication authentication = tokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
+            filterChain.doFilter(request, response);
         }
-
-        filterChain.doFilter(request, response);
     }
 }
