@@ -22,7 +22,7 @@ public class AuthController {
 
     /**
      * 사용자 로그인 기능
-     * @return ApiResponse<HttpStatus>
+     * @return ResponseEntity<AuthResponse>
      */
     @ApiOperation(value = "카카오 로그인", notes = "카카오 엑세스 토큰을 이용하여 사용자 정보 받아 저장하고 앱의 토큰 반환")
     @PostMapping(value = "/kakao")
@@ -35,7 +35,7 @@ public class AuthController {
      * 개발예정
      */
 //    @GetMapping("/refresh")
-//    public ApiResponse<AuthResponse> refreshToken (HttpServletRequest request, HttpServletResponse response) {
+//    public ResponseEntity<AuthResponse> refreshToken (HttpServletRequest request, HttpServletResponse response) {
 //        // access token 확인
 //        String accessToken = JwtHeaderUtil.getAccessToken(request);
 //        AuthToken authToken = authTokenProvider.convertAuthToken(accessToken);
@@ -62,10 +62,10 @@ public class AuthController {
 //
 //        // userId refresh token 으로 DB 확인
 //
-//                // expire calculate
+//        // expire calculate
 //
 //        // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
-//            // refresh 토큰 설정
+//        // refresh 토큰 설정
 //
 //            // DB에 refresh 토큰 업데이트
 //

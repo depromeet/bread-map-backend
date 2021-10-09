@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EnableJpaAuditing
 @EntityScan("com.depromeet.breadmapbackend")
 @EnableJpaRepositories("com.depromeet.breadmapbackend")
 public class BreadMapBackendApplication {

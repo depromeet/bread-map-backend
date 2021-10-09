@@ -17,11 +17,8 @@ public class ApiResponse<T> {
     private final ApiResponseHeader header;
     private final T body;
 
-    public static <T> ApiResponse<T> success(String name, T body) {
-        Map<String, T> map = new HashMap<>();
-        map.put(name, body);
-
-        return new ApiResponse(new ApiResponseHeader(SUCCESS, SUCCESS_MESSAGE), map);
+    public static <T> ResponseEntity<T> success(T body) {
+        return ResponseEntity.status(HttpStatus.OK).body(body);
     }
 
     public static <T> ResponseEntity<T> created(T body) {

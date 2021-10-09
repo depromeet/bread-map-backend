@@ -35,6 +35,7 @@ public class ClientKakao implements ClientProxy {
                 .name(kakaoUserResponse.getProperties().getNickname())
                 .email(kakaoUserResponse.getKakaoAccount().getEmail())
                 .gender(kakaoUserResponse.getKakaoAccount().getGender())
+                .memberProvider(MemberProvider.KAKAO)
                 .build();
     }
 }

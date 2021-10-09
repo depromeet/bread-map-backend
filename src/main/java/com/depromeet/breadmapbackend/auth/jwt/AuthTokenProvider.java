@@ -4,7 +4,7 @@ import com.depromeet.breadmapbackend.auth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@AllArgsConstructor
-@NoArgsConstructor
 public class AuthTokenProvider {
 
     @Value("${app.auth.tokenExpiry}")
@@ -35,6 +33,11 @@ public class AuthTokenProvider {
 
     public AuthTokenProvider(@Value("${app.auth.tokenSecret}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
+    public AuthToken createToken(Long id, String expiry) {
+        Date expiryDate = getExpiryDate(expiry);
+        return new AuthToken(id, expiryDate, key);
     }
 
     public AuthToken createAppToken(Long id) {
