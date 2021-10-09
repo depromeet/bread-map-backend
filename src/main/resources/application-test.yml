@@ -1,0 +1,5 @@
+app:
+  auth:
+    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+    tokenExpiry: 604800000 # 7일
+    refreshTokenExpiry: 7776000000 # 90일
