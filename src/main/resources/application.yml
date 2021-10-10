@@ -6,5 +6,4 @@ spring:
 app:
   auth:
     tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
-    tokenExpiry: 604800000 # 7일
-    refreshTokenExpiry: 7776000000 # 90일
+    tokenExpiry: 2592000000 # 30일
