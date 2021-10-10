@@ -1,6 +1,6 @@
-package com.depromeet.breadmapbackend.members.service;
+package com.depromeet.breadmapbackend.auth.service;
 
-import com.depromeet.breadmapbackend.auth.client.ClientKakao;
+import com.depromeet.breadmapbackend.auth.client.ClientGoogle;
 import com.depromeet.breadmapbackend.auth.dto.AuthRequest;
 import com.depromeet.breadmapbackend.auth.dto.AuthResponse;
 import com.depromeet.breadmapbackend.auth.jwt.AuthToken;
@@ -16,23 +16,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class GoogleAuthService {
 
-    private final ClientKakao clientKakao;
+    private final ClientGoogle clientGoogle;
     private final MemberQuerydslRepository memberQuerydslRepository;
     private final AuthTokenProvider authTokenProvider;
     private final MemberRepository memberRepository;
 
     @Transactional
     public AuthResponse login(AuthRequest authRequest) {
-        Members kakaoMember = clientKakao.getUserData(authRequest.getAccessToken());
-        Long socialId = kakaoMember.getSocialId();
+        Members googleMember = clientGoogle.getUserData(authRequest.getAccessToken());
+        String socialId = googleMember.getSocialId();
         Members member = memberQuerydslRepository.findBySocialId(socialId);
 
         AuthToken appToken = authTokenProvider.createUserAppToken(socialId);
 
         if (member == null) {
-            memberRepository.save(kakaoMember);
+            memberRepository.save(googleMember);
         }
 
         return AuthResponse.builder()
