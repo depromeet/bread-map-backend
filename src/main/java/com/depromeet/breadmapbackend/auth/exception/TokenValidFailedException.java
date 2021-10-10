@@ -6,7 +6,7 @@ public class TokenValidFailedException extends RuntimeException {
         super("Failed to generate Token.");
     }
 
-    private TokenValidFailedException(String message) {
+    public TokenValidFailedException(String message) {
         super(message);
     }
 }

@@ -17,11 +17,11 @@ public class KakaoUserResponse {
     private Properties properties;
     private KakaoAccount kakaoAccount;
 
-
     @ToString
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class Properties {
         private String nickname;
         private String profileImage;

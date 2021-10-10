@@ -13,8 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -31,8 +29,7 @@ public class MemberService {
         Long socialId = kakaoMember.getSocialId();
         Members member = memberQuerydslRepository.findBySocialId(socialId);
 
-        AuthToken appToken = authTokenProvider.createAppToken(socialId);
-        AuthToken refreshToken = authTokenProvider.createRefreshToken(socialId);
+        AuthToken appToken = authTokenProvider.createUserAppToken(socialId);
 
         if (member == null) {
             memberRepository.save(kakaoMember);
@@ -40,7 +37,6 @@ public class MemberService {
 
         return AuthResponse.builder()
                 .appToken(appToken.getToken())
-                .refreshToken(refreshToken.getToken())
                 .build();
     }
 }
