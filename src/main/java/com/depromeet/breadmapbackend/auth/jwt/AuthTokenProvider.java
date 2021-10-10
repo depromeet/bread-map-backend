@@ -26,9 +26,6 @@ public class AuthTokenProvider {
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
 
-    @Value("${app.auth.refreshTokenExpiry}")
-    private String refreshExpiry;
-
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
 
@@ -43,10 +40,6 @@ public class AuthTokenProvider {
 
     public AuthToken createUserAppToken(Long id) {
         return createToken(id, RoleType.USER, expiry);
-    }
-
-    public AuthToken createUserRefreshToken(Long id) {
-        return createToken(id, RoleType.USER, refreshExpiry);
     }
 
     public AuthToken convertAuthToken(String token) {

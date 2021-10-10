@@ -24,11 +24,9 @@ public class AuthService {
         Long socialId = Long.parseLong(claims.getSubject());
 
         AuthToken newAppToken = authTokenProvider.createUserAppToken(socialId);
-        AuthToken newRefreshToken = authTokenProvider.createUserRefreshToken(socialId);
 
         return AuthResponse.builder()
                 .appToken(newAppToken.getToken())
-                .refreshToken(newRefreshToken.getToken())
                 .build();
     }
 }

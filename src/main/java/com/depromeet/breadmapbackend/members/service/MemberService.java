@@ -30,7 +30,6 @@ public class MemberService {
         Members member = memberQuerydslRepository.findBySocialId(socialId);
 
         AuthToken appToken = authTokenProvider.createUserAppToken(socialId);
-        AuthToken refreshToken = authTokenProvider.createUserRefreshToken(socialId);
 
         if (member == null) {
             memberRepository.save(kakaoMember);
@@ -38,7 +37,6 @@ public class MemberService {
 
         return AuthResponse.builder()
                 .appToken(appToken.getToken())
-                .refreshToken(refreshToken.getToken())
                 .build();
     }
 }

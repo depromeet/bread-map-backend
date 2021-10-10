@@ -41,10 +41,10 @@ public class AuthController {
     }
 
     /**
-     * appToken & refreshToken 갱신
+     * appToken 갱신
      * @return ResponseEntity<AuthResponse>
      */
-    @ApiOperation(value = "appToken 갱신", notes = "refreshToken을 이용해서 appToken 갱신 후 appToken 및 신규 refreshToken 반환")
+    @ApiOperation(value = "appToken 갱신", notes = "appToken 갱신")
     @GetMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken (HttpServletRequest request) {
         String appToken = JwtHeaderUtil.getAccessToken(request);
