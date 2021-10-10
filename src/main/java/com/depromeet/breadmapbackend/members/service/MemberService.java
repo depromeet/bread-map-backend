@@ -37,7 +37,7 @@ public class MemberService {
         if (member == null) {
             memberRepository.save(kakaoMember);
         }
-
+        // TODO member != null이면서 정보 갱신(예: 동의항목 변경)시 update 코드 필요 (/refresh 완료 후 개발 예정)
         return AuthResponse.builder()
                 .appToken(appToken.getToken())
                 .refreshToken(refreshToken.getToken())
