@@ -1,6 +1,5 @@
 package com.depromeet.breadmapbackend.auth.dto;
 
-import com.depromeet.breadmapbackend.members.enumerate.MemberProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

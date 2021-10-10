@@ -5,8 +5,10 @@ import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.enumerate.MemberProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Log4j2
 @Component
@@ -15,13 +17,15 @@ public class ClientKakao implements ClientProxy {
 
     private final WebClient webClient;
 
+    // TODO ADMIN 유저 생성 시 getAdminUserData 메소드 생성 필요
     @Override
     public Members getUserData(String accessToken) {
         KakaoUserResponse kakaoUserResponse = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
-                // TODO 에러 핸들링 필요 (WebClient default 4xx, 5xx: WebClientResponseException)
+                .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
+                .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
                 .bodyToMono(KakaoUserResponse.class)
                 .block();
 
@@ -31,6 +35,8 @@ public class ClientKakao implements ClientProxy {
                 .email(kakaoUserResponse.getKakaoAccount().getEmail())
                 .gender(kakaoUserResponse.getKakaoAccount().getGender())
                 .memberProvider(MemberProvider.KAKAO)
+                .roleType(RoleType.USER)
+                .profileImagePath(kakaoUserResponse.getProperties().getProfileImage())
                 .build();
     }
 }

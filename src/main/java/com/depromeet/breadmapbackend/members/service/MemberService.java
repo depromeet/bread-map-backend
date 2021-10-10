@@ -31,8 +31,8 @@ public class MemberService {
         Long socialId = kakaoMember.getSocialId();
         Members member = memberQuerydslRepository.findBySocialId(socialId);
 
-        AuthToken appToken = authTokenProvider.createAppToken(socialId);
-        AuthToken refreshToken = authTokenProvider.createRefreshToken(socialId);
+        AuthToken appToken = authTokenProvider.createUserAppToken(socialId);
+        AuthToken refreshToken = authTokenProvider.createUserRefreshToken(socialId);
 
         if (member == null) {
             memberRepository.save(kakaoMember);

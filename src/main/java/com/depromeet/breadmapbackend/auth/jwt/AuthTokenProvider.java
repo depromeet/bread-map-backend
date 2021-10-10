@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.auth.jwt;
 
+import com.depromeet.breadmapbackend.auth.enumerate.RoleType;
 import com.depromeet.breadmapbackend.auth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
@@ -35,17 +36,17 @@ public class AuthTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public AuthToken createToken(Long id, String expiry) {
+    public AuthToken createToken(Long id, RoleType roleType, String expiry) {
         Date expiryDate = getExpiryDate(expiry);
-        return new AuthToken(id, expiryDate, key);
+        return new AuthToken(id, roleType, expiryDate, key);
     }
 
-    public AuthToken createAppToken(Long id) {
-        return createToken(id, expiry);
+    public AuthToken createUserAppToken(Long id) {
+        return createToken(id, RoleType.USER, expiry);
     }
 
-    public AuthToken createRefreshToken(Long id) {
-        return createToken(id, refreshExpiry);
+    public AuthToken createUserRefreshToken(Long id) {
+        return createToken(id, RoleType.USER, refreshExpiry);
     }
 
     public AuthToken convertAuthToken(String token) {
@@ -55,21 +56,6 @@ public class AuthTokenProvider {
     public static Date getExpiryDate(String expiry) {
         return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
     }
-
-//    public Claims getClaims(String token) {
-//        return Jwts.parserBuilder()
-//                .setSigningKey(secretKey)
-//                .build()
-//                .parseClaimsJwt(token)
-//                .getBody();
-//    }
-//
-//    public void verifyToken(String token) {
-//        Jwts.parserBuilder()
-//                .setSigningKey(secretKey)
-//                .build()
-//                .parseClaimsJwt(token);
-//    }
 
     public Authentication getAuthentication(AuthToken authToken) {
 

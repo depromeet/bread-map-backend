@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        // TODO header에 bearer 있을때만 validate하도록
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String tokenStr = JwtHeaderUtil.getAccessToken(request);
             AuthToken token = tokenProvider.convertAuthToken(tokenStr);
