@@ -13,8 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class MemberService {
         if (member == null) {
             memberRepository.save(kakaoMember);
         }
-        // TODO member != null이면서 정보 갱신(예: 동의항목 변경)시 update 코드 필요 (/refresh 완료 후 개발 예정)
+
         return AuthResponse.builder()
                 .appToken(appToken.getToken())
                 .refreshToken(refreshToken.getToken())

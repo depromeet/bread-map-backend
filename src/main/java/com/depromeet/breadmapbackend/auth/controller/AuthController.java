@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final static String REFRESH_TOKEN = "refresh_token";
     private final MemberService memberService;
     private final AuthTokenProvider authTokenProvider;
     private final AuthService authService;
@@ -40,7 +39,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestBody AuthRequest authRequest) {
         return ApiResponse.success(memberService.login(authRequest));
     }
-
 
     /**
      * appToken & refreshToken 갱신

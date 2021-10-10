@@ -1,7 +1,6 @@
 package com.depromeet.breadmapbackend.common.dto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

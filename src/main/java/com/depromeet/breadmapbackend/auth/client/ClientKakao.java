@@ -1,6 +1,8 @@
 package com.depromeet.breadmapbackend.auth.client;
 
 import com.depromeet.breadmapbackend.auth.dto.KakaoUserResponse;
+import com.depromeet.breadmapbackend.auth.enumerate.RoleType;
+import com.depromeet.breadmapbackend.auth.exception.TokenValidFailedException;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.enumerate.MemberProvider;
 import lombok.RequiredArgsConstructor;
