@@ -24,16 +24,15 @@ public class AuthToken {
 
     private static final String AUTHORITIES_KEY = "role";
 
-    AuthToken(Long socialId, RoleType roleType, Date expiry, Key key) {
+    AuthToken(String socialId, RoleType roleType, Date expiry, Key key) {
         String role = roleType.toString();
         this.key = key;
         this.token = createAuthToken(socialId, role, expiry);
     }
 
-    private String createAuthToken(Long socialId, String role, Date expiry) {
-        String id = String.valueOf(socialId);
+    private String createAuthToken(String socialId, String role, Date expiry) {
         return Jwts.builder()
-                .setSubject(id)
+                .setSubject(socialId)
                 .claim(AUTHORITIES_KEY, role)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)

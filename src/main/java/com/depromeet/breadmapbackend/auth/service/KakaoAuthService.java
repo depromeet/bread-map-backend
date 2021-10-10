@@ -1,4 +1,4 @@
-package com.depromeet.breadmapbackend.members.service;
+package com.depromeet.breadmapbackend.auth.service;
 
 import com.depromeet.breadmapbackend.auth.client.ClientKakao;
 import com.depromeet.breadmapbackend.auth.dto.AuthRequest;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class KakaoAuthService {
 
     private final ClientKakao clientKakao;
     private final MemberQuerydslRepository memberQuerydslRepository;
@@ -26,7 +26,7 @@ public class MemberService {
     @Transactional
     public AuthResponse login(AuthRequest authRequest) {
         Members kakaoMember = clientKakao.getUserData(authRequest.getAccessToken());
-        Long socialId = kakaoMember.getSocialId();
+        String socialId = kakaoMember.getSocialId();
         Members member = memberQuerydslRepository.findBySocialId(socialId);
 
         AuthToken appToken = authTokenProvider.createUserAppToken(socialId);

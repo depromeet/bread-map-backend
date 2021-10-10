@@ -21,7 +21,7 @@ public class AuthService {
             return null;
         }
 
-        Long socialId = Long.parseLong(claims.getSubject());
+        String socialId = claims.getSubject();
 
         AuthToken newAppToken = authTokenProvider.createUserAppToken(socialId);
 

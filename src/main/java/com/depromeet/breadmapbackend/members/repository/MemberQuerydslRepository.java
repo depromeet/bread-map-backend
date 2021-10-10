@@ -15,7 +15,7 @@ public class MemberQuerydslRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Transactional(readOnly = true)
-    public Members findBySocialId(Long socialId) {
+    public Members findBySocialId(String socialId) {
         return jpaQueryFactory
                 .selectFrom(members)
                 .where(members.socialId.eq(socialId))
