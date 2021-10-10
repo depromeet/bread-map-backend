@@ -32,7 +32,7 @@ public class ClientKakao implements ClientProxy {
                 .block();
 
         return Members.builder()
-                .socialId(kakaoUserResponse.getId())
+                .socialId(String.valueOf(kakaoUserResponse.getId()))
                 .name(kakaoUserResponse.getProperties().getNickname())
                 .email(kakaoUserResponse.getKakaoAccount().getEmail())
                 .gender(kakaoUserResponse.getKakaoAccount().getGender())

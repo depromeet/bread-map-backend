@@ -39,7 +39,7 @@ public class AuthController {
     @ApiOperation(value = "카카오 로그인", notes = "카카오 엑세스 토큰을 이용하여 사용자 정보 받아 저장하고 앱의 토큰 신환")
     @PostMapping(value = "/kakao")
     public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestBody AuthRequest authRequest) {
-        return ApiResponse.success(memberService.login(authRequest));
+        return ApiResponse.success(kakaoAuthService.login(authRequest));
     }
 
     /**

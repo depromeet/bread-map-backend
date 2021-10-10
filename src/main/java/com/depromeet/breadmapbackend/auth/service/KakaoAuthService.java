@@ -26,7 +26,7 @@ public class KakaoAuthService {
     @Transactional
     public AuthResponse login(AuthRequest authRequest) {
         Members kakaoMember = clientKakao.getUserData(authRequest.getAccessToken());
-        Long socialId = kakaoMember.getSocialId();
+        String socialId = kakaoMember.getSocialId();
         Members member = memberQuerydslRepository.findBySocialId(socialId);
 
         AuthToken appToken = authTokenProvider.createUserAppToken(socialId);

@@ -54,7 +54,7 @@ public class Members extends BaseEntity {
     private Integer breadTestResult;
 
     @Column(nullable = false)
-    private Long socialId;
+    private String socialId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
