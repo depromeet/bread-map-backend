@@ -1,4 +1,4 @@
-name: earth-github-action-test CD
+name: EARTH DEV CD TEST
 
 on:
   push:
