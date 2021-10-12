@@ -1,14 +1,13 @@
 spring:
   jpa:
-
     database-platform: org.hibernate.dialect.H2Dialect
-
-swagger-info:
-  title: Daedong BreadMap REST API
-  description: Depromeet 10th Team 7
-  version: 1.0.0
 
 app:
   auth:
     tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
     tokenExpiry: 2592000000 # 30일
+
+swagger-info:
+  title: Daedong BreadMap REST API
+  description: Depromeet 10th Team 7
+  version: 1.0.0

@@ -1,11 +1,11 @@
 package com.depromeet.breadmapbackend.auth.jwt;
+
+import com.depromeet.breadmapbackend.auth.enumerate.RoleType;
 import com.depromeet.breadmapbackend.auth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,27 +21,33 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@AllArgsConstructor
-@NoArgsConstructor
 public class AuthTokenProvider {
 
-    private Key key;
-    private String AUTHORITIES_KEY = "role";
+    @Value("${app.auth.tokenExpiry}")
+    private String expiry;
 
-    public AuthTokenProvider(String secret) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    private final Key key;
+    private static final String AUTHORITIES_KEY = "role";
+
+    public AuthTokenProvider(@Value("${app.auth.tokenSecret}") String secretKey) {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public AuthToken createAuthToken(String id, Date expiry) {
-        return new AuthToken(id, expiry, key);
+    public AuthToken createToken(String id, RoleType roleType, String expiry) {
+        Date expiryDate = getExpiryDate(expiry);
+        return new AuthToken(id, roleType, expiryDate, key);
     }
 
-    public AuthToken createAuthToken(String id, String role, Date expiry) {
-        return new AuthToken(id, role, expiry, key);
+    public AuthToken createUserAppToken(String id) {
+        return createToken(id, RoleType.USER, expiry);
     }
 
     public AuthToken convertAuthToken(String token) {
         return new AuthToken(token, key);
+    }
+
+    public static Date getExpiryDate(String expiry) {
+        return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
     }
 
     public Authentication getAuthentication(AuthToken authToken) {
@@ -54,7 +60,6 @@ public class AuthTokenProvider {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
-            log.debug("claims subject := [{}]", claims.getSubject());
             User principal = new User(claims.getSubject(), "", authorities);
 
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);

@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.members.domain;
 
+import com.depromeet.breadmapbackend.auth.enumerate.RoleType;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
@@ -53,11 +54,24 @@ public class Members extends BaseEntity {
     private Integer breadTestResult;
 
     @Column(nullable = false)
-    private Long socialId; // social id
+    private String socialId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberProvider memberProvider;
 
-    private String token;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RoleType roleType;
+
+    @Column
+    private String profileImagePath;
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 }
