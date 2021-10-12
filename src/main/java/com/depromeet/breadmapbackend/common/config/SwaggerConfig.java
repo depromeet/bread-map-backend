@@ -14,7 +14,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@Profile({"dev"}) //dev 환경에서만 Swagger 동작하도록 설정(run configuration의 VM option: -Dspring.profiles.active=dev 설정 필요)
+//@Profile({"dev"}) //dev 환경에서만 Swagger 동작하도록 설정(run configuration의 VM option: -Dspring.profiles.active=dev 설정 필요)
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
