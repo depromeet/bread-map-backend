@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sameOrigin().and()
                 .cors().and()
                 .csrf().disable()
-                .exceptionHandling()
-                .and()
+                //.exceptionHandling() // TODO 예외 처리 필요한지 체크할 것
+                //.and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
