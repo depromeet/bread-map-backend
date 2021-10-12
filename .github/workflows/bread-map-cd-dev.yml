@@ -4,7 +4,7 @@ name: DaeDong-BreadMap dev server CD
 on:
   push:
     branches:
-      - 'develop'
+      - 'feature/26'
 
 jobs:
   build:
@@ -34,24 +34,24 @@ jobs:
           format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00"
 
-#      - name: Generate deployment package - dev
-#        run: |
-#               mkdir -p deploy-dev
-#               cp build/libs/*.jar deploy-dev/application.jar
-##                    cp Procfile deploy-dev/Procfile
-##                    cp -r .ebextensions deploy-dev/.ebextensions
-##                    cp -r .platform deploy-dev/.platform
-#               cd deploy-dev && zip -r deploy-dev.zip .
-#
-#      - name: Deploy to Elastic Beanstalk dev-server
-#        uses: einaregilsson/beanstalk-deploy@v14
-#        with:
-#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          application_name: daedong-breadmap
-#          environment_name: Daedongbreadmap-env
-#          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
-#          region: ap-northeast-2
-#          deployment_package: deploy-dev/deploy-dev.zip
+      - name: Generate deployment package - dev
+        run: |
+               mkdir -p deploy-dev
+               cp build/libs/*.jar deploy-dev/application.jar
+#                    cp Procfile deploy-dev/Procfile
+#                    cp -r .ebextensions deploy-dev/.ebextensions
+#                    cp -r .platform deploy-dev/.platform
+               cd deploy-dev && zip -r deploy-dev.zip .
+
+      - name: Deploy to Elastic Beanstalk dev-server
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: daedong-breadmap
+          environment_name: Daedongbreadmap-env
+          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          region: ap-northeast-2
+          deployment_package: deploy-dev/deploy-dev.zip
 
 

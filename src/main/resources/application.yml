@@ -1,16 +1,36 @@
-spring:
-  profiles:
-      group:
-        dev: dev, oauth
+#spring:
+#  profiles:
+#      group:
+#        dev: dev, oauth
+#
+#app:
+#  auth:
+#    tokenSecret: secretkeysecretkeysecretkey
+#    tokenExpiry: 604800000 # 7일
+#    refreshTokenExpiry: 7776000000 # 90일
+##
+##---
+##spring:
+##  profiles:
+##    group:
+##      test: test
 
 app:
   auth:
-    tokenSecret: secretkeysecretkeysecretkey
-    tokenExpiry: 604800000 # 7일
-    refreshTokenExpiry: 7776000000 # 90일
-#
-#---
-#spring:
-#  profiles:
-#    group:
-#      test: test
+    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+    tokenExpiry: 2592000000 # 30일
+
+# CD TEST
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
