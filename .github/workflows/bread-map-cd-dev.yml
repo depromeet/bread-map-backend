@@ -1,4 +1,4 @@
-# 개발서버 Deploy workflow - develop 브랜치 기준
+# 개발서버 Deploy workflow - develop 브랜치
 name: DaeDong-BreadMap dev server CD
 
 on:
