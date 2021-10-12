@@ -1,36 +1,35 @@
-spring:
-  profiles:
-      group:
-        dev: dev, oauth
+#spring:
+#  profiles:
+#      group:
+#        dev: dev, oauth
+#
+#app:
+#  auth:
+#    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+#    tokenExpiry: 2592000000 # 30일
+#
+#
 
 app:
   auth:
     tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
     tokenExpiry: 2592000000 # 30일
+# CD TEST
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
 
-
-    app:
-      auth:
-        tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
-        tokenExpiry: 2592000000 # 30일
----
-    # CD TEST
-    spring:
-      datasource:
-        url: jdbc:h2:mem:testdb
-        username: sa
-        password:
-        driver-class-name: org.h2.Driver
-
-      jpa:
-        hibernate:
-          ddl-auto: create
-        properties:
-          hibernate:
-            format_sql: true
-
-    swagger-info:
-      title: Daedong BreadMap REST API
-      description: Depromeet 10th Team 7
-      version: 1.0.0
+swagger-info:
+  title: Daedong BreadMap REST API
+  description: Depromeet 10th Team 7
+  version: 1.0.0
