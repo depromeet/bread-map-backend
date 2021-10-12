@@ -34,11 +34,14 @@ jobs:
           format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00"
 
-      - name: Generate deployment package - dev
+      - name: Generate deployment package # (1)
         run: |
-               mkdir -p deploy-dev
-               cp build/libs/*.jar deploy-dev/application.jar
-               cd deploy-dev && zip -r deploy-dev.zip .
+          mkdir -p deploy-dev
+          cp build/libs/*.jar deploy-dev/application.jar
+          cp Procfile deploy-dev/Procfile
+          cp -r .ebextensions deploy-dev/.ebextensions
+          cp -r .platform deploy-dev/.platform
+          cd deploy-dev && zip -r deploy-dev.zip .
 
       - name: Deploy to Elastic Beanstalk dev-server
         uses: einaregilsson/beanstalk-deploy@v14
