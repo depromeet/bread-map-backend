@@ -38,9 +38,6 @@ jobs:
         run: |
                mkdir -p deploy-dev
                cp build/libs/*.jar deploy-dev/application.jar
-#                    cp Procfile deploy-dev/Procfile
-#                    cp -r .ebextensions deploy-dev/.ebextensions
-#                    cp -r .platform deploy-dev/.platform
                cd deploy-dev && zip -r deploy-dev.zip .
 
       - name: Deploy to Elastic Beanstalk dev-server
