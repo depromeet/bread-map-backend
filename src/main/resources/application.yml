@@ -9,7 +9,7 @@
 #    tokenExpiry: 604800000 # 7일
 #    refreshTokenExpiry: 7776000000 # 90일
 ##
-##---
+#---
 ##spring:
 ##  profiles:
 ##    group:
