@@ -1,0 +1,4 @@
+app:
+  auth:
+    tokenSecret: ${app.auth.token.secret}
+    tokenExpiry: ${app.auth.token.expiry}

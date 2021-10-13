@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${rds.hostname}:${rds.port}/${rds.dbname}
+    username: ${rds.username}
+    password: ${rds.password}
+    driver-class-name: ${rds.driver}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+
+swagger-info:
+  title: ${swagger.title}
+  description: ${swagger.description}
+  version: ${swagger.version}
+
+logging:
+  level:
+    org.hibernate.SQL: debug
