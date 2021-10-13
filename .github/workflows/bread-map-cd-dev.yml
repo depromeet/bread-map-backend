@@ -4,7 +4,7 @@ name: DaeDong-BreadMap dev server CD
 on:
   push:
     branches:
-      - 'feature/26'
+      - 'develop'
 
 jobs:
   build:
