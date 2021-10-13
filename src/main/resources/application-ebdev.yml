@@ -7,9 +7,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     database: postgresql
     properties:
       hibernate:
         format_sql: true
     generate-ddl: true
+
+swagger-info:
+  title: ${swagger.title}
+  description: ${swagger.description}
+  version: ${swagger.version}
+
+logging:
+  level:
+    org.hibernate.SQL: debug
