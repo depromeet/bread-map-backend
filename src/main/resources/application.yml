@@ -1,25 +1,13 @@
-#spring:
-#  profiles:
-#      group:
-#        dev: dev, oauth
-#
-#app:
-#  auth:
-#    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
-#    tokenExpiry: 2592000000 # 30일
-#
-#
-app:
-  auth:
-    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
-    tokenExpiry: 2592000000 # 30일
-# CD TEST
 spring:
-  datasource:
+  datasource: # default database
     url: jdbc:h2:mem:testdb
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  profiles:
+      group:
+        dev: dev, oauth
+        ebdev: ebdev, eboauth
 
   jpa:
     hibernate:
@@ -27,6 +15,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+app:
+  auth:
+    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+    tokenExpiry: 2592000000 # 30일
 
 swagger-info:
   title: Daedong BreadMap REST API
