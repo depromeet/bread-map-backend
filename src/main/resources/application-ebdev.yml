@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${rds.hostname}:${rds.port}/${rds.dbname}
+    username: ${rds.username}
+    password: ${rds.password}
+    driver-class-name: ${rds.driver}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
