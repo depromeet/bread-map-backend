@@ -50,7 +50,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: daedong-breadmap
           environment_name: Daedongbreadmap-env
-          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          version_label: Daedong Bread Map-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: deploy-dev/deploy-dev.zip
 

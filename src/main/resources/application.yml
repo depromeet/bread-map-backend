@@ -17,10 +17,10 @@ app:
 # CD TEST
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://${rds.hostname}:5432/${rds.dbname}
+    username: ${rds.username}
+    password: ${rds.password}
+    driver-class-name: ${rds.driver}
 
   jpa:
     hibernate:
