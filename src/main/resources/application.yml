@@ -9,7 +9,6 @@
 #    tokenExpiry: 2592000000 # 30일
 #
 #
-
 app:
   auth:
     tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
