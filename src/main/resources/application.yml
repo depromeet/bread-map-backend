@@ -6,6 +6,7 @@ spring:
     driver-class-name: org.h2.Driver
   profiles:
       group:
+        dev: dev, oauth
         ebdev: ebdev, eboauth
 
   jpa:
