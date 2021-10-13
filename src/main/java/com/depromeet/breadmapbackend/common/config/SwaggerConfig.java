@@ -46,5 +46,4 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .description(swaggerDescription)
                 .build();
     }
-
 }
