@@ -29,13 +29,6 @@ spring:
       hibernate:
         format_sql: true
 
-spring:
-  datasource:
-    url: jdbc:postgresql://daedong-bread-dev-db.chgx9pjvwafw.ap-northeast-2.rds.amazonaws.com:5432/daedongbread
-    username: postgres
-    password: postgre12
-    driver-class-name: org.postgresql.Driver
-
 swagger-info:
   title: Daedong BreadMap REST API
   description: Depromeet 10th Team 7
