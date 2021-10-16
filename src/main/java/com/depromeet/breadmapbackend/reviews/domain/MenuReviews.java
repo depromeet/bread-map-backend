@@ -35,7 +35,7 @@ public class MenuReviews extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Members members;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String contents;
 
     @Column(nullable = false)
