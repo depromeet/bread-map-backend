@@ -52,7 +52,7 @@ public class Bakeries extends BaseEntity {
     private List<Flags> flagsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "bakeries")
-    private List<Images> bakeryImgPathList = new ArrayList<>();
+    private List<Images> imgPathList = new ArrayList<>();
 
     @OneToMany(mappedBy = "bakeries")
     private List<BakeriesBreadCategoriesMap> bakeriesMenusMapList = new ArrayList<>();
