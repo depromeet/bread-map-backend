@@ -34,8 +34,4 @@ public class Menus extends BaseEntity {
     @JoinColumn(name = "bread_category_id")
     private BreadCategories breadCategories;
 
-    @OneToMany(mappedBy = "menus")
-    private List<BakeriesMenusMap> bakeriesMenusMapList = new ArrayList<>();
-
-
 }
