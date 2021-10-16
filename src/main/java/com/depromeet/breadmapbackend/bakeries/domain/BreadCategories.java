@@ -19,6 +19,7 @@ public class BreadCategories extends BaseEntity {
     @Column(name = "bread_category_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "breadCategories")
