@@ -29,8 +29,8 @@ public class BakeriesController {
      * @return ResponseEntity<BakeryListResponse>
      */
     @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 깃발 꼽기 기능")
-    @PostMapping("/{id}/flags")
-    public ResponseEntity<Void> registerFlag(@RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long bakeryId) {
+    @PostMapping("/{id}/flag")
+    public ResponseEntity<Void> registerFlag(@RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long id) {
         return null;
     }
 }
