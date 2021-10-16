@@ -24,6 +24,7 @@ public class MenuReviews extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "menu_review_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
