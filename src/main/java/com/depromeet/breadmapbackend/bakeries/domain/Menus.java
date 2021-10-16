@@ -33,5 +33,4 @@ public class Menus extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_category_id")
     private BreadCategories breadCategories;
-
 }

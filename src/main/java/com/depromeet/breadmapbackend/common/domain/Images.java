@@ -2,7 +2,8 @@ package com.depromeet.breadmapbackend.common.domain;
 
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.enumerate.ImageType;
-import com.depromeet.breadmapbackend.reviews.domain.Reviews;
+import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
+import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +36,11 @@ public class Images extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "review_id")
-    private Reviews reviews;
+    private BakeryReviews bakeryReviews;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "menu_review_id")
+    private MenuReviews menuReviews;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bakery_id")

@@ -24,10 +24,11 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reviews extends BaseEntity {
+public class BakeryReviews extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bakery_review_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,15 +39,12 @@ public class Reviews extends BaseEntity {
     @JoinColumn(name = "bakery_id")
     private Bakeries bakeries;
 
-    @OneToMany(mappedBy = "reviews")
-    private List<ReviewsFiltersMap> reviewsFiltersMaps = new ArrayList<>();
-
     @Column(nullable = false)
     private String contents;
 
     @Column(nullable = false)
     private Integer rating;
 
-    @OneToMany(mappedBy = "reviews")
-    private List<Images> reviewImgPathList = new ArrayList<>();
+    @OneToMany(mappedBy = "bakeryReviews")
+    private List<Images> imagePathList = new ArrayList<>();
 }
