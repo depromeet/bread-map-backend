@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
     run configuration의 VM option: -Dspring.profiles.active=dev or ebdev 설정 필요
  */
 @Configuration
-@Profile({"ebdev", "dev"})
+@Profile({"ebdev", "dev", "local"})
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
