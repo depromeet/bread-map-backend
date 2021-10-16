@@ -46,7 +46,7 @@ public class Bakeries extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Members members;
+    private Members members; // 개척자(빵집 등록한 사람)
 
     @OneToMany(mappedBy = "bakeries")
     private List<Flags> flagsList = new ArrayList<>();
