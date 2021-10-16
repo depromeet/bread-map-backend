@@ -41,7 +41,10 @@ public class Bakeries extends BaseEntity {
 
     private String telNumber;
 
-    @Convert(converter = StringListConverter.class)
+    @ElementCollection
+    @CollectionTable(
+            joinColumns = @JoinColumn(name = "bakery_id")
+    )
     private List<String> basicInfoList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
