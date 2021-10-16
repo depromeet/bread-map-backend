@@ -25,4 +25,8 @@ public class BakeriesBreadCategoriesMap extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menus menus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bread_category_id")
+    private BreadCategories breadCategories;
 }
