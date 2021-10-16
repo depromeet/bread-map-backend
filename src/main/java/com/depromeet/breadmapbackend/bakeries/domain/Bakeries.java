@@ -7,7 +7,6 @@ import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,14 +35,12 @@ public class Bakeries extends BaseEntity {
 
     private String businessHour;
 
-    @Type(type = "list-array")
-    @Column(columnDefinition = "text[]")
+    @ElementCollection
     private List<String> websiteUrlList = new ArrayList<>();
 
     private String telNumber;
 
-    @Type(type = "list-array")
-    @Column(columnDefinition = "text[]")
+    @ElementCollection
     private List<String> basicInfoList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
