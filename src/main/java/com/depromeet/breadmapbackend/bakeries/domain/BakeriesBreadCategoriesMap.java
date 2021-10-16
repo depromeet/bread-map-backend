@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class BakeriesMenusMap extends BaseEntity {
+public class BakeriesBreadCategoriesMap extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,6 @@ public class BakeriesMenusMap extends BaseEntity {
     private Bakeries bakeries;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    private Menus menus;
+    @JoinColumn(name = "bread_category_id")
+    private BreadCategories breadCategories;
 }
