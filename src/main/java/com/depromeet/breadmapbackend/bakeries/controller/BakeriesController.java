@@ -47,8 +47,8 @@ public class BakeriesController {
      * @return ResponseEntity<Void>
      */
     @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 꽂힌 깃발을 해제하는 기능")
-    @DeleteMapping("/{bakeryId}/flag/{flagsId}")
-    public ResponseEntity<Void> deleteFlags(@PathVariable Long flagsId, @PathVariable Long bakeryId) {
+    @DeleteMapping("/{bakeryId}/flag/{flagId}")
+    public ResponseEntity<Void> deleteFlags(@PathVariable Long flagId, @PathVariable Long bakeryId) {
         return null;
     }
 }
