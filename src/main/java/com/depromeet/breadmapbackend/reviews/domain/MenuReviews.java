@@ -8,13 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -43,7 +40,7 @@ public class MenuReviews extends BaseEntity {
     @Column(nullable = false)
     private Integer rating;
 
-    @OneToOne
-    private Images imagePath;
+    @OneToMany(mappedBy = "menuReviews")
+    private List<Images> imagePath = new ArrayList<>();
 
 }
