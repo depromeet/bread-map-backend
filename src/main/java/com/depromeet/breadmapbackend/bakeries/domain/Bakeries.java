@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.bakeries.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.domain.Images;
+import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
@@ -35,12 +36,12 @@ public class Bakeries extends BaseEntity {
 
     private String businessHour;
 
-    @ElementCollection
+    @Convert(converter = StringListConverter.class)
     private List<String> websiteUrlList = new ArrayList<>();
 
     private String telNumber;
 
-    @ElementCollection
+    @Convert(converter = StringListConverter.class)
     private List<String> basicInfoList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

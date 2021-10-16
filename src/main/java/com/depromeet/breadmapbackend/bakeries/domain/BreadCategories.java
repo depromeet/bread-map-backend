@@ -23,4 +23,7 @@ public class BreadCategories extends BaseEntity {
 
     @OneToMany(mappedBy = "breadCategories")
     private List<BakeriesBreadCategoriesMap> bakeriesBreadCategoriesMapList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "breadCategories")
+    private List<Menus> menusList = new ArrayList<>();
 }
