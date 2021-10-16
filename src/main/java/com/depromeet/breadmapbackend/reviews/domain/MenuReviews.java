@@ -43,7 +43,7 @@ public class MenuReviews extends BaseEntity {
     @Column(nullable = false)
     private Integer rating;
 
-    @OneToOne(mappedBy = "menu_reviews")
+    @OneToOne
     private Images imagePath;
 
 }
