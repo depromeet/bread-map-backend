@@ -7,6 +7,7 @@ import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,13 +23,6 @@ public class Bakeries extends BaseEntity {
     @Column(name = "bakery_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Members members;
-
-    @OneToMany(mappedBy = "bakeries")
-    private List<Flags> flagsList = new ArrayList<>();
-
     @Column(nullable = false)
     private String name;
 
@@ -40,12 +34,32 @@ public class Bakeries extends BaseEntity {
 
     private String address;
 
-    @OneToMany(mappedBy = "bakeries")
-    private List<Images> exteriorImgPathList = new ArrayList<>();
+    private String businessHour;
+
+    @Type(type = "list-array")
+    @Column(columnDefinition = "text[]")
+    private List<String> websiteUrlList = new ArrayList<>();
+
+    private String telNumber;
+
+    @Type(type = "list-array")
+    @Column(columnDefinition = "text[]")
+    private List<String> basicInfoList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Members members;
 
     @OneToMany(mappedBy = "bakeries")
-    private List<Images> interiorImgPathList = new ArrayList<>();
+    private List<Flags> flagsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "bakeries")
-    private List<BakeriesMenusMap> bakeriesMenusMapList = new ArrayList<>();
+    private List<Images> bakeryImgPathList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bakeries")
+    private List<BakeriesBreadCategoriesMap> bakeriesMenusMapList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bakeries")
+    private List<Menus> menusList = new ArrayList<>();
+
 }
