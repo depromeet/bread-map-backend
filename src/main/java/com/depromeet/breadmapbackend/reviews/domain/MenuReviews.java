@@ -41,6 +41,6 @@ public class MenuReviews extends BaseEntity {
     private Integer rating;
 
     @OneToMany(mappedBy = "menuReviews")
-    private List<Images> imagePath = new ArrayList<>();
+    private List<Images> imagePathList = new ArrayList<>();
 
 }
