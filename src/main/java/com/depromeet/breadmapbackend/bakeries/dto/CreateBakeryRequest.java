@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,10 @@ public class CreateBakeryRequest {
     private Double latitude;
     private Double longitude;
     private String address;
-    private List<String> exteriorImgPathList;
-    private List<String> interiorImgPathList;
+    private String businessHour;
+    private List<String> websiteUrlList = new ArrayList<>();
+    private String telNumber;
+    private List<String> basicInfoList = new ArrayList<>();
+    private List<String> imgPathList = new ArrayList<>();
+
 }

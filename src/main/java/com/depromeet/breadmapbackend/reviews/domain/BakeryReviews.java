@@ -39,7 +39,7 @@ public class BakeryReviews extends BaseEntity {
     @JoinColumn(name = "bakery_id")
     private Bakeries bakeries;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String contents;
 
     @Column(nullable = false)
