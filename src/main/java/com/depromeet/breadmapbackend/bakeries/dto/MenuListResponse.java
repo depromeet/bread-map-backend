@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenusListResponse {
+public class MenuListResponse {
 
-    private List<String> menusList = new ArrayList<>();
+    private List<String> menuList = new ArrayList<>();
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,6 +23,7 @@ public class BakeryListResponse {
     private Float rating;
     private Integer reviewsCount;
     private String businessHour;
-    private List<MenuReviewsResponse> menuReviewsList; // select
-    private List<String> breadCategoriesList;
+    private List<MenuReviewsResponse> menuReviewList; // select
+    private List<String> breadCategoryList;
+    private List<String> websiteUrlList = new ArrayList<>();
 }

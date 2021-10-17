@@ -16,7 +16,7 @@ public class MenuReviewsResponse {
     private Long memberId;
     private String memberName;
     private Long menuId;
-    private List<String> imagePathList;
+    private List<String> imgPathList;
     private String contents;
     private Integer rating;
     private LocalDateTime lastModifiedDateTime;

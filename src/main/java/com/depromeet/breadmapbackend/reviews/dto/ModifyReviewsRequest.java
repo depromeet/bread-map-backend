@@ -17,6 +17,6 @@ public class ModifyReviewsRequest {
     private Integer rating;
     private List<FilterType> filterTypeList;
     private List<String> filterNameList;
-    private List<String> reviewImgPathList;
+    private List<String> imgPathList;
 
 }
