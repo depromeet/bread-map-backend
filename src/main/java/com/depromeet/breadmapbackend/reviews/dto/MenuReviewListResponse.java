@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewListResponse {
+public class MenuReviewListResponse {
 
     private Long reviewId;
     private Long bakeryId;
@@ -17,5 +17,5 @@ public class ReviewListResponse {
     private String memberName;
     private String contents;
     private Integer rating;
-    private List<String> reviewImgPathList;
+    private List<String> imgPathList;
 }
