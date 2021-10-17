@@ -13,7 +13,9 @@ import java.util.List;
 public class BakeryMenusListResponse {
 
     private Long bakeryId;
-    private String bakeryName;
+    private Long menuId;
+    private Long breadCategoryId;
+    private Long breadCategoryName;
     private String menuName;
     private Integer price;
     private List<String> imgPathList;

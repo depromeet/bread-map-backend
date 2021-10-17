@@ -2,8 +2,8 @@ package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenusListResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.PostBakeryRatingRequest;
-import com.depromeet.breadmapbackend.bakeries.dto.PostBakeryRatingResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingResponse;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.reviews.dto.ReviewsListResponse;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ public class BakeriesController {
      * @return ResponseEntity<BakeryReviewListResponse>
      */
     @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
-    @GetMapping(value = "/{bakeryId}/review")
+    @GetMapping(value = "/{bakeryId}/menu-review")
     public ResponseEntity<ReviewsListResponse> getBakeryReviewList(@PathVariable Long bakeryId){
         return null;
     }
@@ -54,10 +54,10 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
     @PostMapping(value = "/{bakeryId}/rating")
-    public ResponseEntity postBakeryRating(@PathVariable Long bakeryId, @RequestBody PostBakeryRatingRequest postBakeryRatingRequest){
-        PostBakeryRatingResponse postBakeryRatingResponse = new PostBakeryRatingResponse();
-        float totalRating = postBakeryRatingResponse.getRating();
-        totalRating = totalRating/postBakeryRatingRequest.getRating();
+    public ResponseEntity<Void> registerBakeryRating(@PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
+        RegisterBakeryRatingResponse registerBakeryRatingResponse = new RegisterBakeryRatingResponse();
+        float totalRating = registerBakeryRatingResponse.getRating();
+        totalRating = totalRating/registerBakeryRatingRequest.getRating();
         return ApiResponse.created(null);
     }
 
