@@ -1,6 +1,5 @@
 package com.depromeet.breadmapbackend.bakeries.dto;
 
-import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
