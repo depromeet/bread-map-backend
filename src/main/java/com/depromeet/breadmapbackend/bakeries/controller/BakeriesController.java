@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenusListResponse;
+import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.reviews.dto.ReviewsListResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,16 @@ public class BakeriesController {
     @GetMapping(value = "/{bakeryId}/menus")
     public ResponseEntity<BakeryMenusListResponse> getBakeryMenusList(@PathVariable Integer bakeryId){
         return null;
+    }
+
+    /**
+     * 빵집 별점 넣기
+     * @return 성공 시 201 Created
+     */
+    @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
+    @PostMapping(value = "/{bakeryId}/rating")
+    public ResponseEntity postBakeryRating(@RequestBody PostBakeryRatingRequest postBakeryRatingRequest){
+        return ApiResponse.created(null);
     }
 
 }
