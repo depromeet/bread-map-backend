@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.MenusListResponse;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
@@ -9,14 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +30,18 @@ public class BakeriesController {
         return null;
     }
 
+    /**
+     * 선택된 카테고리에 해댕하는 빵 리스트 반환
+     * @param bakeryId
+     * @param category
+     * @return 성공 시 200 OK + menusListResponse
+     */
+    @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
+    @GetMapping(value = "/{bakeryId}")
+    public ResponseEntity getMenusList(@PathVariable Long bakeryId, @RequestParam String category) {
+        MenusListResponse menusListResponse = new MenusListResponse();
+        return ApiResponse.success(menusListResponse);
+    }
     /**
      * 신규 빵집 생성
      * @param createBakeryRequest

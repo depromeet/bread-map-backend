@@ -45,6 +45,7 @@ public class Bakeries extends BaseEntity {
     @CollectionTable(
             joinColumns = @JoinColumn(name = "bakery_id")
     )
+    @Column(name = "basic_info")
     private List<String> basicInfoList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
