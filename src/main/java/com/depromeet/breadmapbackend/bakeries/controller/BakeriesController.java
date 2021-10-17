@@ -33,7 +33,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
     @GetMapping(value = "/{bakeryId}")
-    public ResponseEntity getMenusList(@PathVariable Integer bakeryId, @RequestParam String category) {
+    public ResponseEntity getMenusList(@PathVariable Long bakeryId, @RequestParam String category) {
         MenusListResponse menusListResponse = new MenusListResponse();
         return ApiResponse.success(menusListResponse);
     }
