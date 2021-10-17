@@ -1,11 +1,11 @@
 package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenusListResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
 import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingResponse;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
-import com.depromeet.breadmapbackend.reviews.dto.ReviewsListResponse;
+import com.depromeet.breadmapbackend.reviews.dto.ReviewListResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu-review")
-    public ResponseEntity<ReviewsListResponse> getBakeryReviewList(@PathVariable Long bakeryId){
+    public ResponseEntity<ReviewListResponse> getBakeryReviewList(@PathVariable Long bakeryId){
         return null;
     }
 
@@ -44,7 +44,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menus")
-    public ResponseEntity<BakeryMenusListResponse> getBakeryMenusList(@PathVariable Long bakeryId){
+    public ResponseEntity<BakeryMenuListResponse> getBakeryMenuList(@PathVariable Long bakeryId){
         return null;
     }
 

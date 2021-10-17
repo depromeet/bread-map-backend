@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BakeryMenusListResponse {
+public class BakeryMenuListResponse {
 
     private Long bakeryId;
     private Long menuId;
