@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,4 +19,5 @@ public class MenuReviewsResponse {
     private List<String> imagePathList;
     private String contents;
     private Integer rating;
+    private LocalDateTime lastModifiedDateTime;
 }
