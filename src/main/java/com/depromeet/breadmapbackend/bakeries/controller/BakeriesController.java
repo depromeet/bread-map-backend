@@ -1,7 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
-<<<<<<< HEAD
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
 import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingResponse;
