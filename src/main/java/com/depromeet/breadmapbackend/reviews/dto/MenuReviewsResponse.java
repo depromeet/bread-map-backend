@@ -13,6 +13,7 @@ public class MenuReviewsResponse {
 
     private Long menuReviewId;
     private Long memberId;
+    private String memberName;
     private Long menuId;
     private List<String> imagePathList;
     private String contents;
