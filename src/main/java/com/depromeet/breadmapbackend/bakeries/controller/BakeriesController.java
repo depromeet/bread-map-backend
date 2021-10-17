@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenusListResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.PostBakeryRatingRequest;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.reviews.dto.ReviewsListResponse;
 import io.swagger.annotations.ApiOperation;
