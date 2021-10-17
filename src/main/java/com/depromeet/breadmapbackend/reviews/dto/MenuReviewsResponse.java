@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BakeryReviewsResponse {
+public class MenuReviewsResponse {
 
-    private Long bakeryReviewId;
+    private Long menuReviewId;
     private Long memberId;
-    private Long bakeryId;
+    private Long menuId;
     private List<String> imagePathList;
     private String contents;
     private Integer rating;

@@ -1,6 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.dto;
 
-import com.depromeet.breadmapbackend.reviews.dto.BakeryReviewsResponse;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewsResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +22,6 @@ public class BakeryListResponse {
     private Float rating;
     private Integer reviewsCount;
     private String businessHour;
-    private List<BakeryReviewsResponse> bakeryReviewsList; // select
+    private List<MenuReviewsResponse> menuReviewsList; // select
     private List<String> breadCategoriesList;
 }
