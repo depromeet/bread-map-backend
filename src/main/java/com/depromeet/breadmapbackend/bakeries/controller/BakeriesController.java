@@ -30,7 +30,7 @@ public class BakeriesController {
      * 단일 빵집 리뷰 조회
      * @return ResponseEntity<BakeryReviewListResponse>
      */
-    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집 리뷰 리스트 조회")
+    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
     @GetMapping(value = "/{bakeryId}/review")
     public ResponseEntity<ReviewsListResponse> getBakeryReviewList(@PathVariable Integer bakeryId){
         return null;
@@ -40,7 +40,7 @@ public class BakeriesController {
      * 단일 빵집 메뉴 조회
      * @return ResponseEntity<BakeryMenusListResponse>
      */
-    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집 메뉴 리스트 조회")
+    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menus")
     public ResponseEntity<BakeryMenusListResponse> getBakeryMenusList(@PathVariable Integer bakeryId){
         return null;
@@ -52,7 +52,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
     @PostMapping(value = "/{bakeryId}/rating")
-    public ResponseEntity postBakeryRating(@RequestBody PostBakeryRatingRequest postBakeryRatingRequest){
+    public ResponseEntity postBakeryRating(@PathVariable Integer bakeryId, @RequestBody PostBakeryRatingRequest postBakeryRatingRequest){
         return ApiResponse.created(null);
     }
 
