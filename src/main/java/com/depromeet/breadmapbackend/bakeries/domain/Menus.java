@@ -28,7 +28,7 @@ public class Menus extends BaseEntity {
     private Bakeries bakeries;
 
     @Column(nullable = false)
-    private String price;
+    private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_category_id")
