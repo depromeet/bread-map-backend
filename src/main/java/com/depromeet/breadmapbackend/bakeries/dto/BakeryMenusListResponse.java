@@ -18,7 +18,7 @@ public class BakeryMenusListResponse {
     private Long breadCategoryName;
     private String menuName;
     private Integer price;
-    private List<String> imgPathList;
+    private String imgPath;
 
 }
 
