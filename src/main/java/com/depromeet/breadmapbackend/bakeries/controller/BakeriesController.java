@@ -3,6 +3,7 @@ package com.depromeet.breadmapbackend.bakeries.controller;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenusListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.PostBakeryRatingRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.PostBakeryRatingResponse;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.reviews.dto.ReviewsListResponse;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +55,9 @@ public class BakeriesController {
     @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
     @PostMapping(value = "/{bakeryId}/rating")
     public ResponseEntity postBakeryRating(@PathVariable Long bakeryId, @RequestBody PostBakeryRatingRequest postBakeryRatingRequest){
+        PostBakeryRatingResponse postBakeryRatingResponse = new PostBakeryRatingResponse();
+        float totalRating = postBakeryRatingResponse.getRating();
+        totalRating = totalRating/postBakeryRatingRequest.getRating();
         return ApiResponse.created(null);
     }
 
