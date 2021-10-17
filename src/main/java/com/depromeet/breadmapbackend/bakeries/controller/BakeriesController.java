@@ -26,7 +26,7 @@ public class BakeriesController {
 
     /**
      * 빵집 깃발 꼽기
-     * @return ResponseEntity<BakeryListResponse>
+     * @return ResponseEntity<Void>
      */
     @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 깃발 꼽기 기능")
     @PostMapping("/{bakeryId}/flag")
