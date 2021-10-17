@@ -1,9 +1,15 @@
 package com.depromeet.breadmapbackend.bakeries.controller;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuListResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingResponse;
+import com.depromeet.breadmapbackend.common.dto.ApiResponse;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
 import com.depromeet.breadmapbackend.bakeries.dto.MenuListResponse;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.MenusListResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +37,39 @@ public class BakeriesController {
     }
 
     /**
-     * 선택된 카테고리에 해댕하는 빵 리스트 반환
+     * 단일 빵집 리뷰 조회
+     * @return ResponseEntity<BakeryReviewListResponse>
+     */
+    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
+    @GetMapping(value = "/{bakeryId}/menu-review")
+    public ResponseEntity<MenuReviewListResponse> getMenuReviewList(@PathVariable Long bakeryId){
+        return null;
+    }
+
+    /**
+     * 단일 빵집 메뉴 조회
+     * @return ResponseEntity<BakeryMenusListResponse>
+     */
+    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
+    @GetMapping(value = "/{bakeryId}/menus")
+    public ResponseEntity<BakeryMenuListResponse> getBakeryMenuList(@PathVariable Long bakeryId){
+        return null;
+    }
+
+    /**
+     * 빵집 별점 넣기
+     * @return 성공 시 201 Created
+     */
+    @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
+    @PostMapping(value = "/{bakeryId}/rating")
+    public ResponseEntity<Void> registerBakeryRating(@PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
+        RegisterBakeryRatingResponse registerBakeryRatingResponse = new RegisterBakeryRatingResponse();
+        float totalRating = registerBakeryRatingResponse.getRating();
+        totalRating = totalRating/registerBakeryRatingRequest.getRating();
+        return ApiResponse.created(null);
+    }
+
+     /** 선택된 카테고리에 해댕하는 빵 리스트 반환
      * @param bakeryId
      * @param category
      * @return 성공 시 200 OK + menusListResponse
