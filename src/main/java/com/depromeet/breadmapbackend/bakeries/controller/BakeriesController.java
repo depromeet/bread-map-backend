@@ -62,13 +62,13 @@ public class BakeriesController {
         return ApiResponse.created(null);
     }
 
-     /** 선택된 카테고리에 해댕하는 빵 리스트 반환
+     /** 선택된 카테고리에 해당하는 빵 리스트 반환
      * @param bakeryId
      * @param category
      * @return 성공 시 200 OK + menusListResponse
      */
     @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
-    @GetMapping(value = "/{bakeryId}")
+    @GetMapping(value = "/{bakeryId}/menu")
     public ResponseEntity<MenuListResponse> getMenuList(@PathVariable Long bakeryId, @RequestParam String category) {
         MenuListResponse menuListResponse = new MenuListResponse();
         return ApiResponse.success(menuListResponse);
