@@ -4,7 +4,7 @@ import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
-import com.depromeet.breadmapbackend.reviews.dto.MenuReviewListResponse;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewsResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +31,11 @@ public class BakeriesController {
 
     /**
      * 단일 빵집 리뷰 조회
-     * @return ResponseEntity<BakeryReviewListResponse>
+     * @return List<MenuReviewsResponse>
      */
     @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu-review")
-    public ResponseEntity<MenuReviewListResponse> getMenuReviewList(@PathVariable Long bakeryId){
+    public List<MenuReviewsResponse> getMenuReviewList(@PathVariable Long bakeryId){
         return null;
     }
 
@@ -62,13 +62,13 @@ public class BakeriesController {
         return ApiResponse.created(null);
     }
 
-     /** 선택된 카테고리에 해댕하는 빵 리스트 반환
+     /** 선택된 카테고리에 해당하는 빵 리스트 반환
      * @param bakeryId
      * @param category
      * @return 성공 시 200 OK + menusListResponse
      */
     @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
-    @GetMapping(value = "/{bakeryId}")
+    @GetMapping(value = "/{bakeryId}/menu")
     public ResponseEntity<MenuListResponse> getMenuList(@PathVariable Long bakeryId, @RequestParam String category) {
         MenuListResponse menuListResponse = new MenuListResponse();
         return ApiResponse.success(menuListResponse);
@@ -124,6 +124,16 @@ public class BakeriesController {
     @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 꽂힌 깃발을 해제하는 기능")
     @DeleteMapping("/{bakeryId}/flag/{flagId}")
     public ResponseEntity<Void> deleteFlags(@PathVariable Long flagId, @PathVariable Long bakeryId) {
+        return null;
+    }
+
+    /**
+     * 단일빵집 상세 조회
+     * @return List<BakeryDetailResponse>
+     */
+    @ApiOperation(value = "단일빵집 상세 조회", notes = "지도에 클릭한 빵집의 상세보기 기능")
+    @GetMapping("/{bakeryId}")
+    public List<BakeryDetailResponse> getBakeryDetail(@PathVariable Long bakeryId) {
         return null;
     }
 }

@@ -26,4 +26,6 @@ public class BakeryListResponse {
     private List<MenuReviewsResponse> menuReviewList; // select
     private List<String> breadCategoryList;
     private List<String> websiteUrlList = new ArrayList<>();
+    private String telNumber;
+    private List<String> basicInfoList = new ArrayList<>();
 }
