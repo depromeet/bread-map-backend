@@ -126,4 +126,14 @@ public class BakeriesController {
     public ResponseEntity<Void> deleteFlags(@PathVariable Long flagId, @PathVariable Long bakeryId) {
         return null;
     }
+
+    /**
+     * 단일빵집 상세 조회
+     * @return List<BakeryDetailResponse>
+     */
+    @ApiOperation(value = "단일빵집 상세 조회", notes = "지도에 클릭한 빵집의 상세보기 기능")
+    @GetMapping("/{bakeryId}")
+    public List<BakeryDetailResponse> getBakeryDetail(@PathVariable Long bakeryId) {
+        return null;
+    }
 }
