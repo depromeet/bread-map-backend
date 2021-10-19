@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.depromeet.breadmapbackend.flags.domain.QFlags.flags;
 import static com.depromeet.breadmapbackend.members.domain.QMembers.members;
 
 @Repository
@@ -22,4 +23,15 @@ public class MemberQuerydslRepository {
                 .fetchOne();
     }
 
+    @Transactional(readOnly = true)
+    public Members findByIdAndBakeryId(Long memberId, Long bakeryId) {
+        return jpaQueryFactory
+                .select(members)
+                .from(members)
+                .join(flags)
+                .on(flags.members.id.eq(memberId)
+                        .and(flags.bakeries.id.eq(bakeryId)))
+                .where(members.id.eq(memberId))
+                .fetchOne();
+    }
 }

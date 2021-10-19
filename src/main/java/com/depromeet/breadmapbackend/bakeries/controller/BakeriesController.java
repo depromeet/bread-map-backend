@@ -1,6 +1,8 @@
 package com.depromeet.breadmapbackend.bakeries.controller;
 
+import com.depromeet.breadmapbackend.auth.jwt.JwtHeaderUtil;
 import com.depromeet.breadmapbackend.bakeries.dto.*;
+import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
@@ -18,6 +21,8 @@ import java.util.List;
 @RequestMapping("/bakery")
 @RequiredArgsConstructor
 public class BakeriesController {
+
+    private final BakeriesService bakeriesService;
 
     /**
      * 빵집 리스트 조회
@@ -133,7 +138,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일빵집 상세 조회", notes = "지도에 클릭한 빵집의 상세보기 기능")
     @GetMapping("/{bakeryId}")
-    public List<BakeryDetailResponse> getBakeryDetail(@PathVariable Long bakeryId) {
-        return null;
+    public List<BakeryDetailResponse> getBakeryDetail(HttpServletRequest request, @PathVariable Long bakeryId) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+
+        return bakeriesService.getBakeryDetail(token, bakeryId);
     }
 }
