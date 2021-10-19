@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BakeryMenuListResponse {
 
-    private Long bakeryId;
     private Long menuId;
     private Long breadCategoryId;
     private Long breadCategoryName;
