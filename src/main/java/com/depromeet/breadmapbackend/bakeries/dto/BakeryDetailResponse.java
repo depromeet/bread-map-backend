@@ -27,9 +27,9 @@ public class BakeryDetailResponse {
     @ApiModelProperty(value = "wifi, pet, parking, takeOut")
     private List<String> basicInfoList = new ArrayList<>();
     private List<String> imgPathList;
-    @ApiModelProperty(value = "빵집 별점(평균 점수)")
+    @ApiModelProperty(value = "빵집 별점(평균 점수), 별점 없을 경우 null 반환")
     private Float avgRating;
-    @ApiModelProperty(value = "빵집 별점(로그인한 회원)")
+    @ApiModelProperty(value = "빵집 별점(로그인한 회원), 별점 없을 경우 null 반환")
     private Float personalRating;
     @ApiModelProperty(value = "빵집 별점 매긴 사람 수")
     private Integer ratingCount;
