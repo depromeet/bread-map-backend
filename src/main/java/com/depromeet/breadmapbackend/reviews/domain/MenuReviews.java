@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.reviews.domain;
 
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.domain.Images;
@@ -34,6 +35,10 @@ public class MenuReviews extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Members members;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "bakery_id")
+    private Bakeries bakeries;
 
     @Column(nullable = false, length = 200)
     private String contents;

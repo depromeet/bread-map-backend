@@ -5,6 +5,7 @@ import com.depromeet.breadmapbackend.common.domain.Images;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.members.domain.Members;
+import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,5 +64,8 @@ public class Bakeries extends BaseEntity {
 
     @OneToMany(mappedBy = "bakeries")
     private List<Menus> menusList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bakeries")
+    private List<MenuReviews> menuReviewsList = new ArrayList<>();
 
 }
