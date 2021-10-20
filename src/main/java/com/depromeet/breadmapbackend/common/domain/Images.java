@@ -29,7 +29,7 @@ public class Images extends BaseEntity {
     private ImageType imageType;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "bakery_review_id")
     private BakeryReviews bakeryReviews;
 
     @ManyToOne(fetch = LAZY)
