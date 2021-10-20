@@ -20,6 +20,6 @@ public class MenuReviewsResponse {
     private Long menuId;
     private List<String> imgPathList;
     private String contents;
-    private Integer rating;
+    private Long rating;
     private LocalDateTime lastModifiedDateTime;
 }

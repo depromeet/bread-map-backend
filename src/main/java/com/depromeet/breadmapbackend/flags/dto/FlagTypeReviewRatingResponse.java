@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class FlagTypeReviewRatingResponse {
 
     private FlagType flagType;
-    private Integer rating;
+    private Long rating;
 }

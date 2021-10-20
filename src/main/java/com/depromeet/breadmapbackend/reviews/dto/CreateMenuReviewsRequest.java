@@ -16,7 +16,7 @@ public class CreateMenuReviewsRequest {
     private String categoryName;
     private String menuName;
     private Integer price;
-    private Integer rating;
+    private Long rating;
     private String contents;
     private List<String> imgPathList;
 }

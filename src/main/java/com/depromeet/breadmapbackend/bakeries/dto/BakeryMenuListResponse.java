@@ -18,6 +18,6 @@ public class BakeryMenuListResponse {
     private Integer price;
     private String imgPath;
     @ApiModelProperty(value = "메뉴 별점(평균 점수), 별점 없을 경우 null 반환")
-    private Float avgRating;
+    private Double avgRating;
 }
 

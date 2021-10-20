@@ -62,7 +62,7 @@ public class BakeriesController {
     @PostMapping(value = "/{bakeryId}/rating")
     public ResponseEntity<Void> registerBakeryRating(@PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
         RegisterBakeryRatingResponse registerBakeryRatingResponse = new RegisterBakeryRatingResponse();
-        float totalRating = registerBakeryRatingResponse.getRating();
+        Double totalRating = registerBakeryRatingResponse.getRating();
         totalRating = totalRating/registerBakeryRatingRequest.getRating();
         return ApiResponse.created(null);
     }

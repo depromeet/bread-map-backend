@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterBakeryRatingRequest {
 
-    private float rating;
+    private Double rating;
 }
