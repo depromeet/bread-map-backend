@@ -8,13 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -30,7 +24,7 @@ public class Images extends BaseEntity {
     @Column(name = "image_id")
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ImageType imageType;
 
