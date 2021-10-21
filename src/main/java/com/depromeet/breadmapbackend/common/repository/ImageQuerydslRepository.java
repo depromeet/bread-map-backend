@@ -1,11 +1,13 @@
 package com.depromeet.breadmapbackend.common.repository;
 
-import com.depromeet.breadmapbackend.common.dto.ImageResponse;
+import com.depromeet.breadmapbackend.common.domain.Images;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.depromeet.breadmapbackend.common.domain.QImages.images;
 
@@ -17,13 +19,19 @@ public class ImageQuerydslRepository {
 
     // TODO: 더미데이터 더 생성해서 테스트 해볼 것
     @Transactional(readOnly = true)
-    public ImageResponse findFirstByBakeryId(Long bakeryId) {
+    public Images findFirstByBakeryId(Long bakeryId) {
         return jpaQueryFactory
-                .select(Projections.fields(ImageResponse.class,
-                        images.imgPath))
-                .from(images)
+                .selectFrom(images)
                 .where(images.bakeries.id.eq(bakeryId))
                 .orderBy(images.createdDateTime.asc())
                 .fetchFirst();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Images> findByMenuReviewId(Long menuReviewId) {
+        return jpaQueryFactory
+                .selectFrom(images)
+                .where(images.menuReviews.id.eq(menuReviewId))
+                .fetch();
     }
 }

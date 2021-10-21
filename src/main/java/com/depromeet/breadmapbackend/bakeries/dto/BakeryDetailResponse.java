@@ -2,8 +2,7 @@ package com.depromeet.breadmapbackend.bakeries.dto;
 
 import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
-import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
-import com.depromeet.breadmapbackend.reviews.dto.MenuReviewsResponse;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewDetailResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,14 +33,14 @@ public class BakeryDetailResponse {
     private Long ratingCount;
     @ApiModelProperty(value = "WIFI, PET, PARKING, TAKEOUT")
     private List<BasicInfoType> basicInfoList = new ArrayList<>();
-    // ImageResponse
+    // Images
     @ApiModelProperty(value = "빵집 대표 이미지")
     private String imgPath;
     // FlagTypeReviewRatingResponse
     @ApiModelProperty(value = "빵집 별점(로그인한 회원), 별점 없을 경우 null 반환")
     private Long personalRating;
     private FlagType flagType;
-    private List<MenuReviewsResponse> menuReviewsResponseList = new ArrayList<>();
+    private List<MenuReviewDetailResponse> menuReviewsResponseList = new ArrayList<>();
     private List<BakeryMenuListResponse> bakeryMenuListResponseList = new ArrayList<>();
 
 }
