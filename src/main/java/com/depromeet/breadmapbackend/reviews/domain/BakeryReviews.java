@@ -3,22 +3,17 @@ package com.depromeet.breadmapbackend.reviews.domain;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.domain.Images;
+import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
@@ -31,11 +26,11 @@ public class BakeryReviews extends BaseEntity {
     @Column(name = "bakery_review_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Members members;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bakery_id")
     private Bakeries bakeries;
 
@@ -45,6 +40,6 @@ public class BakeryReviews extends BaseEntity {
     @Column(nullable = false)
     private Long rating;
 
-    @OneToMany(mappedBy = "bakeryReviews")
-    private List<Images> imagePathList = new ArrayList<>();
+    @OneToOne(fetch = LAZY, mappedBy = "bakeryReviews")
+    private Images images;
 }

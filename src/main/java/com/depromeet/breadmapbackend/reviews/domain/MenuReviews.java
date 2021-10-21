@@ -4,6 +4,7 @@ import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.domain.Images;
+import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,7 +47,7 @@ public class MenuReviews extends BaseEntity {
     @Column(nullable = false)
     private Long rating;
 
-    @OneToMany(mappedBy = "menuReviews")
-    private List<Images> imagePathList = new ArrayList<>();
+    @OneToOne(fetch = LAZY, mappedBy = "menuReviews")
+    private Images images;
 
 }

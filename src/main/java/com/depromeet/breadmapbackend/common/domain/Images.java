@@ -1,14 +1,18 @@
 package com.depromeet.breadmapbackend.common.domain;
 
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
-import com.depromeet.breadmapbackend.common.enumerate.ImageType;
+import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -24,22 +28,20 @@ public class Images extends BaseEntity {
     @Column(name = "image_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ImageType imageType;
-
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "bakery_review_id")
     private BakeryReviews bakeryReviews;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "menu_review_id")
     private MenuReviews menuReviews;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "bakery_id")
+    @ApiModelProperty(value = "빵집리뷰, 메뉴리뷰, 빵집 개척 시 bakeryId 무조건 가지고 간다")
     private Bakeries bakeries;
 
     @Column(nullable = false)
-    private String imgPath;
+    @Convert(converter = StringListConverter.class)
+    private List<String> imgPath = new ArrayList<>();
 }

@@ -15,6 +15,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -58,8 +60,8 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<Flags> flagsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bakeries")
-    private List<Images> imgPathList = new ArrayList<>();
+    @OneToOne(fetch = LAZY, mappedBy = "bakeries")
+    private Images images;
 
     @OneToMany(mappedBy = "bakeries")
     private List<BakeriesBreadCategoriesMap> bakeriesMenusMapList = new ArrayList<>();
