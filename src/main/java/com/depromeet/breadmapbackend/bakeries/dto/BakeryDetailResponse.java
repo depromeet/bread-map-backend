@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.dto;
 
+import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewsResponse;
@@ -31,8 +32,8 @@ public class BakeryDetailResponse {
     private Double avgRating;
     @ApiModelProperty(value = "빵집 별점 매긴 사람 수")
     private Long ratingCount;
-    @ApiModelProperty(value = "wifi, pet, parking, takeOut")
-    private List<String> basicInfoList = new ArrayList<>();
+    @ApiModelProperty(value = "WIFI, PET, PARKING, TAKEOUT")
+    private List<BasicInfoType> basicInfoList = new ArrayList<>();
     // ImageResponse
     @ApiModelProperty(value = "빵집 대표 이미지")
     private String imgPath;

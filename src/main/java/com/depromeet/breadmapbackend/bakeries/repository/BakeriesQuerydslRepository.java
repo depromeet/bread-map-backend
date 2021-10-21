@@ -1,10 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.repository;
 
-import com.depromeet.breadmapbackend.bakeries.domain.QBakeries;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
-import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
-import com.depromeet.breadmapbackend.reviews.domain.QBakeryReviews;
-import com.depromeet.breadmapbackend.reviews.domain.QMenuReviews;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,26 +23,19 @@ public class BakeriesQuerydslRepository {
     public BakeryInfoResponse findByBakeryId(Long bakeryId) {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryInfoResponse.class,
-                        bakeries.name.as("bakeryName"),
-                        bakeries.address,
-                        bakeries.businessHour,
-                        bakeries.websiteUrlList,
-                        bakeries.telNumber,
- //                       bakeries.basicInfoList,
+                        bakeries,
                         flags.count().as("flagsCount"),
                         bakeryReviews.rating.avg().as("avgRating"),
                         bakeryReviews.count().as("ratingCount"),
                         menuReviews.count().as("menuReviewsCount")))
                 .from(bakeries)
                 .join(flags)
-                .on(flags.bakeries.id.eq(bakeryId)
-                        .and(bakeries.id.eq(bakeryId)))
+                .on(flags.bakeries.id.eq(bakeryId))
                 .join(menuReviews)
-                .on(menuReviews.bakeries.id.eq(bakeryId)
-                        .and(bakeries.id.eq(bakeryId)))
+                .on(menuReviews.bakeries.id.eq(bakeryId))
                 .join(bakeryReviews)
-                .on(bakeryReviews.bakeries.id.eq(bakeryId)
-                        .and(bakeries.id.eq(bakeryId)))
+                .on(bakeryReviews.bakeries.id.eq(bakeryId))
+                .where(bakeries.id.eq(bakeryId))
                 .groupBy(bakeries.id)
                 .fetchOne();
     }

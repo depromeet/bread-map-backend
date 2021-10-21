@@ -10,12 +10,14 @@ import com.depromeet.breadmapbackend.common.repository.ImageRepository;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BakeriesService {
 
     private final FlagsQuerydslRepository flagsQuerydslRepository;
@@ -27,23 +29,23 @@ public class BakeriesService {
         Long memberId = authService.getMemberId(token);
         FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
         BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
-        ImageResponse imageResponse = imageQuerydslRepository.findByBakeryId(bakeryId);
+        ImageResponse imageResponse = imageQuerydslRepository.findFirstByBakeryId(bakeryId);
 
         // TODO dto null이면 어떻게 할 지 찾아볼 것 (null ? ' ' : getData())
         // TODO basicInfoList (값 타입 컬렉션 쿼리 구성)
 
         return BakeryDetailResponse.builder()
                 .bakeryId(bakeryId)
-                .bakeryName(bakeryInfoResponse.getBakeryName())
-                .address(bakeryInfoResponse.getAddress())
+                .bakeryName(bakeryInfoResponse.getBakeries().getName())
+                .address(bakeryInfoResponse.getBakeries().getAddress())
                 .flagsCount(bakeryInfoResponse.getFlagsCount())
                 .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
-                .businessHour(bakeryInfoResponse.getBusinessHour())
-                .websiteUrlList(bakeryInfoResponse.getWebsiteUrlList())
-                .telNumber(bakeryInfoResponse.getTelNumber())
+                .businessHour(bakeryInfoResponse.getBakeries().getBusinessHour())
+                .websiteUrlList(bakeryInfoResponse.getBakeries().getWebsiteUrlList())
+                .telNumber(bakeryInfoResponse.getBakeries().getTelNumber())
                 .avgRating(bakeryInfoResponse.getAvgRating())
                 .ratingCount(bakeryInfoResponse.getRatingCount())
-                //.basicInfoList(bakeryInfoResponse.getBasicInfoList())
+                .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
                 .imgPath(imageResponse.getImgPath())
                 .flagType(flagTypeReviewRatingResponse.getFlagType())
                 .personalRating(flagTypeReviewRatingResponse.getRating())

@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.bakeries.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.domain.Images;
+import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.members.domain.Members;
@@ -42,12 +43,13 @@ public class Bakeries extends BaseEntity {
 
     private String telNumber;
 
-    @ElementCollection
+    @ElementCollection(targetClass = BasicInfoType.class)
     @CollectionTable(
             joinColumns = @JoinColumn(name = "bakery_id")
     )
     @Column(name = "basic_info")
-    private List<String> basicInfoList = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private List<BasicInfoType> basicInfoList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
