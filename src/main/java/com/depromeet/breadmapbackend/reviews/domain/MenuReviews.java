@@ -1,15 +1,15 @@
 package com.depromeet.breadmapbackend.reviews.domain;
 
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
-import com.depromeet.breadmapbackend.common.domain.Images;
+import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +35,17 @@ public class MenuReviews extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Members members;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "bakery_id")
+    private Bakeries bakeries;
+
     @Column(nullable = false, length = 200)
     private String contents;
 
     @Column(nullable = false)
-    private Integer rating;
+    private Long rating;
 
-    @OneToMany(mappedBy = "menuReviews")
-    private List<Images> imagePathList = new ArrayList<>();
-
+    @Column(nullable = false)
+    @Convert(converter = StringListConverter.class)
+    private List<String> imgPath = new ArrayList<>();
 }

@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BakeryMenuListResponse {
+public class BakeryMenuResponse {
 
     private Long menuId;
     private Long breadCategoryId;
-    private Long breadCategoryName;
+    private String breadCategoryName;
     private String menuName;
     private Integer price;
     private String imgPath;
-    @ApiModelProperty(value = "메뉴 별점(평균 점수)")
-    private Float avgRating;
+    @ApiModelProperty(value = "메뉴 별점(평균 점수), 별점 없을 경우 null 반환")
+    private Double avgRating;
 }
 
