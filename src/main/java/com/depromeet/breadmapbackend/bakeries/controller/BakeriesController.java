@@ -1,16 +1,19 @@
 package com.depromeet.breadmapbackend.bakeries.controller;
 
+import com.depromeet.breadmapbackend.auth.jwt.JwtHeaderUtil;
 import com.depromeet.breadmapbackend.bakeries.dto.*;
+import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
-import com.depromeet.breadmapbackend.reviews.dto.MenuReviewsResponse;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
@@ -18,6 +21,8 @@ import java.util.List;
 @RequestMapping("/bakery")
 @RequiredArgsConstructor
 public class BakeriesController {
+
+    private final BakeriesService bakeriesService;
 
     /**
      * 빵집 리스트 조회
@@ -31,11 +36,11 @@ public class BakeriesController {
 
     /**
      * 단일 빵집 리뷰 조회
-     * @return List<MenuReviewsResponse>
+     * @return List<MenuReviewDetailResponse>
      */
     @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu-review")
-    public List<MenuReviewsResponse> getMenuReviewList(@PathVariable Long bakeryId){
+    public List<MenuReviewResponse> getMenuReviewList(@PathVariable Long bakeryId){
         return null;
     }
 
@@ -45,7 +50,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menus")
-    public ResponseEntity<BakeryMenuListResponse> getBakeryMenuList(@PathVariable Long bakeryId){
+    public ResponseEntity<BakeryMenuResponse> getBakeryMenuList(@PathVariable Long bakeryId){
         return null;
     }
 
@@ -57,7 +62,7 @@ public class BakeriesController {
     @PostMapping(value = "/{bakeryId}/rating")
     public ResponseEntity<Void> registerBakeryRating(@PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
         RegisterBakeryRatingResponse registerBakeryRatingResponse = new RegisterBakeryRatingResponse();
-        float totalRating = registerBakeryRatingResponse.getRating();
+        Double totalRating = registerBakeryRatingResponse.getRating();
         totalRating = totalRating/registerBakeryRatingRequest.getRating();
         return ApiResponse.created(null);
     }
@@ -133,7 +138,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일빵집 상세 조회", notes = "지도에 클릭한 빵집의 상세보기 기능")
     @GetMapping("/{bakeryId}")
-    public List<BakeryDetailResponse> getBakeryDetail(@PathVariable Long bakeryId) {
-        return null;
+    public BakeryDetailResponse getBakeryDetail(HttpServletRequest request, @PathVariable Long bakeryId) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+
+        return bakeriesService.getBakeryDetail(token, bakeryId);
     }
 }

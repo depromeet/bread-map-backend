@@ -1,6 +1,5 @@
 package com.depromeet.breadmapbackend.reviews.dto;
 
-import com.depromeet.breadmapbackend.common.domain.Images;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ public class CreateMenuReviewsRequest {
     private String categoryName;
     private String menuName;
     private Integer price;
-    private Integer rating;
+    private Long rating;
     private String contents;
     private List<String> imgPathList;
 }
