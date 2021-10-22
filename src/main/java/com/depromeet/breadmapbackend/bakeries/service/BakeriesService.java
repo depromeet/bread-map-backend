@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,16 +31,8 @@ public class BakeriesService {
         FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
         BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
 
-        List<MenuReviewResponse> menuReviewDetailResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
-
+        List<MenuReviewResponse> menuReviewResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
         List<BakeryMenuResponse> bakeryMenuResponseList = menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
-        for(BakeryMenuResponse bakeryMenuResponse: bakeryMenuResponseList) {
-            log.info("menuName: " + bakeryMenuResponse.getMenuName());
-            log.info("imgPath: " + bakeryMenuResponse.getImgPath());
-        }
-
-
-        // TODO dto null이면 어떻게 할 지 찾아볼 것 (null ? ' ' : getData())
 
         return BakeryDetailResponse.builder()
                 .bakeryId(bakeryId)
@@ -55,9 +48,9 @@ public class BakeriesService {
                 .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
                 .imgPath(bakeryInfoResponse.getBakeries().getImgPath().get(0))
                 .flagType(flagTypeReviewRatingResponse.getFlagType())
-                .personalRating(flagTypeReviewRatingResponse.getRating())
-                .menuReviewsResponseList(menuReviewDetailResponseList)
-                .bakeryMenuListResponseList(bakeryMenuResponseList)
+                .personalRating(flagTypeReviewRatingResponse.getPersonalRating())
+                .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
+                .bakeryMenuListResponseList(bakeryMenuResponseList != null ? bakeryMenuResponseList : Collections.emptyList())
                 .build();
     }
 }

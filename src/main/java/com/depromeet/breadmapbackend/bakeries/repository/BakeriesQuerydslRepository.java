@@ -18,22 +18,21 @@ public class BakeriesQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    // TODO: 더미데이터 더 생성해서 테스트 해볼 것
     @Transactional(readOnly = true)
     public BakeryInfoResponse findByBakeryId(Long bakeryId) {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryInfoResponse.class,
                         bakeries,
                         flags.count().as("flagsCount"),
-                        bakeryReviews.rating.avg().as("avgRating"),
+                        bakeryReviews.rating.avg().coalesce(0.0).as("avgRating"),
                         bakeryReviews.count().as("ratingCount"),
                         menuReviews.count().as("menuReviewsCount")))
                 .from(bakeries)
-                .join(flags)
+                .leftJoin(flags)
                 .on(flags.bakeries.id.eq(bakeryId))
-                .join(menuReviews)
+                .leftJoin(menuReviews)
                 .on(menuReviews.bakeries.id.eq(bakeryId))
-                .join(bakeryReviews)
+                .leftJoin(bakeryReviews)
                 .on(bakeryReviews.bakeries.id.eq(bakeryId))
                 .where(bakeries.id.eq(bakeryId))
                 .groupBy(bakeries.id)
