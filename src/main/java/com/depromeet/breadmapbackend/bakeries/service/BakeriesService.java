@@ -7,8 +7,10 @@ import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslRepository;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
+import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
+import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class BakeriesService {
     private final FlagsQuerydslRepository flagsQuerydslRepository;
     private final BakeriesQuerydslRepository bakeriesQuerydslRepository;
     private final MenuReviewQuerydslRepository menuReviewQuerydslRepository;
+    private final MenuReviewRepository menuReviewRepository;
     private final AuthService authService;
 
     public BakeryDetailResponse getBakeryDetail(String token, Long bakeryId) {
@@ -52,5 +55,12 @@ public class BakeriesService {
                 .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
                 .bakeryMenuListResponseList(bakeryMenuResponseList != null ? bakeryMenuResponseList : Collections.emptyList())
                 .build();
+    }
+
+    public void createMenuReviewList(Long bakeryId, List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
+        // TODO bakeryId, menuName으로 메뉴테이블 검색해서 없으면 메뉴 생성 후 리뷰 작성
+
+        //menuReviews.createMenuReview(createMenuReviewRequestList, menus, bakeries);
+        //menuReviewRepository.save(menuReviews)
     }
 }
