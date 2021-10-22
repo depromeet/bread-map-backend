@@ -1,7 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
-import com.depromeet.breadmapbackend.common.domain.Images;
 import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
@@ -14,8 +13,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
@@ -60,8 +57,9 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<Flags> flagsList = new ArrayList<>();
 
-    @OneToOne(fetch = LAZY, mappedBy = "bakeries")
-    private Images images;
+    @Column(nullable = false)
+    @Convert(converter = StringListConverter.class)
+    private List<String> imgPath = new ArrayList<>();
 
     @OneToMany(mappedBy = "bakeries")
     private List<BakeriesBreadCategoriesMap> bakeriesMenusMapList = new ArrayList<>();

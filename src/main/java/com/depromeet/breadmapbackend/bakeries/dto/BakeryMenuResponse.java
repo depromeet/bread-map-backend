@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BakeryMenuListResponse {
+public class BakeryMenuResponse {
 
     private Long menuId;
     private Long breadCategoryId;
-    private Long breadCategoryName;
+    private String breadCategoryName;
     private String menuName;
     private Integer price;
     private String imgPath;

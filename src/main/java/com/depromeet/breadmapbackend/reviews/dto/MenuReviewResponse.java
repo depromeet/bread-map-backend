@@ -1,13 +1,10 @@
 package com.depromeet.breadmapbackend.reviews.dto;
 
-import com.depromeet.breadmapbackend.common.domain.Images;
-import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Convert;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MenuReviewDetailResponse {
+public class MenuReviewResponse {
 
     private Long menuReviewId;
     private Long memberId;

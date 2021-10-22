@@ -1,6 +1,5 @@
 package com.depromeet.breadmapbackend.reviews.dto;
 
-import com.depromeet.breadmapbackend.common.domain.Images;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

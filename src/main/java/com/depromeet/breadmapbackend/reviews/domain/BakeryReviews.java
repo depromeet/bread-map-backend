@@ -1,8 +1,7 @@
 package com.depromeet.breadmapbackend.reviews.domain;
 
-import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
-import com.depromeet.breadmapbackend.common.domain.Images;
+import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
@@ -40,6 +39,7 @@ public class BakeryReviews extends BaseEntity {
     @Column(nullable = false)
     private Long rating;
 
-    @OneToOne(fetch = LAZY, mappedBy = "bakeryReviews")
-    private Images images;
+    @Column(nullable = false)
+    @Convert(converter = StringListConverter.class)
+    private List<String> imgPath = new ArrayList<>();
 }

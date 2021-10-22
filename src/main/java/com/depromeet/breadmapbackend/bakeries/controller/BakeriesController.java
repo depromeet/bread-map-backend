@@ -6,7 +6,7 @@ import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
-import com.depromeet.breadmapbackend.reviews.dto.MenuReviewDetailResponse;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu-review")
-    public List<MenuReviewDetailResponse> getMenuReviewList(@PathVariable Long bakeryId){
+    public List<MenuReviewResponse> getMenuReviewList(@PathVariable Long bakeryId){
         return null;
     }
 
@@ -50,7 +50,7 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menus")
-    public ResponseEntity<BakeryMenuListResponse> getBakeryMenuList(@PathVariable Long bakeryId){
+    public ResponseEntity<BakeryMenuResponse> getBakeryMenuList(@PathVariable Long bakeryId){
         return null;
     }
 
