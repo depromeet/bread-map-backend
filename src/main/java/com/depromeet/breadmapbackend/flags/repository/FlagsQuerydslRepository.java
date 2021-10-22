@@ -22,9 +22,9 @@ public class FlagsQuerydslRepository {
         return jpaQueryFactory
                 .select(Projections.fields(FlagTypeReviewRatingResponse.class,
                         flags.flagType,
-                        bakeryReviews.rating))
+                        bakeryReviews.rating.coalesce(0L).as("personalRating")))
                 .from(flags)
-                .join(bakeryReviews)
+                .leftJoin(bakeryReviews)
                 .on(flags.members.id.eq(memberId)
                         .and(bakeryReviews.members.id.eq(memberId))
                         .and(flags.bakeries.id.eq(bakeryId))

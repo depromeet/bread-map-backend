@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.flags.dto;
 
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class FlagTypeReviewRatingResponse {
 
     private FlagType flagType;
-    private Long rating;
+    @ApiModelProperty(value = "회원 한명의 빵집 별점, 별점 없을 경우 0.0 반환")
+    private Long personalRating;
 }
