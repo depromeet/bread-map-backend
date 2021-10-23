@@ -8,6 +8,7 @@ import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,11 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 리스트", notes = "빵집 리스트 조회")
     @GetMapping
-    public ResponseEntity<BakeryListResponse> getBakeryList(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam Long range){ // TODO range 소숫점 있는지 체크 필요
-        return null;
+    public List<BakeryListResponse> getBakeryList(
+            @ApiParam(value="위도", required = true) @RequestParam Double latitude,
+            @ApiParam(value="경도", required = true) @RequestParam Double longitude,
+            @ApiParam(value="반지름(m)", required = true) @RequestParam Long range){
+        return bakeriesService.getBakeryList(latitude, longitude, range);
     }
 
     /**

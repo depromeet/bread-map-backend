@@ -6,6 +6,7 @@ import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,7 @@ public class BakeriesService {
     private final MenuReviewQuerydslRepository menuReviewQuerydslRepository;
     private final MenusQuerydslRepository menusQuerydslRepository;
     private final BreadCategoriesQuerydslRepository breadCategoriesQuerydslRepository;
+    private final BakeriesBreadCategoriesMapQuerydslRepository bakeriesBreadCategoriesMapQuerydslRepository;
     private final MemberRepository memberRepository;
     private final BakeriesRepository bakeriesRepository;
     private final MenuReviewRepository menuReviewRepository;
@@ -64,12 +67,40 @@ public class BakeriesService {
                 .avgRating(bakeryInfoResponse.getAvgRating())
                 .ratingCount(bakeryInfoResponse.getRatingCount())
                 .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
-                .imgPath(bakeryInfoResponse.getBakeries().getImgPath().get(0))
+                .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "") 
                 .flagType(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getFlagType() : FlagType.NONE)
                 .personalRating(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getPersonalRating() : 0L)
                 .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
                 .bakeryMenuListResponseList(bakeryMenuResponseList != null ? bakeryMenuResponseList : Collections.emptyList())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<BakeryListResponse> getBakeryList(Double latitude, Double longitude, Long range) {
+        List<BakeryListResponse> bakeryListResponseList = new ArrayList<>();
+
+        List<Long> bakeryIdList = bakeriesRepository.findByEarthDistance(latitude, longitude, range);
+        for(Long bakeryId: bakeryIdList) {
+            BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
+            List<MenuReviewResponse> menuReviewResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
+            List<String> breadCategoryList = bakeriesBreadCategoriesMapQuerydslRepository.findByBakeryId(bakeryId);
+
+            bakeryListResponseList.add(BakeryListResponse.builder()
+                    .bakeryId(bakeryId)
+                    .bakeryName(bakeryInfoResponse.getBakeries().getName())
+                    .latitude(bakeryInfoResponse.getBakeries().getLatitude())
+                    .longitude(bakeryInfoResponse.getBakeries().getLongitude())
+                    .address(bakeryInfoResponse.getBakeries().getAddress())
+                    .flagsCount(bakeryInfoResponse.getFlagsCount())
+                    .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
+                    .avgRating(bakeryInfoResponse.getAvgRating())
+                    .ratingCount(bakeryInfoResponse.getRatingCount())
+                    .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
+                    .menuReviewList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
+                    .breadCategoryList(breadCategoryList)
+                    .build());
+        }
+        return bakeryListResponseList != null ? bakeryListResponseList : Collections.emptyList();
     }
 
     @Transactional
