@@ -57,7 +57,7 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<Flags> flagsList = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "varchar(255) default ''")
     @Convert(converter = StringListConverter.class)
     private List<String> imgPath = new ArrayList<>();
 
