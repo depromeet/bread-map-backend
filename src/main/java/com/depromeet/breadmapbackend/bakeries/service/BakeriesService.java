@@ -7,8 +7,10 @@ import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
+import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
+import com.depromeet.breadmapbackend.flags.repository.FlagsRepository;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
@@ -46,6 +48,7 @@ public class BakeriesService {
     private final MenuReviewRepository menuReviewRepository;
     private final MenusRepository menusRepository;
     private final BakeryReviewRepository bakeryReviewRepository;
+    private final FlagsRepository flagsRepository;
     private final AuthService authService;
 
     @Transactional(readOnly = true)
@@ -141,6 +144,15 @@ public class BakeriesService {
         Optional<Members> member = memberRepository.findById(memberId);
 
         if (bakeryReview == null) {
+            Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
+            if (flag == null) {
+                Flags newFlag = Flags.builder()
+                        .members(member.orElseThrow(NullPointerException::new))
+                        .bakeries(bakery.orElseThrow(NullPointerException::new))
+                        .flagType(FlagType.NONE)
+                        .build();
+                flagsRepository.save(newFlag);
+            }
             BakeryReviews newBakeryReview = BakeryReviews.builder()
                     .bakeries(bakery.orElseThrow(NullPointerException::new))
                     .members(member.orElseThrow(NullPointerException::new))
@@ -151,8 +163,9 @@ public class BakeriesService {
             bakeryReviewRepository.save(newBakeryReview);
         } else {
             bakeryReview.updateRating(registerBakeryRatingRequest.getRating());
-            bakeryReviewRepository.save(bakeryReview);
         }
+
+
     }
 
 }
