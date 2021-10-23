@@ -98,7 +98,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵 리뷰(들) 작성", notes = "빵(들)에 대한 리뷰 작성")
     @PostMapping(value = "/{bakeryId}/menu-review")
-    public ResponseEntity<Void> createMenuReviewList(@PathVariable Long bakeryId, @RequestBody List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
+    public ResponseEntity<Void> createMenuReviewList(HttpServletRequest request, @PathVariable Long bakeryId, @RequestBody List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.createMenuReviewList(token, bakeryId, createMenuReviewRequestList);
         return ApiResponse.created(null);
     }
 

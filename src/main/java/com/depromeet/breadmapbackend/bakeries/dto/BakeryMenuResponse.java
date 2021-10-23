@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.bakeries.dto;
 
 
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class BakeryMenuResponse {
 
     private Long menuId;
     private Long breadCategoryId;
-    private String breadCategoryName;
+    private BreadCategoryType breadCategoryName;
     private String menuName;
     private Integer price;
     private String imgPath;

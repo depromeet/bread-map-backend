@@ -5,7 +5,9 @@ import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.members.domain.Members;
+import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,4 +50,15 @@ public class MenuReviews extends BaseEntity {
     @Column(nullable = false)
     @Convert(converter = StringListConverter.class)
     private List<String> imgPath = new ArrayList<>();
+
+    @Builder
+    public void createMenuReview(CreateMenuReviewsRequest createMenuReviewsRequest, Menus menu, Members member, Bakeries bakery) {
+        this.contents = createMenuReviewsRequest.getContents();
+        this.rating = createMenuReviewsRequest.getRating();
+        this.imgPath = createMenuReviewsRequest.getImgPathList();
+        this.menus = menu;
+        this.members = member;
+        this.bakeries = bakery;
+        bakery.getMenuReviewsList().add(this);
+    }
 }
