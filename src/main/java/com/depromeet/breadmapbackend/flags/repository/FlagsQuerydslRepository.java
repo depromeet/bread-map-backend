@@ -27,7 +27,7 @@ public class FlagsQuerydslRepository {
                         .and(bakeryReviews.members.id.eq(memberId))
                         .and(flags.bakeries.id.eq(bakeryId))
                         .and(bakeryReviews.bakeries.id.eq(bakeryId)))
-                .where(flags.bakeries.id.eq(bakeryId))
+                .where(flags.bakeries.id.eq(bakeryId).and(flags.members.id.eq(memberId)))
                 .fetchOne();
     }
 }
