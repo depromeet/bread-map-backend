@@ -18,7 +18,6 @@ public class BakeriesQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    //@Transactional(readOnly = true)
     public BakeryInfoResponse findByBakeryId(Long bakeryId) {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryInfoResponse.class,

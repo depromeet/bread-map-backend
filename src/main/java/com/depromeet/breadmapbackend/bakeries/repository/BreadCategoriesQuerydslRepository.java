@@ -18,7 +18,6 @@ public class BreadCategoriesQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    //@Transactional(readOnly = true)
     public BreadCategories findByBreadCategoryName(String categoryName) {
         return jpaQueryFactory
                 .selectFrom(breadCategories)

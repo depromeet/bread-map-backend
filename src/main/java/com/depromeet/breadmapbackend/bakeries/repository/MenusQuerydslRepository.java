@@ -23,7 +23,6 @@ public class MenusQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    //@Transactional(readOnly = true)
     public Menus findByMenuNameBakeryId(String menuName, Long bakeryId) {
         return jpaQueryFactory
                 .selectFrom(menus)
