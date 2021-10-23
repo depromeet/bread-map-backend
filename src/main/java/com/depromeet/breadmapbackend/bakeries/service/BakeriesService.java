@@ -1,12 +1,19 @@
 package com.depromeet.breadmapbackend.bakeries.service;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
+import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
+import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
-import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslRepository;
+import com.depromeet.breadmapbackend.bakeries.repository.*;
+import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
+import com.depromeet.breadmapbackend.members.domain.Members;
+import com.depromeet.breadmapbackend.members.repository.MemberRepository;
+import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
@@ -14,9 +21,11 @@ import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +35,15 @@ public class BakeriesService {
     private final FlagsQuerydslRepository flagsQuerydslRepository;
     private final BakeriesQuerydslRepository bakeriesQuerydslRepository;
     private final MenuReviewQuerydslRepository menuReviewQuerydslRepository;
+    private final MenusQuerydslRepository menusQuerydslRepository;
+    private final BreadCategoriesQuerydslRepository breadCategoriesQuerydslRepository;
+    private final MemberRepository memberRepository;
+    private final BakeriesRepository bakeriesRepository;
     private final MenuReviewRepository menuReviewRepository;
+    private final MenusRepository menusRepository;
     private final AuthService authService;
 
+    @Transactional(readOnly = true)
     public BakeryDetailResponse getBakeryDetail(String token, Long bakeryId) {
         Long memberId = authService.getMemberId(token);
         FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
@@ -50,17 +65,34 @@ public class BakeriesService {
                 .ratingCount(bakeryInfoResponse.getRatingCount())
                 .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
                 .imgPath(bakeryInfoResponse.getBakeries().getImgPath().get(0))
-                .flagType(flagTypeReviewRatingResponse.getFlagType())
-                .personalRating(flagTypeReviewRatingResponse.getPersonalRating())
+                .flagType(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getFlagType() : FlagType.NONE)
+                .personalRating(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getPersonalRating() : 0L)
                 .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
                 .bakeryMenuListResponseList(bakeryMenuResponseList != null ? bakeryMenuResponseList : Collections.emptyList())
                 .build();
     }
 
-    public void createMenuReviewList(Long bakeryId, List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
-        // TODO bakeryId, menuName으로 메뉴테이블 검색해서 없으면 메뉴 생성 후 리뷰 작성
+    @Transactional
+    public void createMenuReviewList(String token, Long bakeryId, List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
+        for(CreateMenuReviewsRequest createMenuReviewsRequest: createMenuReviewRequestList) {
+            Long memberId = authService.getMemberId(token);
+            Optional<Members> member = memberRepository.findById(memberId);
+            Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
+            MenuReviews menuReview = new MenuReviews();
 
-        //menuReviews.createMenuReview(createMenuReviewRequestList, menus, bakeries);
-        //menuReviewRepository.save(menuReviews)
+            Menus menu = menusQuerydslRepository.findByMenuNameBakeryId(createMenuReviewsRequest.getMenuName(), bakeryId);
+            if (menu == null) {
+                BreadCategories breadCategory = breadCategoriesQuerydslRepository.findByBreadCategoryName(createMenuReviewsRequest.getCategoryName().replaceAll("[ /]", ""));
+                String imgPath = createMenuReviewsRequest.getImgPathList().isEmpty() ? "" : createMenuReviewsRequest.getImgPathList().get(0);
+                Menus newMenu = new Menus();
+                newMenu.createMenu(bakery.orElseThrow(NullPointerException::new), createMenuReviewsRequest.getMenuName(), createMenuReviewsRequest.getPrice(), breadCategory, imgPath);
+                menusRepository.save(newMenu);
+                menuReview.createMenuReview(createMenuReviewsRequest, newMenu, member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new));
+            }
+            else {
+                menuReview.createMenuReview(createMenuReviewsRequest, menu, member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new));
+            }
+            menuReviewRepository.save(menuReview);
+        }
     }
 }

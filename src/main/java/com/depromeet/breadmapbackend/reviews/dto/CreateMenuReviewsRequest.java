@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateMenuReviewsRequest {
 
-    private Long bakeryId; // TODO PathVariable로 bakeryId를 받고 있어 body로 다시 받아야 할지 고려 필요
     private String categoryName;
     private String menuName;
     private Integer price;

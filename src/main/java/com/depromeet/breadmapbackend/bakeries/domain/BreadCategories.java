@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.bakeries.domain;
 
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,8 @@ public class BreadCategories extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private BreadCategoryType name;
 
     @OneToMany(mappedBy = "breadCategories")
     private List<BakeriesBreadCategoriesMap> bakeriesBreadCategoriesMapList = new ArrayList<>();
