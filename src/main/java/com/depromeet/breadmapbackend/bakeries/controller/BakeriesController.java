@@ -42,7 +42,7 @@ public class BakeriesController {
      * 단일 빵집 리뷰 조회
      * @return List<MenuReviewDetailResponse>
      */
-    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
+    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회") // TODO pagable 쓰면 될 듯? (프론트에서 주는대로 순서 맞추어 줘도 될듯..?) 무한스크롤이면 안녕..
     @GetMapping(value = "/{bakeryId}/menu-review")
     public List<MenuReviewResponse> getMenuReviewList(@PathVariable Long bakeryId){
         return null;
@@ -64,10 +64,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
     @PostMapping(value = "/{bakeryId}/rating")
-    public ResponseEntity<Void> registerBakeryRating(@PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
-        RegisterBakeryRatingResponse registerBakeryRatingResponse = new RegisterBakeryRatingResponse();
-        Double totalRating = registerBakeryRatingResponse.getRating();
-        totalRating = totalRating/registerBakeryRatingRequest.getRating();
+    public ResponseEntity<Void> registerBakeryRating(HttpServletRequest request, @PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest);
         return ApiResponse.created(null);
     }
 

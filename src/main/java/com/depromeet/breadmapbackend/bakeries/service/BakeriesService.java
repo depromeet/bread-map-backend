@@ -4,19 +4,19 @@ import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
+import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
+import com.depromeet.breadmapbackend.reviews.repository.BakeryReviewQuerydslRepository;
+import com.depromeet.breadmapbackend.reviews.repository.BakeryReviewRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +40,12 @@ public class BakeriesService {
     private final MenusQuerydslRepository menusQuerydslRepository;
     private final BreadCategoriesQuerydslRepository breadCategoriesQuerydslRepository;
     private final BakeriesBreadCategoriesMapQuerydslRepository bakeriesBreadCategoriesMapQuerydslRepository;
+    private final BakeryReviewQuerydslRepository bakeryReviewQuerydslRepository;
     private final MemberRepository memberRepository;
     private final BakeriesRepository bakeriesRepository;
     private final MenuReviewRepository menuReviewRepository;
     private final MenusRepository menusRepository;
+    private final BakeryReviewRepository bakeryReviewRepository;
     private final AuthService authService;
 
     @Transactional(readOnly = true)
@@ -121,8 +123,7 @@ public class BakeriesService {
                 newMenu.createMenu(bakery.orElseThrow(NullPointerException::new), createMenuReviewsRequest.getMenuName(), createMenuReviewsRequest.getPrice(), breadCategory, imgPath);
                 menusRepository.save(newMenu);
                 menuReview.createMenuReview(createMenuReviewsRequest, newMenu, member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new));
-            }
-            else {
+            } else {
                 if (menu.getImgPath().equals("") && !imgPath.equals("")) {
                         menu.updateImgPath(imgPath);
                 }
@@ -131,4 +132,27 @@ public class BakeriesService {
             menuReviewRepository.save(menuReview);
         }
     }
+
+    @Transactional
+    public void registerBakeryRating(String token, Long bakeryId, RegisterBakeryRatingRequest registerBakeryRatingRequest) {
+        Long memberId = authService.getMemberId(token);
+        BakeryReviews bakeryReview = bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
+        Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
+        Optional<Members> member = memberRepository.findById(memberId);
+
+        if (bakeryReview == null) {
+            BakeryReviews newBakeryReview = BakeryReviews.builder()
+                    .bakeries(bakery.orElseThrow(NullPointerException::new))
+                    .members(member.orElseThrow(NullPointerException::new))
+                    .contents("")
+                    .rating(registerBakeryRatingRequest.getRating())
+                    .imgPath(Collections.emptyList())
+                    .build();
+            bakeryReviewRepository.save(newBakeryReview);
+        } else {
+            bakeryReview.updateRating(registerBakeryRatingRequest.getRating());
+            bakeryReviewRepository.save(bakeryReview);
+        }
+    }
+
 }
