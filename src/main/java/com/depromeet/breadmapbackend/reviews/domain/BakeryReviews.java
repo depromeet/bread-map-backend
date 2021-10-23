@@ -48,4 +48,5 @@ public class BakeryReviews extends BaseEntity {
     public void updateRating(Long rating) {
         this.rating = rating;
     }
+
 }

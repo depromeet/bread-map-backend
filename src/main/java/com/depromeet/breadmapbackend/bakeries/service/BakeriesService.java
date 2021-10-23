@@ -160,6 +160,9 @@ public class BakeriesService {
                     .rating(registerBakeryRatingRequest.getRating())
                     .imgPath(Collections.emptyList())
                     .build();
+            member.orElseThrow(NullPointerException::new).getBakeryReviewsList().add(newBakeryReview);
+            // TODO 체크 필요: bakeries에는 bakeryReviewsList 양방향 안 걸려있음
+            // TODO 체크 필요: member에도 add하는거
             bakeryReviewRepository.save(newBakeryReview);
         } else {
             bakeryReview.updateRating(registerBakeryRatingRequest.getRating());
