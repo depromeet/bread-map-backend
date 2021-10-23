@@ -107,20 +107,25 @@ public class BakeriesService {
     public void createMenuReviewList(String token, Long bakeryId, List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
         for(CreateMenuReviewsRequest createMenuReviewsRequest: createMenuReviewRequestList) {
             Long memberId = authService.getMemberId(token);
-            Optional<Members> member = memberRepository.findById(memberId);
-            Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
+            String imgPath = createMenuReviewsRequest.getImgPathList().isEmpty() ? "" : createMenuReviewsRequest.getImgPathList().get(0);
             MenuReviews menuReview = new MenuReviews();
 
+            Optional<Members> member = memberRepository.findById(memberId);
+            Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
             Menus menu = menusQuerydslRepository.findByMenuNameBakeryId(createMenuReviewsRequest.getMenuName(), bakeryId);
+
             if (menu == null) {
                 BreadCategories breadCategory = breadCategoriesQuerydslRepository.findByBreadCategoryName(createMenuReviewsRequest.getCategoryName().replaceAll("[ /]", ""));
-                String imgPath = createMenuReviewsRequest.getImgPathList().isEmpty() ? "" : createMenuReviewsRequest.getImgPathList().get(0);
+
                 Menus newMenu = new Menus();
                 newMenu.createMenu(bakery.orElseThrow(NullPointerException::new), createMenuReviewsRequest.getMenuName(), createMenuReviewsRequest.getPrice(), breadCategory, imgPath);
                 menusRepository.save(newMenu);
                 menuReview.createMenuReview(createMenuReviewsRequest, newMenu, member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new));
             }
             else {
+                if (menu.getImgPath().equals("") && !imgPath.equals("")) {
+                        menu.updateImgPath(imgPath);
+                }
                 menuReview.createMenuReview(createMenuReviewsRequest, menu, member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new));
             }
             menuReviewRepository.save(menuReview);
