@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public enum BreadCategories {
+public enum BreadCategoryType {
 
     식사빵("식사빵"),
     구움과자류("구움과자류"),
@@ -27,6 +27,6 @@ public enum BreadCategories {
 
     private final String name;
 
-    public static List<String> breadCategoriesList = Arrays.stream(BreadCategories.values())
-            .map(BreadCategories::getName).collect(Collectors.toList());
+    public static List<String> breadCategoriesList = Arrays.stream(BreadCategoryType.values())
+            .map(BreadCategoryType::getName).collect(Collectors.toList());
 }

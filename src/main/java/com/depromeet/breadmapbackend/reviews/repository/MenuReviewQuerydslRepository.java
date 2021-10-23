@@ -6,7 +6,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,11 +18,9 @@ public class MenuReviewQuerydslRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     // TODO: 더미데이터 더 생성해서 테스트 해볼 것
-    @Transactional(readOnly = true)
     public List<MenuReviewResponse> findMenuReviewListByBakeryId(Long bakeryId, Long offset, Long limit) {
         return jpaQueryFactory
                 .select(Projections.fields(MenuReviewResponse.class,
-                        //menuReviews,
                         menuReviews.id.as("menuReviewId"),
                         menuReviews.members.id.as("memberId"),
                         menuReviews.menus.id.as("menuId"),
@@ -43,7 +40,6 @@ public class MenuReviewQuerydslRepository {
                 .fetch();
     }
 
-    @Transactional(readOnly = true)
     public List<BakeryMenuResponse> findBakeryMenuListByBakeryId(Long bakeryId, Long offset, Long limit) {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryMenuResponse.class,
