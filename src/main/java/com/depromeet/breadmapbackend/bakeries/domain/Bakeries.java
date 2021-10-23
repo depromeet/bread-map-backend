@@ -7,6 +7,7 @@ import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bakeries extends BaseEntity {

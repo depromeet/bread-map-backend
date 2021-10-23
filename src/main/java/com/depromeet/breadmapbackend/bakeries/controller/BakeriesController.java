@@ -86,7 +86,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 생성", notes = "신규 빵집 생성")
     @PostMapping
-    public ResponseEntity<Void> createBakery(@RequestBody CreateBakeryRequest createBakeryRequest) {
+    public ResponseEntity<Void> createBakery(HttpServletRequest request, @RequestBody CreateBakeryRequest createBakeryRequest) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.createBakery(token, createBakeryRequest);
         return ApiResponse.created(null);
     }
 

@@ -7,6 +7,7 @@ import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -94,5 +96,13 @@ public class BakeriesService {
             }
             menuReviewRepository.save(menuReview);
         }
+    }
+
+    @Transactional
+    public void createBakery(String token, CreateBakeryRequest createBakeryRequest) {
+        Long memberId = authService.getMemberId(token);
+        Optional<Members> member = memberRepository.findById(memberId);
+
+        bakeriesRepository.save(createBakeryRequest.toEntity(member.orElseThrow(NullPointerException::new)));
     }
 }
