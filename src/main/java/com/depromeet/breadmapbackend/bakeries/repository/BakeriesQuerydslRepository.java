@@ -22,10 +22,10 @@ public class BakeriesQuerydslRepository {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryInfoResponse.class,
                         bakeries,
-                        flags.count().as("flagsCount"),
+                        flags.countDistinct().as("flagsCount"),
                         bakeryReviews.rating.avg().coalesce(0.0).as("avgRating"),
-                        bakeryReviews.count().as("ratingCount"),
-                        menuReviews.count().as("menuReviewsCount")))
+                        bakeryReviews.countDistinct().as("ratingCount"),
+                        menuReviews.countDistinct().as("menuReviewsCount")))
                 .from(bakeries)
                 .leftJoin(flags)
                 .on(flags.bakeries.id.eq(bakeryId).and(flags.flagType.eq(FlagType.GONE)))
@@ -33,7 +33,7 @@ public class BakeriesQuerydslRepository {
                 .on(menuReviews.bakeries.id.eq(bakeryId))
                 .leftJoin(bakeryReviews)
                 .on(bakeryReviews.bakeries.id.eq(bakeryId))
-                .where(bakeries.id.eq(bakeryId)) // TODO flags count 셀 때 가본곳에 해당하는 것만 count하도록 변경 필요
+                .where(bakeries.id.eq(bakeryId))
                 .groupBy(bakeries.id)
                 .fetchOne();
     }
