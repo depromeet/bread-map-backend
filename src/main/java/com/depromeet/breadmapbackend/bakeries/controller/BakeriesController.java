@@ -3,8 +3,10 @@ package com.depromeet.breadmapbackend.bakeries.controller;
 import com.depromeet.breadmapbackend.auth.jwt.JwtHeaderUtil;
 import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
+import com.depromeet.breadmapbackend.bakeries.service.MenusService;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
+import com.depromeet.breadmapbackend.flags.service.FlagsService;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
@@ -26,6 +28,8 @@ public class BakeriesController {
 
     private final BakeriesService bakeriesService;
     private final MenuReviewsService menuReviewsService;
+    private final FlagsService flagsService;
+    private final MenusService menusService;
 
     /**
      * 빵집 리스트 조회
@@ -80,7 +84,7 @@ public class BakeriesController {
     @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
     @GetMapping(value = "/{bakeryId}/menu")
     public ResponseEntity<MenuListResponse> getMenuList(@PathVariable Long bakeryId, @RequestParam String category) {
-        MenuListResponse menuListResponse = bakeriesService.getMenuList(bakeryId, category);
+        MenuListResponse menuListResponse = menusService.getMenuList(bakeryId, category);
         return ApiResponse.success(menuListResponse);
     }
 
@@ -107,7 +111,7 @@ public class BakeriesController {
     @PostMapping(value = "/{bakeryId}/menu-review")
     public ResponseEntity<Void> createMenuReviewList(HttpServletRequest request, @PathVariable Long bakeryId, @RequestBody List<CreateMenuReviewsRequest> createMenuReviewRequestList) {
         String token = JwtHeaderUtil.getAccessToken(request);
-        bakeriesService.createMenuReviewList(token, bakeryId, createMenuReviewRequestList);
+        menuReviewsService.createMenuReviewList(token, bakeryId, createMenuReviewRequestList);
         return ApiResponse.created(null);
     }
 
@@ -131,7 +135,7 @@ public class BakeriesController {
     @PostMapping("/{bakeryId}/flag")
     public ResponseEntity<Void> registerFlag(HttpServletRequest request, @RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long bakeryId) {
         String token = JwtHeaderUtil.getAccessToken(request);
-        bakeriesService.registerFlag(token, bakeryId, createFlagsRequest);
+        flagsService.registerFlag(token, bakeryId, createFlagsRequest);
         return ApiResponse.success(null);
     }
 
