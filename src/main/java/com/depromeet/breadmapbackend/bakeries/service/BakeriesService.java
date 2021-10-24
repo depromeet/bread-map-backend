@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -92,7 +93,7 @@ public class BakeriesService {
         for(Long bakeryId: bakeryIdList) {
             BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
             List<MenuReviewResponse> menuReviewResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
-            List<String> breadCategoryList = bakeriesBreadCategoriesMapQuerydslRepository.findByBakeryId(bakeryId);
+            List<BreadCategoryType> breadCategoryList = bakeriesBreadCategoriesMapQuerydslRepository.findByBakeryId(bakeryId);
 
             bakeryListResponseList.add(BakeryListResponse.builder()
                     .bakeryId(bakeryId)
@@ -106,7 +107,7 @@ public class BakeriesService {
                     .ratingCount(bakeryInfoResponse.getRatingCount())
                     .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
                     .menuReviewList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
-                    .breadCategoryList(breadCategoryList)
+                    .breadCategoryList(breadCategoryList.stream().map(BreadCategoryType::getName).collect(Collectors.toList()))
                     .build());
         }
         return bakeryListResponseList != null ? bakeryListResponseList : Collections.emptyList();
