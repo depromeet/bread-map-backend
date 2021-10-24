@@ -24,19 +24,4 @@ public class CreateBakeryRequest {
     private String telNumber;
     private List<BasicInfoType> basicInfoList = new ArrayList<>();
     private List<String> imgPathList = new ArrayList<>();
-
-    public Bakeries toEntity(Members members) {
-        return Bakeries.builder()
-                .name(bakeryName)
-                .latitude(latitude)
-                .longitude(longitude)
-                .address(address)
-                .members(members)
-                .businessHour(businessHour)
-                .websiteUrlList(websiteUrlList)
-                .telNumber(telNumber)
-                .basicInfoList(basicInfoList)
-                .imgPath(imgPathList)
-                .build();
-    }
 }
