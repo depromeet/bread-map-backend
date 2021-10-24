@@ -1,5 +1,8 @@
 package com.depromeet.breadmapbackend.bakeries.dto;
 
+import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
+import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
+import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +22,6 @@ public class CreateBakeryRequest {
     private String businessHour;
     private List<String> websiteUrlList = new ArrayList<>();
     private String telNumber;
-    private List<String> basicInfoList = new ArrayList<>();
+    private List<BasicInfoType> basicInfoList = new ArrayList<>();
     private List<String> imgPathList = new ArrayList<>();
-
 }

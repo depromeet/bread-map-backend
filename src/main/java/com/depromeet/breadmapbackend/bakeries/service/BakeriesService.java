@@ -7,6 +7,7 @@ import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
@@ -20,8 +21,10 @@ import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslReposi
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
@@ -94,5 +97,27 @@ public class BakeriesService {
             }
             menuReviewRepository.save(menuReview);
         }
+    }
+
+    @Transactional
+    public void createBakery(String token, CreateBakeryRequest createBakeryRequest) {
+        if(bakeriesQuerydslRepository.isBakeryExisted(createBakeryRequest.getLatitude(), createBakeryRequest.getLongitude()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 등록 된 빵집입니다.");
+
+        Long memberId = authService.getMemberId(token);
+        Optional<Members> member = memberRepository.findById(memberId);
+
+        bakeriesRepository.save(Bakeries.builder()
+                .name(createBakeryRequest.getBakeryName())
+                .latitude(createBakeryRequest.getLatitude())
+                .longitude(createBakeryRequest.getLongitude())
+                .members(member.orElseThrow(NullPointerException::new))
+                .telNumber(createBakeryRequest.getTelNumber())
+                .address(createBakeryRequest.getAddress())
+                .businessHour(createBakeryRequest.getBusinessHour())
+                .basicInfoList(createBakeryRequest.getBasicInfoList())
+                .websiteUrlList(createBakeryRequest.getWebsiteUrlList())
+                .imgPath(createBakeryRequest.getImgPathList())
+                .build());
     }
 }
