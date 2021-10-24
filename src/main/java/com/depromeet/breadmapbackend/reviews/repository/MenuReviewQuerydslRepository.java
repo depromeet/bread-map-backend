@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.reviews.repository;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
+import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -57,5 +58,13 @@ public class MenuReviewQuerydslRepository {
                 .offset(offset)
                 .limit(limit)
                 .fetch();
+    }
+
+    public MenuReviews findByMenuReviewIdAndBakeryId(Long bakeryId, Long menuReviewId) {
+        return jpaQueryFactory
+                .selectFrom(menuReviews)
+                .where(menuReviews.id.eq(menuReviewId)
+                        .and(menuReviews.bakeries.id.eq(bakeryId)))
+                .fetchOne();
     }
 }

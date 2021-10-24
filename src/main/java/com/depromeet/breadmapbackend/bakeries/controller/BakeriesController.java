@@ -7,6 +7,7 @@ import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
+import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.List;
 public class BakeriesController {
 
     private final BakeriesService bakeriesService;
+    private final MenuReviewsService menuReviewsService;
 
     /**
      * 빵집 리스트 조회
@@ -112,7 +114,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵 리뷰 삭제", notes = "빵 리뷰 삭제")
     @DeleteMapping(value = "/{bakeryId}/menu-review/{menuReviewId}")
-    public ResponseEntity<Void> deleteMenuReview(@PathVariable Long bakeryId, @PathVariable Long menuReviewId) {
+    public ResponseEntity<Void> deleteMenuReview(HttpServletRequest request, @PathVariable Long bakeryId, @PathVariable Long menuReviewId) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        menuReviewsService.deleteMenuReview(token, bakeryId, menuReviewId);
         return ApiResponse.success(null);
     }
 
