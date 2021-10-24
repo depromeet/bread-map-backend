@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.bakeries.repository;
 
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class MenusQuerydslRepository {
 
     public List<String> findByBreadCategoryIdBakeryId(Long categoryId, Long bakeryId) {
         return jpaQueryFactory
-                .select(menus.name)
+                .select(Projections.fields(String.class, menus.name))
                 .from(menus)
                 .where(menus.breadCategories.id.eq(categoryId)
                         .and(menus.bakeries.id.eq(bakeryId)))
