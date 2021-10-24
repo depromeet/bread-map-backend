@@ -21,12 +21,13 @@ import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslReposi
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -100,9 +101,14 @@ public class BakeriesService {
 
     @Transactional
     public void createBakery(String token, CreateBakeryRequest createBakeryRequest) {
+        if(bakeriesQuerydslRepository.isBakeryExisted(createBakeryRequest.getLatitude(), createBakeryRequest.getLongitude()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 등록 된 빵집입니다.");
+
         Long memberId = authService.getMemberId(token);
         Optional<Members> member = memberRepository.findById(memberId);
 
-        bakeriesRepository.save(createBakeryRequest.toEntity(member.orElseThrow(NullPointerException::new)));
+        Bakeries newBakery = new Bakeries();
+        newBakery.createBakery(createBakeryRequest, member.orElseThrow(NullPointerException::new));
+        bakeriesRepository.save(newBakery);
     }
 }

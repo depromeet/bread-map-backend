@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.domain;
 
+import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
@@ -72,4 +73,17 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<MenuReviews> menuReviewsList = new ArrayList<>();
 
+    public void createBakery(CreateBakeryRequest createBakeryRequest, Members members) {
+        this.name = createBakeryRequest.getBakeryName();
+        this.latitude = createBakeryRequest.getLatitude();
+        this.longitude = createBakeryRequest.getLongitude();
+        this.address = createBakeryRequest.getAddress();
+        this.members = members;
+        members.getBakeriesList().add(this);
+        this.businessHour = createBakeryRequest.getBusinessHour();
+        this.websiteUrlList = createBakeryRequest.getWebsiteUrlList();
+        this.telNumber = createBakeryRequest.getTelNumber();
+        this.basicInfoList = createBakeryRequest.getBasicInfoList();
+        this.imgPath = createBakeryRequest.getImgPathList();
+    }
 }

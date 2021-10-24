@@ -5,7 +5,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.depromeet.breadmapbackend.bakeries.domain.QBakeries.bakeries;
 import static com.depromeet.breadmapbackend.flags.domain.QFlags.flags;
@@ -36,5 +35,16 @@ public class BakeriesQuerydslRepository {
                 .where(bakeries.id.eq(bakeryId))
                 .groupBy(bakeries.id)
                 .fetchOne();
+    }
+
+    public Boolean isBakeryExisted(Double latitude, Double longitude) {
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(bakeries)
+                .where(bakeries.latitude.eq(latitude)
+                        .and(bakeries.longitude.eq(longitude)))
+                .fetchFirst();
+
+        return fetchOne != null;
     }
 }
