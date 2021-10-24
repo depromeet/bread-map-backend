@@ -31,11 +31,11 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 리스트", notes = "빵집 리스트 조회")
     @GetMapping
-    public List<BakeryListResponse> getBakeryList(
+    public ResponseEntity<List<BakeryListResponse>> getBakeryList(
             @ApiParam(value="위도", required = true) @RequestParam Double latitude,
             @ApiParam(value="경도", required = true) @RequestParam Double longitude,
             @ApiParam(value="반지름(m)", required = true) @RequestParam Long range){
-        return bakeriesService.getBakeryList(latitude, longitude, range);
+        return ApiResponse.success(bakeriesService.getBakeryList(latitude, longitude, range));
     }
 
     /**
