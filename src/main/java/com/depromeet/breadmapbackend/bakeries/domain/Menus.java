@@ -48,4 +48,8 @@ public class Menus extends BaseEntity {
         breadCategory.getMenusList().add(this);
         this.imgPath = imgPath;
     }
+
+    public void updateImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 }

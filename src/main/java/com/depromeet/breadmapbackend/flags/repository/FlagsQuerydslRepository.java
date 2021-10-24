@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.flags.repository;
 
+import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,7 +28,15 @@ public class FlagsQuerydslRepository {
                         .and(bakeryReviews.members.id.eq(memberId))
                         .and(flags.bakeries.id.eq(bakeryId))
                         .and(bakeryReviews.bakeries.id.eq(bakeryId)))
-                .where(flags.bakeries.id.eq(bakeryId))
+                .where(flags.bakeries.id.eq(bakeryId).and(flags.members.id.eq(memberId)))
+                .fetchOne();
+    }
+
+    public Flags findByBakeryIdMemberId(Long bakeryId, Long memberId) {
+        return jpaQueryFactory
+                .selectFrom(flags)
+                .where(flags.bakeries.id.eq(bakeryId)
+                        .and(flags.members.id.eq(memberId)))
                 .fetchOne();
     }
 }

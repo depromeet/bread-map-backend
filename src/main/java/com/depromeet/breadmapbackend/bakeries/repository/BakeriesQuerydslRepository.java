@@ -1,6 +1,7 @@
 package com.depromeet.breadmapbackend.bakeries.repository;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
+import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,13 @@ public class BakeriesQuerydslRepository {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryInfoResponse.class,
                         bakeries,
-                        flags.count().as("flagsCount"),
+                        flags.countDistinct().as("flagsCount"),
                         bakeryReviews.rating.avg().coalesce(0.0).as("avgRating"),
-                        bakeryReviews.count().as("ratingCount"),
-                        menuReviews.count().as("menuReviewsCount")))
+                        bakeryReviews.countDistinct().as("ratingCount"),
+                        menuReviews.countDistinct().as("menuReviewsCount")))
                 .from(bakeries)
                 .leftJoin(flags)
-                .on(flags.bakeries.id.eq(bakeryId))
+                .on(flags.bakeries.id.eq(bakeryId).and(flags.flagType.eq(FlagType.GONE)))
                 .leftJoin(menuReviews)
                 .on(menuReviews.bakeries.id.eq(bakeryId))
                 .leftJoin(bakeryReviews)
