@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 public class BakeryReviews extends BaseEntity {
 
     @Id 
@@ -49,4 +49,14 @@ public class BakeryReviews extends BaseEntity {
         this.rating = rating;
     }
 
+    @Builder(builderMethodName = "BakeryReviewsBuilder")
+    public BakeryReviews(Members members, Bakeries bakeries, String contents, Long rating, List<String> imgPath) {
+        this.members = members;
+        this.bakeries = bakeries;
+        this.contents = contents;
+        this.rating = rating;
+        this.imgPath = imgPath;
+        members.getBakeryReviewsList().add(this);
+        bakeries.getBakeryReviewsList().add(this);
+    }
 }

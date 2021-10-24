@@ -15,7 +15,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Flags extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +32,13 @@ public class Flags extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private FlagType flagType;
+
+    @Builder(builderMethodName = "FlagsBuilder")
+    public Flags(Members members, Bakeries bakeries, FlagType flagType) {
+        this.members = members;
+        this.bakeries = bakeries;
+        this.flagType = flagType;
+        members.getFlagsList().add(this);
+        bakeries.getFlagsList().add(this);
+    }
 }

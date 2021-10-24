@@ -146,29 +146,22 @@ public class BakeriesService {
         if (bakeryReview == null) {
             Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
             if (flag == null) {
-                Flags newFlag = Flags.builder()
+                flagsRepository.save(Flags.FlagsBuilder()
                         .members(member.orElseThrow(NullPointerException::new))
                         .bakeries(bakery.orElseThrow(NullPointerException::new))
                         .flagType(FlagType.NONE)
-                        .build();
-                flagsRepository.save(newFlag);
+                        .build());
             }
-            BakeryReviews newBakeryReview = BakeryReviews.builder()
-                    .bakeries(bakery.orElseThrow(NullPointerException::new))
+
+            bakeryReviewRepository.save(BakeryReviews.BakeryReviewsBuilder()
                     .members(member.orElseThrow(NullPointerException::new))
+                    .bakeries(bakery.orElseThrow(NullPointerException::new))
                     .contents("")
                     .rating(registerBakeryRatingRequest.getRating())
                     .imgPath(Collections.emptyList())
-                    .build();
-            member.orElseThrow(NullPointerException::new).getBakeryReviewsList().add(newBakeryReview);
-            // TODO 체크 필요: bakeries에는 bakeryReviewsList 양방향 안 걸려있음
-            // TODO 체크 필요: member에도 add하는거
-            bakeryReviewRepository.save(newBakeryReview);
+                    .build());
         } else {
             bakeryReview.updateRating(registerBakeryRatingRequest.getRating());
         }
-
-
     }
-
 }
