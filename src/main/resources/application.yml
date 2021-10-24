@@ -20,3 +20,7 @@ app:
   auth:
     tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
     tokenExpiry: 3333333333
+
+server:
+  error:
+    include-message: always
