@@ -72,8 +72,11 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<MenuReviews> menuReviewsList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "bakeries")
+    private List<BakeryReviews> bakeryReviewsList = new ArrayList<>();
+
     @Builder
-    public Bakeries(String name, Double latitude, Double longitude, String address, String businessHour, List<String> websiteUrlList, String telNumber, List<BasicInfoType> basicInfoList, Members members, List<Flags> flagsList, List<String> imgPath, List<BakeriesBreadCategoriesMap> bakeriesMenusMapList, List<Menus> menusList, List<MenuReviews> menuReviewsList) {
+    public Bakeries(String name, Double latitude, Double longitude, String address, String businessHour, List<String> websiteUrlList, String telNumber, List<BasicInfoType> basicInfoList, Members members, List<Flags> flagsList, List<String> imgPath, List<BakeriesBreadCategoriesMap> bakeriesMenusMapList, List<Menus> menusList, List<MenuReviews> menuReviewsList, List<BakeryReviews> bakeryReviewsList) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -88,6 +91,7 @@ public class Bakeries extends BaseEntity {
         this.bakeriesMenusMapList = bakeriesMenusMapList;
         this.menusList = menusList;
         this.menuReviewsList = menuReviewsList;
+        this.bakeryReviewsList = bakeryReviewsList;
         members.getBakeriesList().add(this);
     }
 }

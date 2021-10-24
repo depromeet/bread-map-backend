@@ -19,7 +19,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-//@Builder
 public class BakeryReviews extends BaseEntity {
 
     @Id 
