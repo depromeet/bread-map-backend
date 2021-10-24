@@ -37,8 +37,8 @@ public class Flags extends BaseEntity {
         this.flagType = flagType;
     }
 
-    //@Builder
-    public void createFlag(Members members, Bakeries bakeries, FlagType flagType) {
+    @Builder
+    public Flags(Members members, Bakeries bakeries, FlagType flagType) {
         this.members = members;
         this.bakeries = bakeries;
         this.flagType = flagType;

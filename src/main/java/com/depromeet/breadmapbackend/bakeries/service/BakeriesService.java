@@ -147,17 +147,22 @@ public class BakeriesService {
         Optional<Members> member = memberRepository.findById(memberId);
 
         if (bakeryReview == null) {
-            BakeryReviews bakeryReviews = new BakeryReviews();
-
             Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
             if (flag == null) {
-                Flags newFlag = new Flags();
-                newFlag.createFlag(member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new), FlagType.NONE);
-                flagsRepository.save(newFlag);
+                flagsRepository.save(Flags.builder()
+                        .members(member.orElseThrow(NullPointerException::new))
+                        .bakeries(bakery.orElseThrow(NullPointerException::new))
+                        .flagType(FlagType.NONE)
+                        .build());
             }
 
-            bakeryReviews.createBakeryReview(member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new), "", registerBakeryRatingRequest.getRating(), Collections.emptyList());
-            bakeryReviewRepository.save(bakeryReviews);
+            bakeryReviewRepository.save(BakeryReviews.builder()
+                    .members(member.orElseThrow(NullPointerException::new))
+                    .bakeries(bakery.orElseThrow(NullPointerException::new))
+                    .contents("")
+                    .rating(registerBakeryRatingRequest.getRating())
+                    .imgPath(Collections.emptyList())
+                    .build());
         } else {
             bakeryReview.updateRating(registerBakeryRatingRequest.getRating());
         }
@@ -168,14 +173,18 @@ public class BakeriesService {
         if(createFlagsRequest.getFlagType() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 FlagType입니다.");
         }
+
         Long memberId = authService.getMemberId(token);
         Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
         Optional<Members> member = memberRepository.findById(memberId);
         Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
+
         if (flag == null) {
-            Flags newFlag = new Flags();
-            newFlag.createFlag(member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new), createFlagsRequest.getFlagType());
-            flagsRepository.save(newFlag);
+            flagsRepository.save(Flags.builder()
+                    .members(member.orElseThrow(NullPointerException::new))
+                    .bakeries(bakery.orElseThrow(NullPointerException::new))
+                    .flagType(createFlagsRequest.getFlagType())
+                    .build());
         } else {
             flag.updateFlagType(createFlagsRequest.getFlagType());
         }
