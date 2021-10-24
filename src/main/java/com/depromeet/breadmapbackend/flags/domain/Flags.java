@@ -5,6 +5,7 @@ import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,17 @@ public class Flags extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private FlagType flagType;
+
+    public void updateFlagType(FlagType flagType) {
+        this.flagType = flagType;
+    }
+
+    @Builder
+    public Flags(Members members, Bakeries bakeries, FlagType flagType) {
+        this.members = members;
+        this.bakeries = bakeries;
+        this.flagType = flagType;
+        members.getFlagsList().add(this);
+        bakeries.getFlagsList().add(this);
+    }
 }

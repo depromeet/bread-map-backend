@@ -5,6 +5,7 @@ import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,4 +43,19 @@ public class BakeryReviews extends BaseEntity {
     @Column(nullable = false)
     @Convert(converter = StringListConverter.class)
     private List<String> imgPath = new ArrayList<>();
+
+    public void updateRating(Long rating) {
+        this.rating = rating;
+    }
+
+    @Builder
+    public BakeryReviews(Members members, Bakeries bakeries, String contents, Long rating, List<String> imgPath) {
+        this.members = members;
+        this.bakeries = bakeries;
+        this.contents = contents;
+        this.rating = rating;
+        this.imgPath = imgPath;
+        members.getBakeryReviewsList().add(this);
+        bakeries.getBakeryReviewsList().add(this);
+    }
 }

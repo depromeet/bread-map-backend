@@ -29,4 +29,14 @@ public enum BreadCategoryType {
 
     public static List<String> breadCategoriesList = Arrays.stream(BreadCategoryType.values())
             .map(BreadCategoryType::getName).collect(Collectors.toList());
+
+    public static BreadCategoryType fromString(String name) {
+        for (BreadCategoryType breadCategoryType: BreadCategoryType.values()) {
+            if(breadCategoryType.name.equals(name))
+                return breadCategoryType;
+        }
+        return null;
+    }
+
+
 }

@@ -7,7 +7,9 @@ import com.depromeet.breadmapbackend.common.dto.ApiResponse;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
+import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import java.util.List;
 public class BakeriesController {
 
     private final BakeriesService bakeriesService;
+    private final MenuReviewsService menuReviewsService;
 
     /**
      * 빵집 리스트 조회
@@ -30,15 +33,18 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 리스트", notes = "빵집 리스트 조회")
     @GetMapping
-    public ResponseEntity<BakeryListResponse> getBakeryList(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam Long range){ // TODO range 소숫점 있는지 체크 필요
-        return null;
+    public ResponseEntity<List<BakeryListResponse>> getBakeryList(
+            @ApiParam(value="위도", required = true) @RequestParam Double latitude,
+            @ApiParam(value="경도", required = true) @RequestParam Double longitude,
+            @ApiParam(value="반지름(m)", required = true) @RequestParam Long range){
+        return ApiResponse.success(bakeriesService.getBakeryList(latitude, longitude, range));
     }
 
     /**
      * 단일 빵집 리뷰 조회
      * @return List<MenuReviewDetailResponse>
      */
-    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
+    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회") // TODO pagable 쓰면 될 듯? (프론트에서 주는대로 순서 맞추어 줘도 될듯..?) 무한스크롤이면 안녕..
     @GetMapping(value = "/{bakeryId}/menu-review")
     public List<MenuReviewResponse> getMenuReviewList(@PathVariable Long bakeryId){
         return null;
@@ -60,10 +66,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 별점 넣기", notes = "빵집 별점 넣기")
     @PostMapping(value = "/{bakeryId}/rating")
-    public ResponseEntity<Void> registerBakeryRating(@PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
-        RegisterBakeryRatingResponse registerBakeryRatingResponse = new RegisterBakeryRatingResponse();
-        Double totalRating = registerBakeryRatingResponse.getRating();
-        totalRating = totalRating/registerBakeryRatingRequest.getRating();
+    public ResponseEntity<Void> registerBakeryRating(HttpServletRequest request, @PathVariable Long bakeryId, @RequestBody RegisterBakeryRatingRequest registerBakeryRatingRequest){
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest);
         return ApiResponse.created(null);
     }
 
@@ -75,7 +80,7 @@ public class BakeriesController {
     @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
     @GetMapping(value = "/{bakeryId}/menu")
     public ResponseEntity<MenuListResponse> getMenuList(@PathVariable Long bakeryId, @RequestParam String category) {
-        MenuListResponse menuListResponse = new MenuListResponse();
+        MenuListResponse menuListResponse = bakeriesService.getMenuList(bakeryId, category);
         return ApiResponse.success(menuListResponse);
     }
 
@@ -86,7 +91,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵집 생성", notes = "신규 빵집 생성")
     @PostMapping
-    public ResponseEntity<Void> createBakery(@RequestBody CreateBakeryRequest createBakeryRequest) {
+    public ResponseEntity<Void> createBakery(HttpServletRequest request, @RequestBody CreateBakeryRequest createBakeryRequest) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.createBakery(token, createBakeryRequest);
         return ApiResponse.created(null);
     }
 
@@ -110,28 +117,22 @@ public class BakeriesController {
      */
     @ApiOperation(value = "빵 리뷰 삭제", notes = "빵 리뷰 삭제")
     @DeleteMapping(value = "/{bakeryId}/menu-review/{menuReviewId}")
-    public ResponseEntity<Void> deleteMenuReview(@PathVariable Long bakeryId, @PathVariable Long menuReviewId) {
+    public ResponseEntity<Void> deleteMenuReview(HttpServletRequest request, @PathVariable Long bakeryId, @PathVariable Long menuReviewId) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        menuReviewsService.deleteMenuReview(token, bakeryId, menuReviewId);
         return ApiResponse.success(null);
     }
 
     /**
      * 빵집 깃발 꼽기
-     * @return ResponseEntity<Void>
+     * @return ResponseEntity<Void> 잘못된 깃발 타입 보내줄 경우 400 error
      */
-    @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 깃발 꼽기 기능")
+    @ApiOperation(value = "빵집 깃발 꼽기/해제", notes = "빵집에 가볼 곳/가본 곳에 대한 깃발 꼽기/해제 기능(NONE/PICKED/GONE) - NONE일 경우 해제")
     @PostMapping("/{bakeryId}/flag")
-    public ResponseEntity<Void> registerFlag(@RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long bakeryId) {
-        return null;
-    }
-
-    /**
-     * 빵집에 꽂힌 깃발 해제
-     * @return ResponseEntity<Void>
-     */
-    @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 꽂힌 깃발을 해제하는 기능")
-    @DeleteMapping("/{bakeryId}/flag/{flagId}")
-    public ResponseEntity<Void> deleteFlags(@PathVariable Long flagId, @PathVariable Long bakeryId) {
-        return null;
+    public ResponseEntity<Void> registerFlag(HttpServletRequest request, @RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long bakeryId) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.registerFlag(token, bakeryId, createFlagsRequest);
+        return ApiResponse.success(null);
     }
 
     /**
@@ -140,9 +141,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일빵집 상세 조회", notes = "지도에 클릭한 빵집의 상세보기 기능")
     @GetMapping("/{bakeryId}")
-    public BakeryDetailResponse getBakeryDetail(HttpServletRequest request, @PathVariable Long bakeryId) {
+    public ResponseEntity<BakeryDetailResponse> getBakeryDetail(HttpServletRequest request, @PathVariable Long bakeryId) {
         String token = JwtHeaderUtil.getAccessToken(request);
 
-        return bakeriesService.getBakeryDetail(token, bakeryId);
+        return ApiResponse.success(bakeriesService.getBakeryDetail(token, bakeryId));
     }
 }
