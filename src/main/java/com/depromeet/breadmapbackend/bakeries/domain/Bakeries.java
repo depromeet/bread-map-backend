@@ -8,6 +8,7 @@ import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -71,7 +72,22 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<MenuReviews> menuReviewsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bakeries")
-    private List<BakeryReviews> bakeryReviewsList = new ArrayList<>();
-
+    @Builder
+    public Bakeries(String name, Double latitude, Double longitude, String address, String businessHour, List<String> websiteUrlList, String telNumber, List<BasicInfoType> basicInfoList, Members members, List<Flags> flagsList, List<String> imgPath, List<BakeriesBreadCategoriesMap> bakeriesMenusMapList, List<Menus> menusList, List<MenuReviews> menuReviewsList) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.businessHour = businessHour;
+        this.websiteUrlList = websiteUrlList;
+        this.telNumber = telNumber;
+        this.basicInfoList = basicInfoList;
+        this.members = members;
+        this.flagsList = flagsList;
+        this.imgPath = imgPath;
+        this.bakeriesMenusMapList = bakeriesMenusMapList;
+        this.menusList = menusList;
+        this.menuReviewsList = menuReviewsList;
+        members.getBakeriesList().add(this);
+    }
 }

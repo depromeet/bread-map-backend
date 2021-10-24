@@ -37,4 +37,15 @@ public class BakeriesQuerydslRepository {
                 .groupBy(bakeries.id)
                 .fetchOne();
     }
+
+    public Boolean isBakeryExisted(Double latitude, Double longitude) {
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(bakeries)
+                .where(bakeries.latitude.eq(latitude)
+                        .and(bakeries.longitude.eq(longitude)))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
 }
