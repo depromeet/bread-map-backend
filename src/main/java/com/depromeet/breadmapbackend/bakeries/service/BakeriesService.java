@@ -5,11 +5,8 @@ import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.*;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
@@ -79,7 +76,7 @@ public class BakeriesService {
                 .avgRating(bakeryInfoResponse.getAvgRating())
                 .ratingCount(bakeryInfoResponse.getRatingCount())
                 .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
-                .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "") 
+                .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
                 .flagType(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getFlagType() : FlagType.NONE)
                 .personalRating(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getPersonalRating() : 0L)
                 .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
@@ -214,5 +211,20 @@ public class BakeriesService {
                 .websiteUrlList(createBakeryRequest.getWebsiteUrlList())
                 .imgPath(createBakeryRequest.getImgPathList())
                 .build());
+    }
+
+
+    @Transactional(readOnly = true)
+    public MenuListResponse getMenuList(Long bakeryId, String category) {
+        BreadCategoryType breadCategoryType = Optional.ofNullable(BreadCategoryType.fromString(category))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 빵 카테고리입니다."));
+
+        BreadCategories breadCategories = breadCategoriesQuerydslRepository.findByBreadCategoryName(breadCategoryType.toString().replaceAll("[/]", ""));
+        Long categoryId = breadCategories.getId();
+        List<String> menuList = menusQuerydslRepository.findByBreadCategoryIdBakeryId(categoryId, bakeryId);
+
+        return MenuListResponse.builder()
+                .menuList(menuList != null ? menuList : Collections.emptyList())
+                .build();
     }
 }
