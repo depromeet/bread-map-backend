@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.util.List;
 
 @Slf4j
@@ -74,8 +75,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "선택된 빵 카테고리에 해당하는 빵(메뉴) 리스트 반환", notes = "리뷰 작성 시 선택된 빵 카테고리에 속하는 빵(메뉴) 리스트 반환")
     @GetMapping(value = "/{bakeryId}/menu")
-    public MenuListResponse getMenuList(@PathVariable Long bakeryId, @RequestParam String category) {
-        return bakeriesService.getMenuList(bakeryId, category);
+    public ResponseEntity<MenuListResponse> getMenuList(@PathVariable Long bakeryId, @RequestParam String category) {
+        MenuListResponse menuListResponse = bakeriesService.getMenuList(bakeryId, category);
+        return ApiResponse.success(menuListResponse);
     }
 
     /**
