@@ -1,5 +1,6 @@
 package com.depromeet.breadmapbackend.bakeries.repository;
 
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,9 @@ public class BakeriesBreadCategoriesMapQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<String> findByBakeryId(Long bakeryId) {
+    public List<BreadCategoryType> findByBakeryId(Long bakeryId) {
         return jpaQueryFactory
-                .select(Projections.fields(String.class,
-                        bakeriesBreadCategoriesMap.breadCategories.name))
+                .select(bakeriesBreadCategoriesMap.breadCategories.name)
                 .from(bakeriesBreadCategoriesMap)
                 .where(bakeriesBreadCategoriesMap.bakeries.id.eq(bakeryId))
                 .fetch();
