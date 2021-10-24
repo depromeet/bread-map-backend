@@ -1,11 +1,11 @@
 package com.depromeet.breadmapbackend.bakeries.repository;
 
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
+import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.depromeet.breadmapbackend.bakeries.domain.QBakeries.bakeries;
 import static com.depromeet.breadmapbackend.flags.domain.QFlags.flags;
@@ -22,13 +22,13 @@ public class BakeriesQuerydslRepository {
         return jpaQueryFactory
                 .select(Projections.fields(BakeryInfoResponse.class,
                         bakeries,
-                        flags.count().as("flagsCount"),
+                        flags.countDistinct().as("flagsCount"),
                         bakeryReviews.rating.avg().coalesce(0.0).as("avgRating"),
-                        bakeryReviews.count().as("ratingCount"),
-                        menuReviews.count().as("menuReviewsCount")))
+                        bakeryReviews.countDistinct().as("ratingCount"),
+                        menuReviews.countDistinct().as("menuReviewsCount")))
                 .from(bakeries)
                 .leftJoin(flags)
-                .on(flags.bakeries.id.eq(bakeryId))
+                .on(flags.bakeries.id.eq(bakeryId).and(flags.flagType.eq(FlagType.GONE)))
                 .leftJoin(menuReviews)
                 .on(menuReviews.bakeries.id.eq(bakeryId))
                 .leftJoin(bakeryReviews)
@@ -36,5 +36,16 @@ public class BakeriesQuerydslRepository {
                 .where(bakeries.id.eq(bakeryId))
                 .groupBy(bakeries.id)
                 .fetchOne();
+    }
+
+    public Boolean isBakeryExisted(Double latitude, Double longitude) {
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(bakeries)
+                .where(bakeries.latitude.eq(latitude)
+                        .and(bakeries.longitude.eq(longitude)))
+                .fetchFirst();
+
+        return fetchOne != null;
     }
 }
