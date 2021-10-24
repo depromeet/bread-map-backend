@@ -8,6 +8,7 @@ import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
+import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
 import com.depromeet.breadmapbackend.flags.repository.FlagsRepository;
@@ -157,6 +158,21 @@ public class BakeriesService {
             bakeryReviewRepository.save(bakeryReviews);
         } else {
             bakeryReview.updateRating(registerBakeryRatingRequest.getRating());
+        }
+    }
+
+    @Transactional
+    public void registerFlag(String token, Long bakeryId, CreateFlagsRequest createFlagsRequest) {
+        Long memberId = authService.getMemberId(token);
+        Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
+        Optional<Members> member = memberRepository.findById(memberId);
+        Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
+        if (flag == null) {
+            Flags newFlag = new Flags();
+            newFlag.createFlag(member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new), createFlagsRequest.getFlagType());
+            flagsRepository.save(newFlag);
+        } else {
+            flag.updateFlagType(createFlagsRequest.getFlagType());
         }
     }
 }

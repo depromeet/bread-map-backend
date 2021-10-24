@@ -33,6 +33,10 @@ public class Flags extends BaseEntity {
     @Column(nullable = false)
     private FlagType flagType;
 
+    public void updateFlagType(FlagType flagType) {
+        this.flagType = flagType;
+    }
+
     @Builder
     public void createFlag(Members members, Bakeries bakeries, FlagType flagType) {
         this.members = members;

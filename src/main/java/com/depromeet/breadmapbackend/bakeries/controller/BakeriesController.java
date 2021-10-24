@@ -119,22 +119,14 @@ public class BakeriesController {
 
     /**
      * 빵집 깃발 꼽기
-     * @return ResponseEntity<Void>
+     * @return ResponseEntity<Void> 잘못된 깃발 타입 보내줄 경우 400 error
      */
-    @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 깃발 꼽기 기능")
+    @ApiOperation(value = "빵집 깃발 꼽기/해제", notes = "빵집에 가볼 곳/가본 곳에 대한 깃발 꼽기/해제 기능(NONE/PICKED/GONE) - NONE일 경우 해제")
     @PostMapping("/{bakeryId}/flag")
-    public ResponseEntity<Void> registerFlag(@RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long bakeryId) {
-        return null;
-    }
-
-    /**
-     * 빵집에 꽂힌 깃발 해제
-     * @return ResponseEntity<Void>
-     */
-    @ApiOperation(value = "빵집 깃발 꼽기", notes = "빵집에 가볼 곳/가본 곳에 대한 꽂힌 깃발을 해제하는 기능")
-    @DeleteMapping("/{bakeryId}/flag/{flagId}")
-    public ResponseEntity<Void> deleteFlags(@PathVariable Long flagId, @PathVariable Long bakeryId) {
-        return null;
+    public ResponseEntity<Void> registerFlag(HttpServletRequest request, @RequestBody CreateFlagsRequest createFlagsRequest, @PathVariable Long bakeryId) {
+        String token = JwtHeaderUtil.getAccessToken(request);
+        bakeriesService.registerFlag(token, bakeryId, createFlagsRequest);
+        return ApiResponse.success(null);
     }
 
     /**
