@@ -45,6 +45,7 @@ dependencies {
     }
     compile("io.swagger:swagger-annotations:1.5.21")
     compile("io.swagger:swagger-models:1.5.21")
+    compile("io.springfox:springfox-swagger-ui:2.9.2")
 
     implementation group: 'com.querydsl', name: 'querydsl-jpa', version: querydslVersion
     implementation group: 'com.querydsl', name: 'querydsl-apt', version: querydslVersion
