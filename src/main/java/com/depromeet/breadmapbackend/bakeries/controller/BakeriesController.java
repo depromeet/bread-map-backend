@@ -135,9 +135,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일빵집 상세 조회", notes = "지도에 클릭한 빵집의 상세보기 기능")
     @GetMapping("/{bakeryId}")
-    public BakeryDetailResponse getBakeryDetail(HttpServletRequest request, @PathVariable Long bakeryId) {
+    public ResponseEntity<BakeryDetailResponse> getBakeryDetail(HttpServletRequest request, @PathVariable Long bakeryId) {
         String token = JwtHeaderUtil.getAccessToken(request);
 
-        return bakeriesService.getBakeryDetail(token, bakeryId);
+        return ApiResponse.success(bakeriesService.getBakeryDetail(token, bakeryId));
     }
 }
