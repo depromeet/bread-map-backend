@@ -7,6 +7,7 @@ import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.MenuListResponse;
 import com.depromeet.breadmapbackend.bakeries.repository.*;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
@@ -94,5 +95,17 @@ public class BakeriesService {
             }
             menuReviewRepository.save(menuReview);
         }
+    }
+
+
+    @Transactional(readOnly = true)
+    public MenuListResponse getMenuList(Long bakeryId, String category) {
+        BreadCategories breadCategories = breadCategoriesQuerydslRepository.findByBreadCategoryName(category.replaceAll("[/]", ""));
+        Long categoryId = breadCategories.getId();
+        List<String> menuList = menusQuerydslRepository.findByBreadCategoryIdBakeryId(bakeryId, categoryId);
+
+        return MenuListResponse.builder()
+                .menuList(menuList != null ? menuList : Collections.emptyList())
+                .build();
     }
 }
