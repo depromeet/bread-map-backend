@@ -24,8 +24,10 @@ import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslReposi
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -163,6 +165,9 @@ public class BakeriesService {
 
     @Transactional
     public void registerFlag(String token, Long bakeryId, CreateFlagsRequest createFlagsRequest) {
+        if(createFlagsRequest.getFlagType() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 FlagType입니다.");
+        }
         Long memberId = authService.getMemberId(token);
         Optional<Bakeries> bakery = bakeriesRepository.findById(bakeryId);
         Optional<Members> member = memberRepository.findById(memberId);
