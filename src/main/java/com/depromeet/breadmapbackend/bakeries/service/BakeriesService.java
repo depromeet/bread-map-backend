@@ -107,8 +107,17 @@ public class BakeriesService {
         Long memberId = authService.getMemberId(token);
         Optional<Members> member = memberRepository.findById(memberId);
 
-        Bakeries newBakery = new Bakeries();
-        newBakery.createBakery(createBakeryRequest, member.orElseThrow(NullPointerException::new));
-        bakeriesRepository.save(newBakery);
+        bakeriesRepository.save(Bakeries.builder()
+                .name(createBakeryRequest.getBakeryName())
+                .latitude(createBakeryRequest.getLatitude())
+                .longitude(createBakeryRequest.getLongitude())
+                .members(member.orElseThrow(NullPointerException::new))
+                .telNumber(createBakeryRequest.getTelNumber())
+                .address(createBakeryRequest.getAddress())
+                .businessHour(createBakeryRequest.getBusinessHour())
+                .basicInfoList(createBakeryRequest.getBasicInfoList())
+                .websiteUrlList(createBakeryRequest.getWebsiteUrlList())
+                .imgPath(createBakeryRequest.getImgPathList())
+                .build());
     }
 }

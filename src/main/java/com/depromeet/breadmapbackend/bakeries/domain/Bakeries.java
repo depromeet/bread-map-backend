@@ -1,6 +1,5 @@
 package com.depromeet.breadmapbackend.bakeries.domain;
 
-import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
 import com.depromeet.breadmapbackend.common.domain.BaseEntity;
 import com.depromeet.breadmapbackend.common.enumerate.BasicInfoType;
 import com.depromeet.breadmapbackend.common.util.StringListConverter;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @Getter
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bakeries extends BaseEntity {
@@ -73,17 +71,22 @@ public class Bakeries extends BaseEntity {
     @OneToMany(mappedBy = "bakeries")
     private List<MenuReviews> menuReviewsList = new ArrayList<>();
 
-    public void createBakery(CreateBakeryRequest createBakeryRequest, Members members) {
-        this.name = createBakeryRequest.getBakeryName();
-        this.latitude = createBakeryRequest.getLatitude();
-        this.longitude = createBakeryRequest.getLongitude();
-        this.address = createBakeryRequest.getAddress();
+    @Builder
+    public Bakeries(String name, Double latitude, Double longitude, String address, String businessHour, List<String> websiteUrlList, String telNumber, List<BasicInfoType> basicInfoList, Members members, List<Flags> flagsList, List<String> imgPath, List<BakeriesBreadCategoriesMap> bakeriesMenusMapList, List<Menus> menusList, List<MenuReviews> menuReviewsList) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.businessHour = businessHour;
+        this.websiteUrlList = websiteUrlList;
+        this.telNumber = telNumber;
+        this.basicInfoList = basicInfoList;
         this.members = members;
+        this.flagsList = flagsList;
+        this.imgPath = imgPath;
+        this.bakeriesMenusMapList = bakeriesMenusMapList;
+        this.menusList = menusList;
+        this.menuReviewsList = menuReviewsList;
         members.getBakeriesList().add(this);
-        this.businessHour = createBakeryRequest.getBusinessHour();
-        this.websiteUrlList = createBakeryRequest.getWebsiteUrlList();
-        this.telNumber = createBakeryRequest.getTelNumber();
-        this.basicInfoList = createBakeryRequest.getBasicInfoList();
-        this.imgPath = createBakeryRequest.getImgPathList();
     }
 }
