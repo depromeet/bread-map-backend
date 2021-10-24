@@ -49,7 +49,7 @@ public class BakeryReviews extends BaseEntity {
         this.rating = rating;
     }
 
-    @Builder
+    //@Builder
     public void createBakeryReview(Members members, Bakeries bakeries, String contents, Long rating, List<String> imgPath) {
         this.members = members;
         this.bakeries = bakeries;
