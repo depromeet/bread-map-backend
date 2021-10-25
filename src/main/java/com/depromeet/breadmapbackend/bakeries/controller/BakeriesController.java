@@ -60,7 +60,9 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menus")
-    public ResponseEntity<BakeryMenuResponse> getBakeryMenuList(@PathVariable Long bakeryId){
+    public ResponseEntity<BakeryMenuResponse> getBakeryMenuList(@PathVariable Long bakeryId, @RequestParam Integer page, @RequestParam(defaultValue = "10") Integer limit){
+        // TODO 서비스단에서 pagable 객체에 넣어서 보내면 될듯
+        // TODO idx는 1부터 시작이고, limit값은 변경될 수 있음
         return null;
     }
 
