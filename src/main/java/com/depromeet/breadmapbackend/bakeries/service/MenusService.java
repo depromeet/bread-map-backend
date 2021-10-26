@@ -46,7 +46,10 @@ public class MenusService {
 
     @Transactional(readOnly = true)
     public Slice<BakeryMenuResponse> getBakeryMenuList(Long bakeryId, Integer page, Integer limit) {
-        Pageable pageable = PageRequest.of(page, limit);
+        if (page < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 page 값입니다(시작 page: 1).");
+        }
+        Pageable pageable = PageRequest.of(page - 1, limit);
         Slice<BakeryMenuResponse> bakeryMenuResponseList = menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, pageable);
         return bakeryMenuResponseList;
     }
