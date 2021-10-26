@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,12 +59,10 @@ public class BakeriesController {
      * 단일 빵집 메뉴 조회
      * @return ResponseEntity<BakeryMenusListResponse>
      */
-    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
+    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회") // TODO 선택된 카테고리에 해당하는 빵 리스트 반환과 API가 너무 비슷합니다...
     @GetMapping(value = "/{bakeryId}/menus")
-    public ResponseEntity<BakeryMenuResponse> getBakeryMenuList(@PathVariable Long bakeryId, @RequestParam Integer page, @RequestParam(defaultValue = "10") Integer limit){
-        // TODO 서비스단에서 pagable 객체에 넣어서 보내면 될듯
-        // TODO idx는 1부터 시작이고, limit값은 변경될 수 있음
-        return null;
+    public ResponseEntity<Slice<BakeryMenuResponse>> getBakeryMenuList(@PathVariable Long bakeryId, @RequestParam Integer page, @RequestParam Integer limit){
+        return ApiResponse.success(menusService.getBakeryMenuList(bakeryId, page, limit));
     }
 
     /**

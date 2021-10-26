@@ -6,14 +6,20 @@ import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.depromeet.breadmapbackend.reviews.domain.QMenuReviews.menuReviews;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class MenuReviewQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -58,6 +64,38 @@ public class MenuReviewQuerydslRepository {
                 .offset(offset)
                 .limit(limit)
                 .fetch();
+    }
+
+    public Slice<BakeryMenuResponse> findBakeryMenuListByBakeryId(Long bakeryId, Pageable pageable) {
+        List<BakeryMenuResponse> bakeryMenuResponseList = jpaQueryFactory
+                .select(Projections.fields(BakeryMenuResponse.class,
+                        menuReviews.menus.id.as("menuId"),
+                        menuReviews.menus.breadCategories.id.as("breadCategoryId"),
+                        menuReviews.menus.breadCategories.name.as("breadCategoryName"),
+                        menuReviews.menus.name.as("menuName"),
+                        menuReviews.menus.price.as("price"),
+                        menuReviews.menus.imgPath.as("imgPath"),
+                        menuReviews.rating.avg().as("avgRating")))
+                .from(menuReviews)
+                .where(menuReviews.bakeries.id.eq(bakeryId))
+                .groupBy(menuReviews.menus.id, menuReviews.menus.breadCategories.id, menuReviews.menus.breadCategories.name, menuReviews.menus.name, menuReviews.menus.price, menuReviews.menus.imgPath)
+                .orderBy(menuReviews.id.count().desc(), menuReviews.rating.avg().desc()) // 리뷰 많은 순(동일 리뷰 개수면 rating 높은 순)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<BakeryMenuResponse> content = new ArrayList<>();
+         for (BakeryMenuResponse eachBakeryMenuResponse: bakeryMenuResponseList) {
+            content.add(new BakeryMenuResponse(eachBakeryMenuResponse));
+
+        }
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+        return new SliceImpl<>(content, pageable, hasNext);
     }
 
     public MenuReviews findByMenuReviewIdAndBakeryId(Long bakeryId, Long menuReviewId) {

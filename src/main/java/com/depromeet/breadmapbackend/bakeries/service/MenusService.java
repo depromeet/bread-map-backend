@@ -1,11 +1,17 @@
 package com.depromeet.breadmapbackend.bakeries.service;
 
 import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.MenuListResponse;
 import com.depromeet.breadmapbackend.bakeries.repository.BreadCategoriesQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.MenusQuerydslRepository;
 import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
+import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +23,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MenusService {
 
     private final BreadCategoriesQuerydslRepository breadCategoriesQuerydslRepository;
+    private final MenuReviewQuerydslRepository menuReviewQuerydslRepository;
     private final MenusQuerydslRepository menusQuerydslRepository;
 
     @Transactional(readOnly = true)
@@ -34,5 +42,12 @@ public class MenusService {
         return MenuListResponse.builder()
                 .menuList(menuList != null ? menuList : Collections.emptyList())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<BakeryMenuResponse> getBakeryMenuList(Long bakeryId, Integer page, Integer limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Slice<BakeryMenuResponse> bakeryMenuResponseList = menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, pageable);
+        return bakeryMenuResponseList;
     }
 }
