@@ -57,7 +57,7 @@ public class BakeriesController {
 
     /**
      * 단일 빵집 메뉴 조회
-     * @return ResponseEntity<BakeryMenusListResponse>
+     * @return ResponseEntity<Slice<BakeryMenuResponse>>
      */
     @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회") // TODO 선택된 카테고리에 해당하는 빵 리스트 반환과 API가 너무 비슷합니다...
     @GetMapping(value = "/{bakeryId}/menus")
