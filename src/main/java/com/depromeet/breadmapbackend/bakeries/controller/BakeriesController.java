@@ -59,7 +59,7 @@ public class BakeriesController {
      * 단일 빵집 메뉴 조회
      * @return ResponseEntity<Slice<BakeryMenuResponse>>
      */
-    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회") // TODO 선택된 카테고리에 해당하는 빵 리스트 반환과 API가 너무 비슷합니다...
+    @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu")
     public ResponseEntity<Slice<BakeryMenuResponse>> getBakeryMenuList(@PathVariable Long bakeryId, @ApiParam(value="page index(1부터 시작)", required = true) @RequestParam Integer page, @ApiParam(value="page당 메뉴 최대 개수", required = true) @RequestParam Integer limit){
         return ApiResponse.success(menusService.getBakeryMenuList(bakeryId, page, limit));
