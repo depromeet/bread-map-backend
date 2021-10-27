@@ -25,4 +25,18 @@ public class MenuReviewResponse {
     private String contents;
     private Long rating;
     private LocalDateTime lastModifiedDateTime;
+
+    @Builder
+    public MenuReviewResponse(MenuReviewResponse menuReviewResponse) {
+        this.menuReviewId = menuReviewResponse.getMenuReviewId();
+        this.memberId = menuReviewResponse.getMemberId();
+        this.breadCategoryId = menuReviewResponse.getBreadCategoryId();
+        this.memberName = menuReviewResponse.getMemberName();
+        this.menuName = menuReviewResponse.getMenuName();
+        this.menuId = menuReviewResponse.getMenuId();
+        this.imgPathList = menuReviewResponse.getImgPathList();
+        this.contents = menuReviewResponse.getContents();
+        this.rating = menuReviewResponse.getRating();
+        this.lastModifiedDateTime = menuReviewResponse.getLastModifiedDateTime();
+    }
 }

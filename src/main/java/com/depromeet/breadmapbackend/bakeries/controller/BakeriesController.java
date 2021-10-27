@@ -14,10 +14,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -46,12 +48,14 @@ public class BakeriesController {
 
     /**
      * 단일 빵집 리뷰 조회
-     * @return List<MenuReviewDetailResponse>
+     * @return ResponseEntity<Slice<MenuReviewResponse>>
      */
-    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회") // TODO pagable 쓰면 될 듯? (프론트에서 주는대로 순서 맞추어 줘도 될듯..?) 무한스크롤이면 안녕..
+    @ApiOperation(value = "단일 빵집 리뷰 리스트", notes = "단일 빵집에 있는 메뉴에 대한 리뷰 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu-review")
-    public List<MenuReviewResponse> getMenuReviewList(@PathVariable Long bakeryId){
-        return null;
+    public ResponseEntity<Slice<MenuReviewResponse>> getMenuReviewList(@PathVariable Long bakeryId,
+                                                                       @ApiParam(value="page index(1부터 시작)", required = true) @RequestParam Integer page,
+                                                                       @ApiParam(value="page당 메뉴 최대 개수", required = true) @RequestParam Integer limit) {
+        return ApiResponse.success(menuReviewsService.getMenuReviewList(bakeryId, page, limit));
     }
 
     /**

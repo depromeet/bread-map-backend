@@ -5,9 +5,14 @@ import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.depromeet.breadmapbackend.reviews.domain.QMenuReviews.menuReviews;
@@ -66,5 +71,37 @@ public class MenuReviewQuerydslRepository {
                 .where(menuReviews.id.eq(menuReviewId)
                         .and(menuReviews.bakeries.id.eq(bakeryId)))
                 .fetchOne();
+    }
+
+    public Slice<MenuReviewResponse> findMenuReviewPageableByBakeryId(Long bakeryId, @NonNull Pageable pageable) {
+        List<MenuReviewResponse> menuReviewResponsesList = jpaQueryFactory
+                .select(Projections.fields(MenuReviewResponse.class,
+                        menuReviews.id.as("menuReviewId"),
+                        menuReviews.members.id.as("memberId"),
+                        menuReviews.menus.breadCategories.id.as("breadCategoryId"),
+                        menuReviews.members.name.as("memberName"),
+                        menuReviews.menus.name.as("menuName"),
+                        menuReviews.menus.id.as("menuId"),
+                        menuReviews.imgPath.as("imgPathList"),
+                        menuReviews.contents.as("contents"),
+                        menuReviews.lastModifiedDateTime.as("lastModifiedDateTime")))
+                .from(menuReviews)
+                .where(menuReviews.bakeries.id.eq(bakeryId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<MenuReviewResponse> content = new ArrayList<>();
+        for (MenuReviewResponse menuReview: menuReviewResponsesList) {
+            content.add(new MenuReviewResponse(menuReview));
+
+        }
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+        return new SliceImpl<>(content, pageable, hasNext);
     }
 }

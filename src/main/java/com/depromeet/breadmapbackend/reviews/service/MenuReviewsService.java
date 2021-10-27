@@ -12,10 +12,14 @@ import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,5 +84,15 @@ public class MenuReviewsService {
             }
             menuReviewRepository.save(menuReview);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<MenuReviewResponse> getMenuReviewList(Long bakeryId, Integer page, Integer limit) {
+        if (page < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 page 값입니다(시작 page: 1).");
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        return menuReviewQuerydslRepository.findMenuReviewPageableByBakeryId(bakeryId, pageable);
     }
 }
