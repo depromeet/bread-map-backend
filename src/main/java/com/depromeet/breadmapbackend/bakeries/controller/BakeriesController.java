@@ -61,7 +61,10 @@ public class BakeriesController {
      */
     @ApiOperation(value = "단일 빵집 메뉴 리스트", notes = "단일 빵집에 있는 메뉴 리스트 조회")
     @GetMapping(value = "/{bakeryId}/menu")
-    public ResponseEntity<Slice<BakeryMenuResponse>> getBakeryMenuList(@PathVariable Long bakeryId, @ApiParam(value="page index(1부터 시작)", required = true) @RequestParam Integer page, @ApiParam(value="page당 메뉴 최대 개수", required = true) @RequestParam Integer limit){
+    public ResponseEntity<Slice<BakeryMenuResponse>> getBakeryMenuList(
+            @PathVariable Long bakeryId,
+            @ApiParam(value="page index(1부터 시작)", required = true) @RequestParam Integer page,
+            @ApiParam(value="page당 메뉴 최대 개수", required = true) @RequestParam Integer limit){
         return ApiResponse.success(menusService.getBakeryMenuList(bakeryId, page, limit));
     }
 
