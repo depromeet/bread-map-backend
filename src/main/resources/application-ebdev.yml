@@ -22,3 +22,13 @@ swagger-info:
 logging:
   level:
     org.hibernate.SQL: debug
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${s3.accesskey}
+      secret-key: ${s3.secretkey}
+    region:
+      static: ${s3.resion}
+    s3:
+      bucket: ${s3.bucket}
