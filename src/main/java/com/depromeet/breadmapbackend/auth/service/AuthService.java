@@ -8,7 +8,9 @@ import com.depromeet.breadmapbackend.members.repository.MemberQuerydslRepository
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Service
@@ -41,7 +43,12 @@ public class AuthService {
             return null;
         }
 
-        Members member =  memberQuerydslRepository.findBySocialId(claims.getSubject());
-        return member.getId();
+        try {
+            Members member =  memberQuerydslRepository.findBySocialId(claims.getSubject());
+            return member.getId();
+
+        } catch (NullPointerException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다.");
+        }
     }
 }
