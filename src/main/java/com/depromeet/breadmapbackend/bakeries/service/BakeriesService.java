@@ -51,7 +51,7 @@ public class BakeriesService {
     @Transactional(readOnly = true)
     public BakeryDetailResponse getBakeryDetail(String token, Long bakeryId) {
         Long memberId = authService.getMemberId(token);
-        FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
+        FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findBakeryReviewByBakeryIdMemberId(bakeryId, memberId);
         BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
 
         List<MenuReviewResponse> menuReviewResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
