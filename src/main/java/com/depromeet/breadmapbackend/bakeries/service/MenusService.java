@@ -50,6 +50,6 @@ public class MenusService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 page 값입니다(시작 page: 1).");
         }
         Pageable pageable = PageRequest.of(page - 1, limit);
-        return menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, pageable);
+        return menuReviewQuerydslRepository.findBakeryMenuPageableByBakeryId(bakeryId, pageable);
     }
 }
