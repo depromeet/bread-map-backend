@@ -23,7 +23,6 @@ public class MenuReviewQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    // TODO: 더미데이터 더 생성해서 테스트 해볼 것
     public List<MenuReviewResponse> findMenuReviewListByBakeryId(Long bakeryId, Long offset, Long limit) {
         return jpaQueryFactory
                 .select(Projections.fields(MenuReviewResponse.class,
@@ -94,7 +93,6 @@ public class MenuReviewQuerydslRepository {
         List<MenuReviewResponse> content = new ArrayList<>();
         for (MenuReviewResponse menuReview: menuReviewResponsesList) {
             content.add(new MenuReviewResponse(menuReview));
-
         }
 
         boolean hasNext = false;
