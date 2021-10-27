@@ -72,7 +72,7 @@ public class MenuReviewQuerydslRepository {
                 .fetchOne();
     }
 
-    public Slice<MenuReviewResponse> findMenuReviewPageableByBakeryId(Long bakeryId, @NonNull Pageable pageable) {
+    public Slice<MenuReviewResponse> findMenuReviewPageableByBakeryId(Long bakeryId, Pageable pageable) {
         List<MenuReviewResponse> menuReviewResponsesList = jpaQueryFactory
                 .select(Projections.fields(MenuReviewResponse.class,
                         menuReviews.id.as("menuReviewId"),
