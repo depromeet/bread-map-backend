@@ -11,3 +11,16 @@ swagger-info:
   title: Daedong BreadMap REST API
   description: Depromeet 10th Team 7
   version: 1.0.0
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      instanceProfile: true
+      access-key: test
+      secret-key: test
+    region:
+      static: us-east-2
+    s3:
+      bucket: testBucket
