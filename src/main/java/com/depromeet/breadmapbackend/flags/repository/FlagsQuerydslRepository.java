@@ -16,12 +16,11 @@ public class FlagsQuerydslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    // TODO: 더미데이터 더 생성해서 테스트 해볼 것
-    public FlagTypeReviewRatingResponse findByMemberIdAndBakeryId(Long memberId, Long bakeryId) {
+    public FlagTypeReviewRatingResponse findBakeryReviewByBakeryIdMemberId(Long bakeryId, Long memberId) {
         return jpaQueryFactory
                 .select(Projections.fields(FlagTypeReviewRatingResponse.class,
                         flags.flagType.as("flagType"),
-                        bakeryReviews.rating.coalesce(0L).as("personalRating"))) // TODO bakeryReviews create할 때 member가 flags를 안 걸었으면 NONE으로 걸기
+                        bakeryReviews.rating.coalesce(0L).as("personalRating")))
                 .from(flags)
                 .leftJoin(bakeryReviews)
                 .on(flags.members.id.eq(memberId)
