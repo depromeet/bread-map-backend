@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/s3")
@@ -20,7 +22,7 @@ public class AmazonS3Controller {
     private final AwsS3Service awsS3Service;
 
     @PostMapping("/image")
-    public ResponseEntity<String> uploadImage(@RequestPart MultipartFile multipartFile) {
+    public ResponseEntity<List<String>> uploadImage(@RequestPart List<MultipartFile> multipartFile) {
         return ApiResponse.success(awsS3Service.uploadImage(multipartFile));
     }
 
