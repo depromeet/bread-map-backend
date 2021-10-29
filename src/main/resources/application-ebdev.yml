@@ -32,3 +32,5 @@ cloud:
       static: ${s3.resion}
     s3:
       bucket: ${s3.bucket}
+    stack:
+      auto: false
