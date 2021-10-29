@@ -33,4 +33,4 @@ cloud:
     s3:
       bucket: ${s3.bucket}
     stack:
-      auto: false
+      auto: false # 정상 배포확인 테스트
