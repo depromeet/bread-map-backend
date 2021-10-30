@@ -84,9 +84,8 @@ public class MenuReviewQuerydslRepository {
                 .fetch();
 
         List<BakeryMenuResponse> content = new ArrayList<>();
-         for (BakeryMenuResponse eachBakeryMenuResponse: bakeryMenuResponseList) {
+        for (BakeryMenuResponse eachBakeryMenuResponse: bakeryMenuResponseList) {
             content.add(new BakeryMenuResponse(eachBakeryMenuResponse));
-
         }
 
         boolean hasNext = false;
