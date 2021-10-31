@@ -20,6 +20,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Bakeries extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
