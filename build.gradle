@@ -39,6 +39,7 @@ dependencies {
         exclude module: 'junit'
     }
     testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation 'io.github.javaunit:autoparams:0.2.8'
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
     compile("io.springfox:springfox-swagger2:2.9.2") {
         exclude module: 'swagger-annotations'
