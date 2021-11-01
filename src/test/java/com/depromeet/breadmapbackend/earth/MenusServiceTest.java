@@ -37,11 +37,6 @@ class MenusServiceTest {
 
     private static final Long BAKERY_ID = 1L;
 
-    @BeforeEach
-    void setUp() {
-        menusService = new MenusService(breadCategoriesQuerydslRepository, menuReviewQuerydslRepository, menusQuerydslRepository);
-    }
-
     @AfterEach
     void tearDown() {
     }
