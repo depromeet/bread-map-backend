@@ -26,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,15 +114,15 @@ public class BakeriesService {
             Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
             if (flag == null) {
                 flagsRepository.save(Flags.builder()
-                        .members(member.orElseThrow(NullPointerException::new))
-                        .bakeries(bakery.orElseThrow(NullPointerException::new))
+                        .members(member.orElseThrow(NoSuchElementException::new))
+                        .bakeries(bakery.orElseThrow(NoSuchElementException::new))
                         .flagType(FlagType.NONE)
                         .build());
             }
 
             bakeryReviewRepository.save(BakeryReviews.builder()
-                    .members(member.orElseThrow(NullPointerException::new))
-                    .bakeries(bakery.orElseThrow(NullPointerException::new))
+                    .members(member.orElseThrow(NoSuchElementException::new))
+                    .bakeries(bakery.orElseThrow(NoSuchElementException::new))
                     .contents("")
                     .rating(registerBakeryRatingRequest.getRating())
                     .imgPath(Collections.emptyList())

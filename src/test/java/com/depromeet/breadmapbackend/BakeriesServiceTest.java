@@ -29,6 +29,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -140,5 +141,14 @@ public class BakeriesServiceTest {
         then(flagsQuerydslRepository).should(never()).findBakeryReviewByBakeryIdMemberId(bakeryId, memberId);
         then(menuReviewQuerydslRepository).should(never()).findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
         then(menuReviewQuerydslRepository).should(never()).findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 베이커리_리뷰의_데이터는_존재하나_member데이터가_null_경우_NoSuchElementException이_발생한다(RegisterBakeryRatingRequest registerBakeryRatingRequest, Long bakeryId, Long memberId, String token) {
+        given(bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).willReturn(bakeryReviews);
+        given(memberRepository.findById(memberId)).willReturn(Optional.of(new Members()));
+
+        assertThrows(NoSuchElementException.class, () -> bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest));
     }
 }
