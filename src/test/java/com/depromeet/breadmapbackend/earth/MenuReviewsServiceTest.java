@@ -147,20 +147,20 @@ public class MenuReviewsServiceTest {
     @DisplayName("리뷰를 작성하고자 하는 메뉴가 빵집에 존재하지 않을 경우, 신규 메뉴를 생성하여 리뷰를 작성합니다.")
     void createMenuReviewList() {
         // given
-        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
-        Members member = Members.builder()
-                .id(MEMBER_ID)
-                .build();
-        Bakeries bakery = Bakeries.builder()
-                .id(BAKERY_ID)
-                .build();
-        BreadCategories breadCategories = new BreadCategories();
-
-        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
-        given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
-        given(menusQuerydslRepository.findByMenuNameBakeryId(any(String.class), BAKERY_ID)).willReturn(null);
-
-        given(breadCategoriesQuerydslRepository.findByBreadCategoryName(any(String.class).replaceAll("[ /]", ""))).willReturn(breadCategories);
+//        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
+//        Members member = Members.builder()
+//                .id(MEMBER_ID)
+//                .build();
+//        Bakeries bakery = Bakeries.builder()
+//                .id(BAKERY_ID)
+//                .build();
+//        BreadCategories breadCategories = new BreadCategories();
+//
+//        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
+//        given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+//        given(menusQuerydslRepository.findByMenuNameBakeryId(any(String.class), BAKERY_ID)).willReturn(null);
+//
+//        given(breadCategoriesQuerydslRepository.findByBreadCategoryName(any(String.class).replaceAll("[ /]", ""))).willReturn(breadCategories);
 
         // when
 
