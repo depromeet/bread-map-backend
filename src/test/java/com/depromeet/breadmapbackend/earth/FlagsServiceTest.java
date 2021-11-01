@@ -25,8 +25,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FlagsServiceTest {
@@ -66,7 +72,39 @@ class FlagsServiceTest {
     }
 
     @Test
-    @DisplayName("깃발 업데이트")
+    @DisplayName("깃발이 없을 경우, 신규 깃발을 생성한다.")
+    public void createFlag() throws Exception {
+        // given
+        CreateFlagsRequest createFlagsRequest = new CreateFlagsRequest(FLAG_TYPE);
+        Members member = Members.builder()
+                .id(MEMBER_ID)
+                .flagsList(new ArrayList<>())
+                .build();
+        Bakeries bakery = Bakeries.builder()
+                .id(BAKERY_ID)
+                .flagsList(new ArrayList<>())
+                .build();
+
+        Flags flag = Flags.builder()
+                .bakeries(bakery)
+                .members(member)
+                .flagType(createFlagsRequest.getFlagType())
+                .build();
+
+        given(authService.getMemberId(any(String.class))).willReturn(MEMBER_ID);
+        given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
+        given(flagsQuerydslRepository.findByBakeryIdMemberId(BAKERY_ID, MEMBER_ID)).willReturn(null);
+
+        // when
+        flagsService.registerFlag(TOKEN, BAKERY_ID, createFlagsRequest);
+        // then
+        then(flagsRepository).should().save(refEq(flag));
+
+    }
+
+    @Test
+    @DisplayName("깃발이 존재할 경우, 깃발 type을 createFlagsRequest에 전달된 type으로 업데이트한다.")
     void updateFlag() {
         // given
         CreateFlagsRequest createFlagsRequest = new CreateFlagsRequest(FLAG_TYPE);
@@ -83,22 +121,15 @@ class FlagsServiceTest {
                 .members(member)
                 .flagType(FlagType.NONE)
                 .build();
+        given(authService.getMemberId(any(String.class))).willReturn(MEMBER_ID);
+        given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
+        given(flagsQuerydslRepository.findByBakeryIdMemberId(BAKERY_ID, MEMBER_ID)).willReturn(existFlag);
 
-        LOGGER.info("깃발 업데이트 전");
-        assertNotEquals(existFlag.getFlagType(), FlagType.GONE);
         // when
-        if (existFlag == null) {
-            flagsRepository.save(Flags.builder()
-                    .members(member)
-                    .bakeries(bakery)
-                    .flagType(createFlagsRequest.getFlagType())
-                    .build());
-        } else {
-            existFlag.updateFlagType(createFlagsRequest.getFlagType());
-        }
+        flagsService.registerFlag(TOKEN, BAKERY_ID, createFlagsRequest);
         // then
-        LOGGER.info("깃발 업데이트 후");
-        assertEquals(existFlag.getFlagType(), FlagType.GONE);
+        assertEquals(existFlag.getFlagType(), FLAG_TYPE);
     }
 
     @Test
