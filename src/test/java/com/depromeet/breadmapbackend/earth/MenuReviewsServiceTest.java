@@ -2,6 +2,7 @@ package com.depromeet.breadmapbackend.earth;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
+import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BreadCategoriesQuerydslRepository;
@@ -10,9 +11,12 @@ import com.depromeet.breadmapbackend.bakeries.repository.MenusRepository;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
+import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,6 +70,7 @@ public class MenuReviewsServiceTest {
     private static final String TOKEN = "tokentokentoken";
     private static final Long BAKERY_ID = 1L;
     private static final Long MEMBER_ID = 1L;
+    private static final Long OTHER_MEMBER_ID = 0L;
     private static final Long MENU_REVIEW_ID = 1L;
 
     @AfterEach
@@ -95,16 +101,15 @@ public class MenuReviewsServiceTest {
     public void deleteMenuReviewIfMemberIsNotAuthor() {
         // given
         String expectedException = "해당 리뷰 작성자가 아닙니다.";
-
         Members member = Members.builder()
                 .id(MEMBER_ID)
                 .build();
         Members otherMember = Members.builder()
-                .id(0L)
+                .id(OTHER_MEMBER_ID)
                 .build();
         MenuReviews menuReview = new MenuReviews(MENU_REVIEW_ID, new Menus(), otherMember, new Bakeries(), "", 3L, new ArrayList<>());
 
-        given(authService.getMemberId(any(String.class))).willReturn(0L);
+        given(authService.getMemberId(any(String.class))).willReturn(OTHER_MEMBER_ID);
         given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
         given(menuReviewQuerydslRepository.findByMenuReviewIdAndBakeryId(any(Long.class), any(Long.class))).willReturn(menuReview);
 
@@ -117,7 +122,49 @@ public class MenuReviewsServiceTest {
     }
 
     @Test
+    @DisplayName("해당하는 리뷰가 존재하지 않을 경우 예외가 발생합니다.")
+    public void deleteMenuReviewIfNotExist() throws Exception {
+        // given
+        String expectedException = "리뷰가 존재하지 않습니다.";
+
+        Members member = Members.builder()
+                .id(MEMBER_ID)
+                .build();
+
+        given(authService.getMemberId(any(String.class))).willReturn(MEMBER_ID);
+        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
+        given(menuReviewQuerydslRepository.findByMenuReviewIdAndBakeryId(any(Long.class), any(Long.class))).willReturn(null);
+        // when
+        ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
+            menuReviewsService.deleteMenuReview(TOKEN, BAKERY_ID, MENU_REVIEW_ID);
+        });
+        // then
+        assertEquals(responseStatusException.getReason(), expectedException);
+    }
+
+    // 진행중
+    @Test
+    @DisplayName("리뷰를 작성하고자 하는 메뉴가 빵집에 존재하지 않을 경우, 신규 메뉴를 생성하여 리뷰를 작성합니다.")
     void createMenuReviewList() {
+        // given
+        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
+        Members member = Members.builder()
+                .id(MEMBER_ID)
+                .build();
+        Bakeries bakery = Bakeries.builder()
+                .id(BAKERY_ID)
+                .build();
+        BreadCategories breadCategories = new BreadCategories();
+
+        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
+        given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+        given(menusQuerydslRepository.findByMenuNameBakeryId(any(String.class), BAKERY_ID)).willReturn(null);
+
+        given(breadCategoriesQuerydslRepository.findByBreadCategoryName(any(String.class).replaceAll("[ /]", ""))).willReturn(breadCategories);
+
+        // when
+
+        // then
     }
 
     @Test
