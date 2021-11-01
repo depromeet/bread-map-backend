@@ -58,12 +58,6 @@ class FlagsServiceTest {
     private static final Long MEMBER_ID = 1L;
     private static final FlagType FLAG_TYPE = FlagType.GONE;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        flagsService = new FlagsService(flagsQuerydslRepository, authService, bakeriesRepository, memberRepository, flagsRepository);
-    }
-
     @AfterEach
     void tearDown() {
     }
