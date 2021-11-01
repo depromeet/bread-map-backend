@@ -20,19 +20,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FlagsServiceTest {
@@ -59,7 +57,6 @@ class FlagsServiceTest {
     private static final Long BAKERY_ID = 1L;
     private static final Long MEMBER_ID = 1L;
     private static final FlagType FLAG_TYPE = FlagType.GONE;
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlagsServiceTest.class);
 
     @BeforeEach
     void setUp() {
@@ -73,7 +70,7 @@ class FlagsServiceTest {
 
     @Test
     @DisplayName("깃발이 없을 경우, 신규 깃발을 생성한다.")
-    public void createFlag() throws Exception {
+    public void createFlag() {
         // given
         CreateFlagsRequest createFlagsRequest = new CreateFlagsRequest(FLAG_TYPE);
         Members member = Members.builder()
@@ -134,7 +131,7 @@ class FlagsServiceTest {
 
     @Test
     @DisplayName("깃발 타입 잘못된 경우 예외 호출")
-    public void registerFlagIfNotSetFlagType () throws Exception {
+    public void registerFlagIfNotSetFlagType () {
         // given
         CreateFlagsRequest nullCreateFlagsRequest = new CreateFlagsRequest();
         // when
