@@ -12,13 +12,11 @@ import com.depromeet.breadmapbackend.flags.service.FlagsService;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -63,7 +61,7 @@ class FlagsServiceTest {
     }
 
     @Test
-    @DisplayName("깃발이 없을 경우, 신규 깃발을 생성한다.")
+    @DisplayName("깃발이 없을 경우, 신규 깃발을 생성합니다.")
     public void createFlag() {
         // given
         CreateFlagsRequest createFlagsRequest = new CreateFlagsRequest(FLAG_TYPE);
@@ -95,7 +93,7 @@ class FlagsServiceTest {
     }
 
     @Test
-    @DisplayName("깃발이 존재할 경우, 깃발 type을 createFlagsRequest에 전달된 type으로 업데이트한다.")
+    @DisplayName("깃발이 존재할 경우, 깃발 type을 createFlagsRequest에 전달된 type으로 업데이트합니다.")
     void updateFlag() {
         // given
         CreateFlagsRequest createFlagsRequest = new CreateFlagsRequest(FLAG_TYPE);
@@ -124,15 +122,18 @@ class FlagsServiceTest {
     }
 
     @Test
-    @DisplayName("깃발 타입 잘못된 경우 예외 호출")
+    @DisplayName("깃발 타입 잘못된 경우 예외가 발생합니다.")
     public void registerFlagIfNotSetFlagType () {
         // given
+        String expectedException = "존재하지 않는 FlagType입니다.";
+
         CreateFlagsRequest nullCreateFlagsRequest = new CreateFlagsRequest();
         // when
         
         // then
-        assertThrows(ResponseStatusException.class, () -> {
+        ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
             flagsService.registerFlag(TOKEN, BAKERY_ID, nullCreateFlagsRequest);
         });
+        assertEquals(responseStatusException.getReason(), expectedException);
     }
 }
