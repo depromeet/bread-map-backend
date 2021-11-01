@@ -52,7 +52,8 @@ public class BakeriesService {
     public BakeryDetailResponse getBakeryDetail(String token, Long bakeryId) {
         Long memberId = authService.getMemberId(token);
         FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findBakeryReviewByBakeryIdMemberId(bakeryId, memberId);
-        BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
+        BakeryInfoResponse bakeryInfoResponse = Optional.ofNullable(bakeriesQuerydslRepository.findByBakeryId(bakeryId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 베이커리 정보가 존재하지 않습니다."));
 
         List<MenuReviewResponse> menuReviewResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
         List<BakeryMenuResponse> bakeryMenuResponseList = menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
@@ -69,7 +70,7 @@ public class BakeriesService {
                 .avgRating(bakeryInfoResponse.getAvgRating())
                 .ratingCount(bakeryInfoResponse.getRatingCount())
                 .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
-                .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
+                .imgPath(bakeryInfoResponse.getBakeries().getImgPath().size() != 0 ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
                 .flagType(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getFlagType() : FlagType.NONE)
                 .personalRating(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getPersonalRating() : 0L)
                 .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())

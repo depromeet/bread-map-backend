@@ -2,10 +2,10 @@ package com.depromeet.breadmapbackend;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryDetailResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
 import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
@@ -14,7 +14,9 @@ import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
+import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
+import com.depromeet.breadmapbackend.reviews.repository.BakeryReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import org.javaunit.autoparams.AutoSource;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,11 +28,9 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.refEq;
@@ -61,7 +61,13 @@ public class BakeriesServiceTest {
     private MenuReviewQuerydslRepository menuReviewQuerydslRepository;
 
     @Mock
+    private BakeryReviewQuerydslRepository bakeryReviewQuerydslRepository;
+
+    @Mock
     private AuthService authService;
+
+    @Mock
+    private BakeryReviews bakeryReviews;
 
     @ParameterizedTest
     @AutoSource
@@ -79,8 +85,8 @@ public class BakeriesServiceTest {
     @ParameterizedTest
     @AutoSource
     void 신규_빵집일_경우_사용자조회_후_데이터를_저장한다(CreateBakeryRequest createBakeryRequest, Members members, String token, Long memberId) {
-        when(bakeriesQuerydslRepository.isBakeryExisted(createBakeryRequest.getLatitude(), createBakeryRequest.getLongitude())).thenReturn(false);
         given(authService.getMemberId(token)).willReturn(memberId);
+        when(bakeriesQuerydslRepository.isBakeryExisted(createBakeryRequest.getLatitude(), createBakeryRequest.getLongitude())).thenReturn(false);
         when(memberRepository.findById(memberId)).thenReturn(Optional.ofNullable(members));
 
         Bakeries data = Bakeries.builder()
@@ -102,14 +108,37 @@ public class BakeriesServiceTest {
 
     @ParameterizedTest
     @AutoSource
-    void 베이커리_아이디에_해당하는_데이터가_있을_경우_베이커리_상세데이터를_반환한다(BakeryInfoResponse bakeryInfoResponse, List<MenuReviewResponse> menuReviewResponseList, List<BakeryMenuResponse> bakeryMenuResponseList, String token, Long bakeryId) {
-//        bakeriesService.getBakeryDetail(token, bakeryId);
-        given(bakeriesQuerydslRepository.findByBakeryId(bakeryId)).willReturn(bakeryInfoResponse);
+    void 베이커리_아이디에_해당하는_데이터가_있을_경우_베이커리_상세데이터를_반환한다(Bakeries bakeries, List<MenuReviewResponse> menuReviewResponseList, List<BakeryMenuResponse> bakeryMenuResponseList, String token, Long bakeryId, Long memberId) {
+        given(authService.getMemberId(token)).willReturn(memberId);
+        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakeries, 22L, 10L, 4.5, 5L);
+        FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = new FlagTypeReviewRatingResponse(FlagType.NONE, 5L);
+
+        when(flagsQuerydslRepository.findBakeryReviewByBakeryIdMemberId(bakeryId, memberId)).thenReturn(flagTypeReviewRatingResponse);
+        when(bakeriesQuerydslRepository.findByBakeryId(bakeryId)).thenReturn(bakeryInfoResponse);
         when(menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L)).thenReturn(menuReviewResponseList);
         when(menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, 0L, 3L)).thenReturn(bakeryMenuResponseList);
-//
-//        verify(menuReviewQuerydslRepository).findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
-//        verify(menuReviewQuerydslRepository).findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
-        //작성중
+
+        bakeriesService.getBakeryDetail(token, bakeryId);
+
+        verify(flagsQuerydslRepository).findBakeryReviewByBakeryIdMemberId(bakeryId, memberId);
+        verify(bakeriesQuerydslRepository).findByBakeryId(bakeryId);
+        verify(menuReviewQuerydslRepository).findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
+        verify(menuReviewQuerydslRepository).findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 베이커리_아이디에_해당하는_bakeryInfoResponse가_없을_경우_ResponseStatusException이_발생한다(Long bakeryId, String token, Long memberId) {
+        given(bakeriesQuerydslRepository.findByBakeryId(bakeryId)).willReturn(null);
+
+        Exception exception = assertThrows(ResponseStatusException.class, () -> bakeriesService.getBakeryDetail(token, bakeryId));
+        String exceptedMessage = "해당 베이커리 정보가 존재하지 않습니다.";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(exceptedMessage));
+
+        then(flagsQuerydslRepository).should(never()).findBakeryReviewByBakeryIdMemberId(bakeryId, memberId);
+        then(menuReviewQuerydslRepository).should(never()).findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
+        then(menuReviewQuerydslRepository).should(never()).findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
     }
 }
