@@ -10,13 +10,16 @@ import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslReposit
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
+import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
+import com.depromeet.breadmapbackend.flags.repository.FlagsRepository;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.BakeryReviews;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.BakeryReviewQuerydslRepository;
+import com.depromeet.breadmapbackend.reviews.repository.BakeryReviewRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import org.javaunit.autoparams.AutoSource;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,16 +31,20 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -59,16 +66,19 @@ public class BakeriesServiceTest {
     private FlagsQuerydslRepository flagsQuerydslRepository;
 
     @Mock
+    private FlagsRepository flagsRepository;
+
+    @Mock
     private MenuReviewQuerydslRepository menuReviewQuerydslRepository;
 
     @Mock
     private BakeryReviewQuerydslRepository bakeryReviewQuerydslRepository;
 
     @Mock
-    private AuthService authService;
+    private BakeryReviewRepository bakeryReviewRepository;
 
     @Mock
-    private BakeryReviews bakeryReviews;
+    private AuthService authService;
 
     @ParameterizedTest
     @AutoSource
@@ -145,10 +155,72 @@ public class BakeriesServiceTest {
 
     @ParameterizedTest
     @AutoSource
-    void 베이커리_리뷰의_데이터는_존재하나_member데이터가_null_경우_NoSuchElementException이_발생한다(RegisterBakeryRatingRequest registerBakeryRatingRequest, Long bakeryId, Long memberId, String token) {
+    void 베이커리_리뷰의_데이터는_존재하나_member데이터가_null_경우_NoSuchElementException이_발생한다(RegisterBakeryRatingRequest registerBakeryRatingRequest, BakeryReviews bakeryReviews, Long bakeryId, Long memberId, String token) {
         given(bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).willReturn(bakeryReviews);
-        given(memberRepository.findById(memberId)).willReturn(Optional.of(new Members()));
+        given(memberRepository.findById(memberId)).willReturn(null);
 
         assertThrows(NoSuchElementException.class, () -> bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest));
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 해당사용자가_작성한_베이커리_리뷰가_null이고_깃발이_없다면_깃발은_NONE타입으로_입력하고_별점을_저장한다(String token, Long memberId, Long bakeryId, RegisterBakeryRatingRequest registerBakeryRatingRequest, Bakeries bakeries, Members members) {
+        given(authService.getMemberId(token)).willReturn(memberId);
+        given(bakeriesRepository.findById(bakeryId)).willReturn(Optional.ofNullable(bakeries));
+        given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(members));
+
+        bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest);
+
+        when(bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).thenReturn(null);
+        when(flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).thenReturn(null);
+
+        then(flagsRepository).should().save(refEq(Flags.builder()
+                .members(members)
+                .bakeries(bakeries)
+                .flagType(FlagType.NONE)
+                .build()));
+
+        then(bakeryReviewRepository).should().save(refEq(BakeryReviews.builder()
+                .members(members)
+                .bakeries(bakeries)
+                .contents("")
+                .rating(registerBakeryRatingRequest.getRating())
+                .imgPath(Collections.emptyList())
+                .build()));
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 해당사용자가_작성한_베이커리_리뷰가_null이고_깃발이_있다면_깃발데이터는_저장하지않고_별점만_저장한다(String token, Long memberId, Long bakeryId, Flags flags, RegisterBakeryRatingRequest registerBakeryRatingRequest, Bakeries bakeries, Members members) {
+        given(authService.getMemberId(token)).willReturn(memberId);
+        given(bakeriesRepository.findById(bakeryId)).willReturn(Optional.ofNullable(bakeries));
+        given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(members));
+
+        bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest);
+
+        when(bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).thenReturn(null);
+        when(flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).thenReturn(flags);
+
+        then(flagsRepository).should(never()).save(flags);
+        then(bakeryReviewRepository).should().save(refEq(BakeryReviews.builder()
+                .members(members)
+                .bakeries(bakeries)
+                .contents("")
+                .rating(registerBakeryRatingRequest.getRating())
+                .imgPath(Collections.emptyList())
+                .build()));
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 해당사용자가_작성한_베이커리_리뷰가_있다면_request로_오는_별점데이터만_업데이트한다(String token, Long memberId, Long bakeryId, BakeryReviews bakeryReviews, RegisterBakeryRatingRequest registerBakeryRatingRequest, Bakeries bakeries, Members members) {
+        given(authService.getMemberId(token)).willReturn(memberId);
+        given(bakeriesRepository.findById(bakeryId)).willReturn(Optional.ofNullable(bakeries));
+        given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(members));
+
+        bakeriesService.registerBakeryRating(token, bakeryId, registerBakeryRatingRequest);
+        when(bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).thenReturn(bakeryReviews);
+
+        bakeryReviews.updateRating(registerBakeryRatingRequest.getRating());
     }
 }
