@@ -2,10 +2,7 @@ package com.depromeet.breadmapbackend;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
-import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
-import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
@@ -31,11 +28,13 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.refEq;
@@ -221,5 +220,16 @@ public class BakeriesServiceTest {
         when(bakeryReviewQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId)).thenReturn(bakeryReviews);
 
         bakeryReviews.updateRating(registerBakeryRatingRequest.getRating());
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 위도_경도_범위_데이터로_조회시_빵집_데이터가_없으면_빈_리스트를_반환한다(Double latitude, Double longitude, Long range) {
+        List<BakeryListResponse> bakeryListResponseList = new ArrayList<>();
+        given(bakeriesRepository.findByEarthDistance(latitude, longitude, range)).willReturn(Collections.emptyList());
+
+        bakeriesService.getBakeryList(latitude, longitude, range);
+
+        assertEquals(Collections.emptyList(), bakeryListResponseList);
     }
 }
