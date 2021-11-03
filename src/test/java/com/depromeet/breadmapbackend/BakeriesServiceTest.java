@@ -2,10 +2,16 @@ package com.depromeet.breadmapbackend;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
-import com.depromeet.breadmapbackend.bakeries.dto.*;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryListResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
+import com.depromeet.breadmapbackend.bakeries.dto.CreateBakeryRequest;
+import com.depromeet.breadmapbackend.bakeries.dto.RegisterBakeryRatingRequest;
+import com.depromeet.breadmapbackend.bakeries.repository.BakeriesBreadCategoriesMapQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
@@ -33,8 +39,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.refEq;
@@ -74,6 +82,9 @@ public class BakeriesServiceTest {
 
     @Mock
     private BakeryReviewRepository bakeryReviewRepository;
+
+    @Mock
+    private BakeriesBreadCategoriesMapQuerydslRepository bakeriesBreadCategoriesMapQuerydslRepository;
 
     @Mock
     private AuthService authService;
@@ -231,5 +242,42 @@ public class BakeriesServiceTest {
         bakeriesService.getBakeryList(latitude, longitude, range);
 
         assertEquals(Collections.emptyList(), bakeryListResponseList);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 위도_경도_범위_데이터로_조회시_빵집_데이터가_있다면_해당범위에_포함되는_빵집리스트를_반환한다(List<BakeryListResponse> bakeryListResponseList, Bakeries bakeries, List<BreadCategoryType> breadCategoryList, List<MenuReviewResponse> menuReviewResponseList, Double latitude, Double longitude, Long range, Long bakeryId) {
+        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakeries, 22L, 10L, 4.5, 5L);
+
+        List<Long> bakeryIdList = new ArrayList<>();
+        bakeryIdList.add(bakeryId);
+        bakeryIdList.add(bakeryId);
+
+        when(bakeriesRepository.findByEarthDistance(latitude, longitude, range)).thenReturn(bakeryIdList);
+
+        bakeryIdList.forEach(bakeryIdResponse -> {
+            when(bakeriesQuerydslRepository.findByBakeryId(bakeryId)).thenReturn(bakeryInfoResponse);
+            when(menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L)).thenReturn(menuReviewResponseList);
+            when(bakeriesBreadCategoriesMapQuerydslRepository.findByBakeryId(bakeryId)).thenReturn(breadCategoryList);
+
+            bakeryListResponseList.add(BakeryListResponse.builder()
+                    .bakeryId(bakeryId)
+                    .bakeryName(bakeryInfoResponse.getBakeries().getName())
+                    .latitude(bakeryInfoResponse.getBakeries().getLatitude())
+                    .longitude(bakeryInfoResponse.getBakeries().getLongitude())
+                    .address(bakeryInfoResponse.getBakeries().getAddress())
+                    .flagsCount(bakeryInfoResponse.getFlagsCount())
+                    .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
+                    .avgRating(bakeryInfoResponse.getAvgRating())
+                    .ratingCount(bakeryInfoResponse.getRatingCount())
+                    .imgPath(bakeryInfoResponse.getBakeries().getImgPath().size() != 0 ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
+                    .menuReviewList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
+                    .breadCategoryList(breadCategoryList.stream().map(BreadCategoryType::getName).collect(Collectors.toList()))
+                    .build());
+        });
+
+        bakeriesService.getBakeryList(latitude, longitude, range);
+
+        assertNotNull(bakeryListResponseList);
     }
 }

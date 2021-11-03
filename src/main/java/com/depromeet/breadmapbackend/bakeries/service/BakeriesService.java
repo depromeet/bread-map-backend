@@ -95,7 +95,7 @@ public class BakeriesService {
                     .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
                     .avgRating(bakeryInfoResponse.getAvgRating())
                     .ratingCount(bakeryInfoResponse.getRatingCount())
-                    .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
+                    .imgPath(bakeryInfoResponse.getBakeries().getImgPath().size() != 0 ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
                     .menuReviewList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
                     .breadCategoryList(breadCategoryList.stream().map(BreadCategoryType::getName).collect(Collectors.toList()))
                     .build());
