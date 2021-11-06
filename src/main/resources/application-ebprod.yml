@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${rds.hostname}:${rds.port}/${rds.dbname}
+    username: ${rds.username}
+    password: ${rds.password}
+    driver-class-name: ${rds.driver}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+
+logging:
+  level:
+    org.hibernate.SQL: warn
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${s3.accesskey}
+      secret-key: ${s3.secretkey}
+    region:
+      static: ${s3.resion}
+    s3:
+      bucket: ${s3.bucket}
+    stack:
+      auto: false
+
+server:
+  port: 5000

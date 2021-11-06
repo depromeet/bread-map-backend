@@ -8,6 +8,7 @@ spring:
       group:
         dev: dev, oauth
         ebdev: ebdev, eboauth
+        ebprod: ebprod, eboauth
 
   jpa:
     hibernate:
