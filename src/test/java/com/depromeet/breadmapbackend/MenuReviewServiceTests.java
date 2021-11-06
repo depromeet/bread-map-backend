@@ -2,13 +2,14 @@ package com.depromeet.breadmapbackend;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
+import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
-import com.depromeet.breadmapbackend.bakeries.repository.BakeriesBreadCategoriesMapQuerydslRepository;
-import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
-import com.depromeet.breadmapbackend.bakeries.repository.MenusQuerydslRepository;
+import com.depromeet.breadmapbackend.bakeries.repository.*;
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
+import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
@@ -36,6 +37,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -65,8 +68,10 @@ public class MenuReviewServiceTests {
     private MenuReviewQuerydslRepository menuReviewQuerydslRepository;
 
     @Mock
-    private BakeriesBreadCategoriesMapQuerydslRepository bakeriesBreadCategoriesMapQuerydslRepository;
+    private BreadCategoriesQuerydslRepository breadCategoriesQuerydslRepository;
 
+    @Mock
+    private MenusRepository menusRepository;
     @Mock
     private AuthService authService;
 
@@ -148,5 +153,36 @@ public class MenuReviewServiceTests {
         menuReviewsService.getMenuReviewList(bakeryId, page, limit);
 
         verify(menuReviewQuerydslRepository).findMenuReviewPageableByBakeryId(bakeryId, pageable);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void 요청으로_온_메뉴정보가_존재하지않는_신규데이터라면_DB에_저장_후_메뉴리뷰를_저장한다(BreadCategories breadCategory, Members members, Bakeries bakeries, String token, Long bakeryId, Long memberId, Menus menus) {
+        List<CreateMenuReviewsRequest> createMenuReviewRequestList = new ArrayList<>();
+        CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("카테고리", "메뉴명", 1000, 5L, "리뷰내용", new ArrayList<>());
+        createMenuReviewRequestList.add(createMenuReviewsRequest);
+
+        createMenuReviewRequestList.forEach(createMenuReviews -> {
+            MenuReviews menuReviews = new MenuReviews();
+            given(authService.getMemberId(token)).willReturn(memberId);
+            given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(members));
+            given(bakeriesRepository.findById(bakeryId)).willReturn(Optional.ofNullable(bakeries));
+
+            String imgPath = createMenuReviews.getImgPathList().isEmpty() || createMenuReviews.getImgPathList() == null ? "" : createMenuReviews.getImgPathList().get(0);
+
+            when(menusQuerydslRepository.findByMenuNameBakeryId(createMenuReviews.getMenuName(), bakeryId)).thenReturn(null);
+            when(breadCategoriesQuerydslRepository.findByBreadCategoryName(createMenuReviewsRequest.getCategoryName().replaceAll("[ /]", ""))).thenReturn(breadCategory);
+
+            menuReviewsService.createMenuReviewList(token, bakeryId, createMenuReviewRequestList);
+
+            if (menus.getId() == null) {
+                Menus newMenu = new Menus();
+                newMenu.createMenu(bakeries, createMenuReviewsRequest.getMenuName(), createMenuReviewsRequest.getPrice(), breadCategory, imgPath);
+
+                menusRepository.save(newMenu);
+                menuReviews.createMenuReview(createMenuReviewsRequest, newMenu, members, bakeries);
+            }
+            verify(menuReviewRepository).save(any());
+        });
     }
 }
