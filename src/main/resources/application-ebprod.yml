@@ -16,7 +16,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: warn
+    org.hibernate.SQL: info
 
 cloud:
   aws:
