@@ -26,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +49,8 @@ public class BakeriesService {
     public BakeryDetailResponse getBakeryDetail(String token, Long bakeryId) {
         Long memberId = authService.getMemberId(token);
         FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = flagsQuerydslRepository.findBakeryReviewByBakeryIdMemberId(bakeryId, memberId);
-        BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
+        BakeryInfoResponse bakeryInfoResponse = Optional.ofNullable(bakeriesQuerydslRepository.findByBakeryId(bakeryId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 베이커리 정보가 존재하지 않습니다."));
 
         List<MenuReviewResponse> menuReviewResponseList = menuReviewQuerydslRepository.findMenuReviewListByBakeryId(bakeryId, 0L, 3L);
         List<BakeryMenuResponse> bakeryMenuResponseList = menuReviewQuerydslRepository.findBakeryMenuListByBakeryId(bakeryId, 0L, 3L);
@@ -69,7 +67,7 @@ public class BakeriesService {
                 .avgRating(bakeryInfoResponse.getAvgRating())
                 .ratingCount(bakeryInfoResponse.getRatingCount())
                 .basicInfoList(bakeryInfoResponse.getBakeries().getBasicInfoList())
-                .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
+                .imgPath(bakeryInfoResponse.getBakeries().getImgPath().size() != 0 ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
                 .flagType(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getFlagType() : FlagType.NONE)
                 .personalRating(flagTypeReviewRatingResponse != null ? flagTypeReviewRatingResponse.getPersonalRating() : 0L)
                 .menuReviewsResponseList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
@@ -97,7 +95,7 @@ public class BakeriesService {
                     .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
                     .avgRating(bakeryInfoResponse.getAvgRating())
                     .ratingCount(bakeryInfoResponse.getRatingCount())
-                    .imgPath(bakeryInfoResponse.getBakeries().getImgPath() != null ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
+                    .imgPath(bakeryInfoResponse.getBakeries().getImgPath().size() != 0 ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
                     .menuReviewList(menuReviewResponseList != null ? menuReviewResponseList : Collections.emptyList())
                     .breadCategoryList(breadCategoryList.stream().map(BreadCategoryType::getName).collect(Collectors.toList()))
                     .build());
@@ -116,15 +114,15 @@ public class BakeriesService {
             Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
             if (flag == null) {
                 flagsRepository.save(Flags.builder()
-                        .members(member.orElseThrow(NullPointerException::new))
-                        .bakeries(bakery.orElseThrow(NullPointerException::new))
+                        .members(member.orElseThrow(NoSuchElementException::new))
+                        .bakeries(bakery.orElseThrow(NoSuchElementException::new))
                         .flagType(FlagType.NONE)
                         .build());
             }
 
             bakeryReviewRepository.save(BakeryReviews.builder()
-                    .members(member.orElseThrow(NullPointerException::new))
-                    .bakeries(bakery.orElseThrow(NullPointerException::new))
+                    .members(member.orElseThrow(NoSuchElementException::new))
+                    .bakeries(bakery.orElseThrow(NoSuchElementException::new))
                     .contents("")
                     .rating(registerBakeryRatingRequest.getRating())
                     .imgPath(Collections.emptyList())
