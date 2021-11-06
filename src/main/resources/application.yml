@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  profiles:
+      group:
+        dev: dev, oauth
+        ebdev: ebdev, eboauth
+        ebprod: ebprod, eboauth
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  auth:
+    tokenSecret: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+    tokenExpiry: 3333333333
+
+server:
+  error:
+    include-message: always

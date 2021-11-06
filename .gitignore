@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Config ###
+application-dev.yml
+application-oauth.yml
+application-local.yml
