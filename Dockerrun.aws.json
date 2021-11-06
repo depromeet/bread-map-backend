@@ -1,0 +1,13 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "149241805058.dkr.ecr.ap-northeast-2.amazonaws.com/daedong-bread-map:latest",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "5000",
+      "HostPort": "5000"
+    }
+  ]
+}
