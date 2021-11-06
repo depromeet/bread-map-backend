@@ -185,4 +185,33 @@ public class MenuReviewServiceTests {
             verify(menuReviewRepository).save(any());
         });
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void 요청으로_온_메뉴정보가_존재하고_이미지가_없다면_이미지를_저장하고_메뉴리뷰를_저장한다(List<String> imgList, BreadCategories breadCategory, Members members, Bakeries bakeries, String token, Long bakeryId, Long memberId) {
+        Menus menus = new Menus(1L, "메뉴명", bakeries, 1000, breadCategory, imgList.get(0));
+        List<CreateMenuReviewsRequest> createMenuReviewRequestList = new ArrayList<>();
+        CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("카테고리", "메뉴명", 1000, 5L, "리뷰내용", imgList);
+        createMenuReviewRequestList.add(createMenuReviewsRequest);
+
+        createMenuReviewRequestList.forEach(createMenuReviews -> {
+            MenuReviews menuReviews = new MenuReviews();
+            given(authService.getMemberId(token)).willReturn(memberId);
+            given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(members));
+            given(bakeriesRepository.findById(bakeryId)).willReturn(Optional.ofNullable(bakeries));
+
+            String imgPath = createMenuReviews.getImgPathList().isEmpty() || createMenuReviews.getImgPathList() == null ? "" : createMenuReviews.getImgPathList().get(0);
+
+            when(menusQuerydslRepository.findByMenuNameBakeryId(createMenuReviews.getMenuName(), bakeryId)).thenReturn(menus);
+            when(breadCategoriesQuerydslRepository.findByBreadCategoryName(createMenuReviewsRequest.getCategoryName().replaceAll("[ /]", ""))).thenReturn(breadCategory);
+
+            menuReviewsService.createMenuReviewList(token, bakeryId, createMenuReviewRequestList);
+
+            if (menus != null) {
+                if(menus.getImgPath() != null && imgPath != null) menus.updateImgPath(imgPath);
+                menuReviews.createMenuReview(createMenuReviewsRequest, menus, members, bakeries);
+            }
+            verify(menuReviewRepository).save(any());
+        });
+    }
 }
