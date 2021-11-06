@@ -2,7 +2,6 @@ package com.depromeet.breadmapbackend.earth;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
-import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BreadCategoriesQuerydslRepository;
@@ -11,12 +10,9 @@ import com.depromeet.breadmapbackend.bakeries.repository.MenusRepository;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
-import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
