@@ -209,7 +209,7 @@ public class MenuReviewServiceTests {
             menuReviewsService.createMenuReviewList(token, bakeryId, createMenuReviewRequestList);
 
             if (menus != null) {
-                if(menus.getImgPath() != null && imgPath != null) menus.updateImgPath(imgPath);
+                if(menus.getImgPath().equals("") && imgPath != null) menus.updateImgPath(imgPath);
                 menuReviews.createMenuReview(createMenuReviewsRequest, menus, members, bakeries);
             }
             verify(menuReviewRepository).save(any());
