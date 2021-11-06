@@ -58,7 +58,6 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy
-          cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
           cp Dockerrun.aws.json deploy/Dockerrun.aws.json
           cd deploy && zip -r deploy.zip .
