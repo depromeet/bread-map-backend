@@ -10,14 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class SimpleMenuReviewResponse {
 
     private String contents;
 
-    @Builder
-    public SimpleMenuReviewResponse(String contents) {
-        this.contents = contents;
-    }
 }
