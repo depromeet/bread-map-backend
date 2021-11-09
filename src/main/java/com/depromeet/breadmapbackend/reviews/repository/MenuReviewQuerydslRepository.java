@@ -83,6 +83,8 @@ public class MenuReviewQuerydslRepository {
                         menuReviews.lastModifiedDateTime.as("lastModifiedDateTime")))
                 .from(menuReviews)
                 .where(menuReviews.bakeries.id.eq(bakeryId))
+                .groupBy(menuReviews.id, menuReviews.menus.name, menuReviews.members.name, menuReviews.menus.breadCategories.id)
+                .orderBy(menuReviews.createdDateTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
