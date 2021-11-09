@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlagTypeBakeryResponse {
+public class FlagTypeBakeryIdResponse {
 
     @ApiModelProperty(value = "회원 한명의 flagType")
     private FlagType flagType;

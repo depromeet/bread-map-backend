@@ -3,7 +3,7 @@ package com.depromeet.breadmapbackend.members.service;
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryInfoResponse;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslRepository;
-import com.depromeet.breadmapbackend.flags.dto.FlagTypeBakeryResponse;
+import com.depromeet.breadmapbackend.flags.dto.FlagTypeBakeryIdResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
 import com.depromeet.breadmapbackend.members.dto.ProfileBakeryResponse;
 import com.depromeet.breadmapbackend.reviews.dto.SimpleMenuReviewResponse;
@@ -32,8 +32,8 @@ public class MembersService {
         Long memberId = authService.getMemberId(token);
         List<ProfileBakeryResponse> profileBakeryResponseList = new ArrayList<>();
 
-        List<FlagTypeBakeryResponse> flagTypeBakeryIdResponseList = flagsQuerydslRepository.findByMemberId(memberId);
-        for(FlagTypeBakeryResponse flagTypeBakeryResponse: flagTypeBakeryIdResponseList) {
+        List<FlagTypeBakeryIdResponse> flagTypeBakeryIdResponseList = flagsQuerydslRepository.findByMemberId(memberId);
+        for(FlagTypeBakeryIdResponse flagTypeBakeryResponse: flagTypeBakeryIdResponseList) {
             Long bakeryId = flagTypeBakeryResponse.getBakeryId();
 
             BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);

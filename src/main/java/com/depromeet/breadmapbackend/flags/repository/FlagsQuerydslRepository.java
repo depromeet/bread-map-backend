@@ -2,7 +2,7 @@ package com.depromeet.breadmapbackend.flags.repository;
 
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import com.depromeet.breadmapbackend.flags.domain.Flags;
-import com.depromeet.breadmapbackend.flags.dto.FlagTypeBakeryResponse;
+import com.depromeet.breadmapbackend.flags.dto.FlagTypeBakeryIdResponse;
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeReviewRatingResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -47,9 +47,9 @@ public class FlagsQuerydslRepository {
     /**
      * MemberId를 기준으로 flagType과 해당 flag가 꽂힌 bakeryId 반환 (FLAGTYPE NONE 제외하고 조회)
      */
-    public List<FlagTypeBakeryResponse> findByMemberId(Long memberId) {
+    public List<FlagTypeBakeryIdResponse> findByMemberId(Long memberId) {
         return jpaQueryFactory
-                .select(Projections.fields(FlagTypeBakeryResponse.class,
+                .select(Projections.fields(FlagTypeBakeryIdResponse.class,
                         flags.flagType.as("flagType"),
                         flags.bakeries.id.as("bakeryId")))
                 .from(flags)
