@@ -1,13 +1,9 @@
 package com.depromeet.breadmapbackend.members.controller;
 
 import com.depromeet.breadmapbackend.auth.jwt.JwtHeaderUtil;
-import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
-import com.depromeet.breadmapbackend.bakeries.service.MenusService;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
-import com.depromeet.breadmapbackend.flags.service.FlagsService;
 import com.depromeet.breadmapbackend.members.dto.ProfileBakeryResponse;
 import com.depromeet.breadmapbackend.members.service.MembersService;
-import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MembersController {
 
-    private final BakeriesService bakeriesService;
-    private final MenuReviewsService menuReviewsService;
-    private final FlagsService flagsService;
-    private final MenusService menusService;
     private final MembersService membersService;
 
     /**

@@ -1,6 +1,5 @@
 package com.depromeet.breadmapbackend.flags.dto;
 
-import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
