@@ -1,30 +1,26 @@
 package com.depromeet.breadmapbackend.members.controller;
 
-import com.depromeet.breadmapbackend.auth.jwt.JwtHeaderUtil;
-import com.depromeet.breadmapbackend.bakeries.dto.*;
 import com.depromeet.breadmapbackend.bakeries.service.BakeriesService;
 import com.depromeet.breadmapbackend.bakeries.service.MenusService;
 import com.depromeet.breadmapbackend.common.dto.ApiResponse;
-import com.depromeet.breadmapbackend.flags.dto.CreateFlagsRequest;
 import com.depromeet.breadmapbackend.flags.service.FlagsService;
 import com.depromeet.breadmapbackend.members.dto.ProfileBakeryListResponse;
-import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
-import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/bakery")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class MembersController {
 

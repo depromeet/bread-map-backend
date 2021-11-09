@@ -27,6 +27,6 @@ public class ProfileBakeryListResponse {
     private Long flagsCount;
     @ApiModelProperty(value = "빵집 대표 이미지")
     private String imgPath;
-    private List<SimpleMenuReviewResponse> menuReviewList = new ArrayList<>();
     private Long menuReviewsCount;
+    private List<SimpleMenuReviewResponse> menuReviewList = new ArrayList<>();
 }
