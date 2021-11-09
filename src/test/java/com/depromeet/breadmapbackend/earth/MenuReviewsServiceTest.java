@@ -2,14 +2,17 @@ package com.depromeet.breadmapbackend.earth;
 
 import com.depromeet.breadmapbackend.auth.service.AuthService;
 import com.depromeet.breadmapbackend.bakeries.domain.Bakeries;
+import com.depromeet.breadmapbackend.bakeries.domain.BreadCategories;
 import com.depromeet.breadmapbackend.bakeries.domain.Menus;
 import com.depromeet.breadmapbackend.bakeries.repository.BakeriesRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.BreadCategoriesQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.MenusQuerydslRepository;
 import com.depromeet.breadmapbackend.bakeries.repository.MenusRepository;
+import com.depromeet.breadmapbackend.common.enumerate.BreadCategoryType;
 import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
+import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
@@ -23,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,6 +35,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MenuReviewsServiceTest {
@@ -117,7 +123,7 @@ public class MenuReviewsServiceTest {
     }
 
     @Test
-    @DisplayName("해당하는 리뷰가 존재하지 않을 경우 예외가 발생합니다.")
+    @DisplayName("리뷰 삭제 시 해당하는 리뷰가 존재하지 않을 경우 예외가 발생합니다.")
     public void deleteMenuReviewIfNotExist() throws Exception {
         // given
         String expectedException = "리뷰가 존재하지 않습니다.";
@@ -143,23 +149,35 @@ public class MenuReviewsServiceTest {
     void createMenuReviewList() {
         // given
 //        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
+//        CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("과자류", "MENU_NAME", 1000, 4L, "CONTENT", new ArrayList<>());
+//        menuReviewsRequestList.add(createMenuReviewsRequest);
+//
 //        Members member = Members.builder()
 //                .id(MEMBER_ID)
 //                .build();
 //        Bakeries bakery = Bakeries.builder()
 //                .id(BAKERY_ID)
+//                .menusList(new ArrayList<>())
 //                .build();
-//        BreadCategories breadCategories = new BreadCategories();
+//        Menus menu = new Menus();
+//        BreadCategories breadCategories = new BreadCategories(1L, BreadCategoryType.과자류, new ArrayList<>(), new ArrayList<>());
 //
-//        given(memberRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(member));
-//        given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
-//        given(menusQuerydslRepository.findByMenuNameBakeryId(any(String.class), BAKERY_ID)).willReturn(null);
+//        for(CreateMenuReviewsRequest menuReviewsRequest: menuReviewsRequestList) {
+//            given(authService.getMemberId(TOKEN)).willReturn(MEMBER_ID);
+//            MenuReviews menuReviews = new MenuReviews();
+//            String imgPath = createMenuReviewsRequest.getImgPathList().isEmpty() ? "" : createMenuReviewsRequest.getImgPathList().get(0);
 //
-//        given(breadCategoriesQuerydslRepository.findByBreadCategoryName(any(String.class).replaceAll("[ /]", ""))).willReturn(breadCategories);
-
-        // when
-
-        // then
+//            given(memberRepository.findById(MEMBER_ID)).willReturn(Optional.ofNullable(member));
+//            given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+//
+//
+//            when(menusQuerydslRepository.findByMenuNameBakeryId(menuReviewsRequest.getMenuName(), BAKERY_ID)).thenReturn(null);
+//            // menu == null
+//            menu.createMenu(bakery, menuReviewsRequest.getMenuName(), menuReviewsRequest.getPrice(), breadCategories, imgPath);
+//            when(breadCategoriesQuerydslRepository.findByBreadCategoryName(any(String.class).replaceAll("[ /]", ""))).thenReturn(breadCategories);
+//
+//            then(menuReviewRepository.save(menuReviews).getMenus().equals(menu));
+//        }
     }
 
     @Test
