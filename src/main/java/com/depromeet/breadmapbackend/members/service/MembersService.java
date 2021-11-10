@@ -6,7 +6,6 @@ import com.depromeet.breadmapbackend.bakeries.repository.BakeriesQuerydslReposit
 import com.depromeet.breadmapbackend.flags.dto.FlagTypeBakeryIdResponse;
 import com.depromeet.breadmapbackend.flags.repository.FlagsQuerydslRepository;
 import com.depromeet.breadmapbackend.members.dto.ProfileBakeryResponse;
-import com.depromeet.breadmapbackend.reviews.dto.SimpleMenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,7 @@ public class MembersService {
 
             BakeryInfoResponse bakeryInfoResponse = bakeriesQuerydslRepository.findByBakeryId(bakeryId);
 
-            List<SimpleMenuReviewResponse> simpleMenuReviewResponseList = menuReviewQuerydslRepository.findSimpleMenuReviewListByBakeryId(bakeryId, 0L, 3L);
+            List<String> menuReviewContentList = menuReviewQuerydslRepository.findMenuReviewContentByBakeryId(bakeryId, 0L, 3L);
 
             profileBakeryResponseList.add(ProfileBakeryResponse.builder()
                     .flagType(flagTypeBakeryResponse.getFlagType())
@@ -48,7 +47,7 @@ public class MembersService {
                     .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
                     .avgRating(bakeryInfoResponse.getAvgRating())
                     .imgPath(bakeryInfoResponse.getBakeries().getImgPath().size() != 0 ? bakeryInfoResponse.getBakeries().getImgPath().get(0) : "")
-                    .menuReviewList(simpleMenuReviewResponseList != null ? simpleMenuReviewResponseList : Collections.emptyList())
+                    .menuReviewContentList(menuReviewContentList != null ? menuReviewContentList : Collections.emptyList())
                     .build());
         }
         return profileBakeryResponseList != null ? profileBakeryResponseList : Collections.emptyList();

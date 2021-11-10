@@ -3,7 +3,6 @@ package com.depromeet.breadmapbackend.reviews.repository;
 import com.depromeet.breadmapbackend.bakeries.dto.BakeryMenuResponse;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
-import com.depromeet.breadmapbackend.reviews.dto.SimpleMenuReviewResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +27,9 @@ public class MenuReviewQuerydslRepository {
     /**
      * 생성날짜 기준(최신순) MenuReviews 리스트 반환(contents만 반환하는 simple형)
      */
-    public List<SimpleMenuReviewResponse> findSimpleMenuReviewListByBakeryId(Long bakeryId, Long offset, Long limit) {
+    public List<String> findMenuReviewContentByBakeryId(Long bakeryId, Long offset, Long limit) {
         return jpaQueryFactory
-                .select(Projections.fields(SimpleMenuReviewResponse.class,
-                        menuReviews.contents))
+                .select(menuReviews.contents)
                 .from(menuReviews)
                 .where(menuReviews.bakeries.id.eq(bakeryId))
                 .orderBy(menuReviews.createdDateTime.desc())

@@ -1,7 +1,6 @@
 package com.depromeet.breadmapbackend.members.dto;
 
 import com.depromeet.breadmapbackend.common.enumerate.FlagType;
-import com.depromeet.breadmapbackend.reviews.dto.SimpleMenuReviewResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +27,5 @@ public class ProfileBakeryResponse {
     @ApiModelProperty(value = "빵집 대표 이미지")
     private String imgPath;
     private Long menuReviewsCount;
-    // SimpleMenuReviewResponse
-    private List<SimpleMenuReviewResponse> menuReviewList = new ArrayList<>();
+    private List<String> menuReviewContentList = new ArrayList<>();
 }
