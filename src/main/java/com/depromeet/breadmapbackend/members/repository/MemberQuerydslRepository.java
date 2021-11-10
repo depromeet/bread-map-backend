@@ -1,6 +1,8 @@
 package com.depromeet.breadmapbackend.members.repository;
 
 import com.depromeet.breadmapbackend.members.domain.Members;
+import com.depromeet.breadmapbackend.members.dto.UserInfoResponse;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,6 +33,18 @@ public class MemberQuerydslRepository {
                 .join(flags)
                 .on(flags.members.id.eq(memberId)
                         .and(flags.bakeries.id.eq(bakeryId)))
+                .where(members.id.eq(memberId))
+                .fetchOne();
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoResponse findByMemberId(Long memberId) {
+        return jpaQueryFactory
+                .select(Projections.fields(UserInfoResponse.class,
+                        members.profileImagePath.as("profileImage"),
+                        members.name.as("nickName"),
+                        members.email))
+                .from(members)
                 .where(members.id.eq(memberId))
                 .fetchOne();
     }
