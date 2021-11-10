@@ -37,7 +37,6 @@ public class MemberQuerydslRepository {
                 .fetchOne();
     }
 
-    @Transactional(readOnly = true)
     public UserInfoResponse findByMemberId(Long memberId) {
         return jpaQueryFactory
                 .select(Projections.fields(UserInfoResponse.class,
