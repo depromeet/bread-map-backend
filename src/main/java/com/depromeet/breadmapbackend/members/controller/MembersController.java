@@ -30,7 +30,7 @@ public class MembersController {
 
     /**
      * 현재 로그인한 회원이 깃발 꽂은 빵집 리스트 조회
-     * @return ResponseEntity<profileBakeryListResponse>
+     * @return ResponseEntity<List<ProfileBakeryResponse>>
      */
     @ApiOperation(value = "현재 로그인한 회원이 깃발 꽂은 빵집 리스트", notes = "현재 로그인한 회원이 깃발 꽂은 빵집 리스트 조회")
     @GetMapping
