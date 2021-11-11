@@ -66,10 +66,8 @@ public class MembersController {
      */
     @ApiOperation(value = "현재 로그인한 유저의 프로필이미지 & 닉네임 변경 기능", notes = "현재 로그인한 유저의 프로필이미지 & 닉네임 변경 기능")
     @PutMapping("/info")
-    public ResponseEntity<Void> updateUserInfo(HttpServletRequest request, @RequestBody UserInfo userInfo) {
+    public ResponseEntity<UserInfo> updateUserInfo(HttpServletRequest request, @RequestBody UserInfo userInfo) {
         String token = JwtHeaderUtil.getAccessToken(request);
-        membersService.updateUserInfo(token, userInfo);
-
-        return ApiResponse.success(null);
+        return ApiResponse.success(membersService.updateUserInfo(token, userInfo));
     }
 }
