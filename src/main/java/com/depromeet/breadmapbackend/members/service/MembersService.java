@@ -79,6 +79,7 @@ public class MembersService {
         Members members = Optional.ofNullable(memberRepository.findMemberById(memberId))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저 정보가 존재하지 않습니다."));
 
+        // TODO 추후 닉네임 지정 기능 생기면 그때는 닉네임 빈칸 막을지 고려 필요
         if(userInfo.getNickName() == null || userInfo.getProfileImage() == null || userInfo.getNickName().equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미지나 닉네임이 누락되어 수정이 불가능합니다.");
         }
