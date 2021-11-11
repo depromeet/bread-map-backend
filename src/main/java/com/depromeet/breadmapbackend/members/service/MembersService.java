@@ -76,7 +76,7 @@ public class MembersService {
     public UserInfo updateUserInfo(String token, UserInfo userInfo) {
         Long memberId = authService.getMemberId(token);
 
-        Members members = Optional.ofNullable(memberRepository.findMembersById(memberId))
+        Members members = Optional.ofNullable(memberRepository.findMemberById(memberId))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저 정보가 존재하지 않습니다."));
 
         if(userInfo.getNickName() == null || userInfo.getProfileImage() == null) {
