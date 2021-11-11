@@ -38,7 +38,7 @@ public class ClientKakao implements ClientProxy {
                 .gender(kakaoUserResponse.getKakaoAccount().getGender())
                 .memberProvider(MemberProvider.KAKAO)
                 .roleType(RoleType.USER)
-                .profileImagePath(kakaoUserResponse.getProperties().getProfileImage())
+                .profileImagePath(kakaoUserResponse.getProperties().getProfileImage() != null ? kakaoUserResponse.getProperties().getProfileImage() : "")
                 .build();
     }
 }
