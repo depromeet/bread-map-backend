@@ -148,36 +148,37 @@ public class MenuReviewsServiceTest {
     @DisplayName("리뷰를 작성하고자 하는 메뉴가 빵집에 존재하지 않을 경우, 신규 메뉴를 생성하여 리뷰를 작성합니다.")
     void createMenuReviewList() {
         // given
-//        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
-//        CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("과자류", "MENU_NAME", 1000, 4L, "CONTENT", new ArrayList<>());
-//        menuReviewsRequestList.add(createMenuReviewsRequest);
-//
-//        Members member = Members.builder()
-//                .id(MEMBER_ID)
-//                .build();
-//        Bakeries bakery = Bakeries.builder()
-//                .id(BAKERY_ID)
-//                .menusList(new ArrayList<>())
-//                .build();
-//        Menus menu = new Menus();
-//        BreadCategories breadCategories = new BreadCategories(1L, BreadCategoryType.과자류, new ArrayList<>(), new ArrayList<>());
-//
-//        for(CreateMenuReviewsRequest menuReviewsRequest: menuReviewsRequestList) {
-//            given(authService.getMemberId(TOKEN)).willReturn(MEMBER_ID);
-//            MenuReviews menuReviews = new MenuReviews();
-//            String imgPath = createMenuReviewsRequest.getImgPathList().isEmpty() ? "" : createMenuReviewsRequest.getImgPathList().get(0);
-//
-//            given(memberRepository.findById(MEMBER_ID)).willReturn(Optional.ofNullable(member));
-//            given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
-//
-//
-//            when(menusQuerydslRepository.findByMenuNameBakeryId(menuReviewsRequest.getMenuName(), BAKERY_ID)).thenReturn(null);
-//            // menu == null
-//            menu.createMenu(bakery, menuReviewsRequest.getMenuName(), menuReviewsRequest.getPrice(), breadCategories, imgPath);
-//            when(breadCategoriesQuerydslRepository.findByBreadCategoryName(any(String.class).replaceAll("[ /]", ""))).thenReturn(breadCategories);
-//
-//            then(menuReviewRepository.save(menuReviews).getMenus().equals(menu));
-//        }
+        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
+        CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("과자류", "MENU_NAME", 1000, 4L, "CONTENT", new ArrayList<>());
+        menuReviewsRequestList.add(createMenuReviewsRequest);
+
+        Members member = Members.builder()
+                .id(MEMBER_ID)
+                .build();
+        Bakeries bakery = Bakeries.builder()
+                .id(BAKERY_ID)
+                .menusList(new ArrayList<>())
+                .menuReviewsList(new ArrayList<>())
+                .build();
+        BreadCategories breadCategories = new BreadCategories(1L, BreadCategoryType.과자류, new ArrayList<>(), new ArrayList<>());
+
+        for(CreateMenuReviewsRequest menuReviewsRequest: menuReviewsRequestList) {
+            given(authService.getMemberId(TOKEN)).willReturn(MEMBER_ID);
+            MenuReviews menuReviews = new MenuReviews();
+            String imgPath = menuReviewsRequest.getImgPathList().isEmpty() ? "" : menuReviewsRequest.getImgPathList().get(0);
+
+            given(memberRepository.findById(MEMBER_ID)).willReturn(Optional.ofNullable(member));
+            given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+
+            when(menusQuerydslRepository.findByMenuNameBakeryId(menuReviewsRequest.getMenuName(), BAKERY_ID)).thenReturn(null); // menu == null
+
+            when(breadCategoriesQuerydslRepository.findByBreadCategoryName(menuReviewsRequest.getCategoryName().replaceAll("[ /]", ""))).thenReturn(breadCategories);
+
+            menuReviewsService.createMenuReviewList(TOKEN, BAKERY_ID, menuReviewsRequestList);
+
+            verify(menusRepository).save(any());
+            verify(menuReviewRepository).save(any());
+        }
     }
 
     @Test
