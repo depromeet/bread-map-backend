@@ -56,10 +56,6 @@ class FlagsServiceTest {
     private static final Long MEMBER_ID = 1L;
     private static final FlagType FLAG_TYPE = FlagType.GONE;
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     @DisplayName("깃발이 없을 경우, 신규 깃발을 생성합니다.")
     public void createFlag() {

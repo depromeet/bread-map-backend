@@ -13,6 +13,7 @@ import com.depromeet.breadmapbackend.members.domain.Members;
 import com.depromeet.breadmapbackend.members.repository.MemberRepository;
 import com.depromeet.breadmapbackend.reviews.domain.MenuReviews;
 import com.depromeet.breadmapbackend.reviews.dto.CreateMenuReviewsRequest;
+import com.depromeet.breadmapbackend.reviews.dto.MenuReviewResponse;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewQuerydslRepository;
 import com.depromeet.breadmapbackend.reviews.repository.MenuReviewRepository;
 import com.depromeet.breadmapbackend.reviews.service.MenuReviewsService;
@@ -20,12 +21,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,14 +43,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MenuReviewsServiceTest {
 
     @InjectMocks
     private MenuReviewsService menuReviewsService;
+
+    @Mock
+    private Pageable pageable;
 
     @Mock
     private MenuReviewRepository menuReviewRepository;
@@ -73,10 +83,6 @@ public class MenuReviewsServiceTest {
     private static final Long MEMBER_ID = 1L;
     private static final Long OTHER_MEMBER_ID = 0L;
     private static final Long MENU_REVIEW_ID = 1L;
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     @DisplayName("본인이 작성한 리뷰를 삭제합니다.")
@@ -124,7 +130,7 @@ public class MenuReviewsServiceTest {
 
     @Test
     @DisplayName("리뷰 삭제 시 해당하는 리뷰가 존재하지 않을 경우 예외가 발생합니다.")
-    public void deleteMenuReviewIfNotExist() throws Exception {
+    public void deleteMenuReviewIfNotExist() {
         // given
         String expectedException = "리뷰가 존재하지 않습니다.";
 
@@ -143,10 +149,9 @@ public class MenuReviewsServiceTest {
         assertEquals(responseStatusException.getReason(), expectedException);
     }
 
-    // 진행중
     @Test
     @DisplayName("리뷰를 작성하고자 하는 메뉴가 빵집에 존재하지 않을 경우, 신규 메뉴를 생성하여 리뷰를 작성합니다.")
-    void createMenuReviewList() {
+    void createMenuReviewListIfNotExistMenu() {
         // given
         List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
         CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("과자류", "MENU_NAME", 1000, 4L, "CONTENT", new ArrayList<>());
@@ -164,8 +169,6 @@ public class MenuReviewsServiceTest {
 
         for(CreateMenuReviewsRequest menuReviewsRequest: menuReviewsRequestList) {
             given(authService.getMemberId(TOKEN)).willReturn(MEMBER_ID);
-            MenuReviews menuReviews = new MenuReviews();
-            String imgPath = menuReviewsRequest.getImgPathList().isEmpty() ? "" : menuReviewsRequest.getImgPathList().get(0);
 
             given(memberRepository.findById(MEMBER_ID)).willReturn(Optional.ofNullable(member));
             given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
@@ -182,6 +185,80 @@ public class MenuReviewsServiceTest {
     }
 
     @Test
-    void getMenuReviewList() {
+    @DisplayName("리뷰를 작성하고자 하는 메뉴가 빵집에 있고, 해당 메뉴 이미지가 없는데 신규 리뷰에 사진 있다면 메뉴 사진을 업데이트 합니다.")
+    void createMenuReviewListAndUpdateMenuImage() {
+        // given
+        List<CreateMenuReviewsRequest> menuReviewsRequestList = new ArrayList<>();
+        List<String> imgPathList = new ArrayList<>();
+        imgPathList.add("http://img.cdn.com");
+        imgPathList.add("http://img2.cdn.com");
+        CreateMenuReviewsRequest createMenuReviewsRequest = new CreateMenuReviewsRequest("과자류", "MENU_NAME", 1000, 4L, "CONTENT", imgPathList);
+        menuReviewsRequestList.add(createMenuReviewsRequest);
+
+        Members member = Members.builder()
+                .id(MEMBER_ID)
+                .build();
+        Bakeries bakery = Bakeries.builder()
+                .id(BAKERY_ID)
+                .menusList(new ArrayList<>())
+                .menuReviewsList(new ArrayList<>())
+                .build();
+        BreadCategories breadCategories = new BreadCategories(1L, BreadCategoryType.과자류, new ArrayList<>(), new ArrayList<>());
+
+        for(CreateMenuReviewsRequest menuReviewsRequest: menuReviewsRequestList) {
+            given(authService.getMemberId(TOKEN)).willReturn(MEMBER_ID);
+
+            given(memberRepository.findById(MEMBER_ID)).willReturn(Optional.ofNullable(member));
+            given(bakeriesRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(bakery));
+
+            Menus menus = new Menus(1L, menuReviewsRequest.getMenuName(), bakery, menuReviewsRequest.getPrice(), breadCategories, "");
+
+            when(menusQuerydslRepository.findByMenuNameBakeryId(menuReviewsRequest.getMenuName(), BAKERY_ID)).thenReturn(menus);
+
+            menuReviewsService.createMenuReviewList(TOKEN, BAKERY_ID, menuReviewsRequestList);
+
+            assertEquals(menus.getImgPath(), menuReviewsRequest.getImgPathList().get(0));
+            verify(menuReviewRepository).save(any());
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("잘못된 page 값이 들어간 경우 예외를 발생합니다.")
+    @ValueSource(ints = {0, -1})
+    public void setWrongPageValueWhenGetMenuReviewList(int page) {
+        // given
+        String expectedException = "잘못된 page 값입니다(시작 page: 1).";
+        Integer limit = 10;
+
+        // when
+        ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
+            menuReviewsService.getMenuReviewList(BAKERY_ID, page, limit);
+        });
+
+        // then
+        assertEquals(responseStatusException.getReason(), expectedException);
+        verify(menuReviewQuerydslRepository, never()).findMenuReviewPageableByBakeryId(BAKERY_ID, pageable);
+    }
+
+    @ParameterizedTest
+    @DisplayName("page 값이 1 이상으로 들어올 경우 메뉴 리뷰 리스트를 반환합니다.")
+    @ValueSource(ints = {1, 2})
+    public void setPageValueMoreThan0WhenGetMenuReviewList(int page) {
+        // given
+        Integer limit = 10;
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        // 하기 구문은 JAVA 9부터 사용이 가능합니다.
+        //List<MenuReviewResponse> content = List.of(new MenuReviewResponse(), new MenuReviewResponse());
+        List<MenuReviewResponse> content = Arrays.asList(new MenuReviewResponse(), new MenuReviewResponse());
+
+        Slice<MenuReviewResponse> menuReviewResponseSlice = new SliceImpl<>(content, pageable, true);
+
+        // when
+        when(menuReviewQuerydslRepository.findMenuReviewPageableByBakeryId(BAKERY_ID, pageable)).thenReturn(menuReviewResponseSlice);
+
+        menuReviewsService.getMenuReviewList(BAKERY_ID, page, limit);
+
+        // then
+        then(menuReviewQuerydslRepository).should().findMenuReviewPageableByBakeryId(BAKERY_ID, pageable);
     }
 }
