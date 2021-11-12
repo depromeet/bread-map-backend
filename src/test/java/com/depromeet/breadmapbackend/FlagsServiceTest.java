@@ -86,7 +86,7 @@ public class FlagsServiceTest {
 
     @ParameterizedTest
     @AutoSource
-    void 요청으로_온_객체에_값이_있고_이미_존재하는_깃발정보라면_해당정보를_업데이트한다(String token, Long bakeryId, Members members, Bakeries bakeries, Long memberId, CreateFlagsRequest createFlagsRequest, Flags flags) {
+    void 요청으로_온_객체에_값이_있고_이미_존재하는_깃발정보라면_FlagType만_업데이트한다(String token, Long bakeryId, Members members, Bakeries bakeries, Long memberId, CreateFlagsRequest createFlagsRequest, Flags flags) {
 
         if(createFlagsRequest.getFlagType() != null) {
             given(authService.getMemberId(token)).willReturn(memberId);

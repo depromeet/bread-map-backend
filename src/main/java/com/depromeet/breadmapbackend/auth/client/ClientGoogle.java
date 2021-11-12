@@ -36,7 +36,7 @@ public class ClientGoogle implements ClientProxy {
                 .email(googleUserResponse.getEmail())
                 .memberProvider(MemberProvider.GOOGLE)
                 .roleType(RoleType.USER)
-                .profileImagePath(googleUserResponse.getPicture())
+                .profileImagePath(googleUserResponse.getPicture() != null ? googleUserResponse.getPicture() : "")
                 .build();
     }
 }
