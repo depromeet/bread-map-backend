@@ -22,7 +22,7 @@
 <br>
 <br>
 
-### 운영환경(prod) 인프라 구성
+### | 운영환경(prod) 인프라 구성
 - AWS ECR
 - AWS Elastic Beanstalk (ALB + EC2(docker))
 - RDS (postgreSQL)
@@ -32,7 +32,7 @@
 <br>
 <br>
 
-### 개발환경(dev) 인프라 구성
+### | 개발환경(dev) 인프라 구성
 - AWS Elastic Beanstalk (ALB + nginx + EC2(springboot))
 - AWS RDS (postgreSQL)
 - AWS S3
@@ -41,7 +41,7 @@
 <br>
 <br>
 
-### 데이터베이스 구조
+### | 데이터베이스 구조
 
 <img width="1196" alt="스크린샷 2021-11-14 오후 10 41 23" src="https://user-images.githubusercontent.com/58355531/141683929-672901e8-4476-46b2-b9d3-e4b9bbbc548e.png">
 
