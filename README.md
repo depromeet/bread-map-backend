@@ -11,8 +11,10 @@
 <br>
 
 ## 👩🏻‍💻👨🏻‍💻 대동빵지도 Back-end
-|[이지은](https://github.com/Jane096)|[이해인](https://github.com/2haein)|[황지수](https://github.com/earth-h)|
+
+|[<img src="https://user-images.githubusercontent.com/58355531/141788110-27767a22-8a7b-49e0-a29e-ae3eae57733e.png" width="80">](https://github.com/Jane096)|[<img src="" width="80">](https://github.com/2haein)|[<img src="" width="80">](https://github.com/earth-h)|
 |:---:|:---:|:---:|
+|[이지은](https://github.com/Jane096)|[이해인](https://github.com/2haein)|[황지수](https://github.com/earth-h)|
 
 <br>
 
