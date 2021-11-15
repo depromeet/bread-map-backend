@@ -1,6 +1,5 @@
 # 🍞 대동빵지도
 
----
 <p align="center">
   <img width="460" alt="스크린샷 2021-11-15 오후 5 26 57" src="https://user-images.githubusercontent.com/58355531/141747595-b0b15d34-6cc5-4347-b06e-058cf518f7cf.png">
 </p>
