@@ -1,5 +1,6 @@
-## 대동빵지도
+# 🍞 대동빵지도
 
+---
 <p align="center">
   <img width="460" alt="스크린샷 2021-11-15 오후 5 26 57" src="https://user-images.githubusercontent.com/58355531/141747595-b0b15d34-6cc5-4347-b06e-058cf518f7cf.png">
 </p>
@@ -9,9 +10,14 @@
 </p>
   
 <br>
+
+## 👩🏻‍💻👨🏻‍💻 대동빵지도 Back-end
+|[이지은](https://github.com/Jane096)|[이해인](https://github.com/2haein)|[황지수](https://github.com/earth-h)|
+|:---:|:---:|:---:|
+
 <br>
 
-## 📱기술 스택
+## 📱 기술 스택
 
 - Java 8
 - Spring Boot 2.4
@@ -19,7 +25,6 @@
 - Gradle
 - Junit5
 
-<br>
 <br>
 
 ### | 운영환경(prod) 인프라 구성
@@ -30,7 +35,6 @@
 - Github Actions CI/CD
 
 <br>
-<br>
 
 ### | 개발환경(dev) 인프라 구성
 - AWS Elastic Beanstalk (ALB + nginx + EC2(springboot))
@@ -39,13 +43,10 @@
 - Github Actions CI/CD
 
 <br>
-<br>
 
 ### | 데이터베이스 구조
 
 <img width="1196" alt="스크린샷 2021-11-14 오후 10 41 23" src="https://user-images.githubusercontent.com/58355531/141683929-672901e8-4476-46b2-b9d3-e4b9bbbc548e.png">
 
-<br>
-<br>
 <br>
 <br>
