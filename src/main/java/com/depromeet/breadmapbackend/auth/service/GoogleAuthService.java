@@ -33,10 +33,15 @@ public class GoogleAuthService {
 
         if (member == null) {
             memberRepository.save(googleMember);
+            return AuthResponse.builder()
+                    .appToken(appToken.getToken())
+                    .isNewMember(Boolean.TRUE)
+                    .build();
         }
 
         return AuthResponse.builder()
                 .appToken(appToken.getToken())
+                .isNewMember(Boolean.FALSE)
                 .build();
     }
 }
