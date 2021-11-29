@@ -130,7 +130,7 @@ public class BakeriesServiceTest {
     @AutoSource
     void 베이커리_아이디에_해당하는_데이터가_있을_경우_베이커리_상세데이터를_반환한다(Bakeries bakeries, List<MenuReviewResponse> menuReviewResponseList, List<BakeryMenuResponse> bakeryMenuResponseList, String token, Long bakeryId, Long memberId) {
         given(authService.getMemberId(token)).willReturn(memberId);
-        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakeries, 22L, 10L, 4.5, 5L);
+        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakeries, 22L, 10L, 3L, 4.5, 5L);
         FlagTypeReviewRatingResponse flagTypeReviewRatingResponse = new FlagTypeReviewRatingResponse(FlagType.NONE, 5L);
 
         when(flagsQuerydslRepository.findBakeryReviewByBakeryIdMemberId(bakeryId, memberId)).thenReturn(flagTypeReviewRatingResponse);
@@ -247,7 +247,7 @@ public class BakeriesServiceTest {
     @ParameterizedTest
     @AutoSource
     void 위도_경도_범위_데이터로_조회시_빵집_데이터가_있다면_해당범위에_포함되는_빵집리스트를_반환한다(List<BakeryListResponse> bakeryListResponseList, Bakeries bakeries, List<BreadCategoryType> breadCategoryList, List<MenuReviewResponse> menuReviewResponseList, Double latitude, Double longitude, Long range, Long bakeryId) {
-        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakeries, 22L, 10L, 4.5, 5L);
+        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakeries, 22L, 10L, 3L, 4.5, 5L);
 
         List<Long> bakeryIdList = new ArrayList<>();
         bakeryIdList.add(bakeryId);

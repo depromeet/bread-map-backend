@@ -101,7 +101,7 @@ public class BakeriesServiceTest {
                 .imgPath(new ArrayList<>())
                 .build();
 
-        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakery, 10L, 15L, 3.5, 4L);
+        BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakery, 10L, 15L, 3L, 3.5, 4L);
 
         // when
         when(flagsQuerydslRepository.findBakeryReviewByBakeryIdMemberId(BAKERY_ID, MEMBER_ID)).thenReturn(null);
@@ -149,7 +149,7 @@ public class BakeriesServiceTest {
                     .imgPath(new ArrayList<>())
                     .build();
 
-            BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakery, 5L, 3L, 3.5, 5L);
+            BakeryInfoResponse bakeryInfoResponse = new BakeryInfoResponse(bakery, 5L, 3L, 15L, 3.5, 5L);
 
             when(bakeriesQuerydslRepository.findByBakeryId(bakeryId)).thenReturn(bakeryInfoResponse);
         }
