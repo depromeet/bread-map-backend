@@ -25,12 +25,11 @@ public class BakeriesQuerydslRepository {
                         flags.countDistinct().as("flagsCount"),
                         bakeryReviews.rating.avg().coalesce(0.0).as("avgRating"),
                         bakeryReviews.countDistinct().as("ratingCount"),
-                        menuReviews.countDistinct().as("menuReviewsCount")))
+                        bakeries.menuReviewsList.size().castToNum(Long.class).as("menuReviewsCount"),
+                        bakeries.menusList.size().castToNum(Long.class).as("menusCount")))
                 .from(bakeries)
                 .leftJoin(flags)
                 .on(flags.bakeries.id.eq(bakeryId).and(flags.flagType.eq(FlagType.GONE)))
-                .leftJoin(menuReviews)
-                .on(menuReviews.bakeries.id.eq(bakeryId))
                 .leftJoin(bakeryReviews)
                 .on(bakeryReviews.bakeries.id.eq(bakeryId))
                 .where(bakeries.id.eq(bakeryId))
