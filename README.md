@@ -12,7 +12,7 @@
 
 ## 👩🏻‍💻👨🏻‍💻 대동빵지도 Back-end
 
-|[<img src="https://user-images.githubusercontent.com/58355531/141788110-27767a22-8a7b-49e0-a29e-ae3eae57733e.png" width="80">](https://github.com/Jane096)|[<img src="" width="80">](https://github.com/2haein)|[<img src="https://avatars.githubusercontent.com/u/70900028?v=4" width="80">](https://github.com/earth-h)|
+|[<img src="https://user-images.githubusercontent.com/58355531/141788110-27767a22-8a7b-49e0-a29e-ae3eae57733e.png" width="80">](https://github.com/Jane096)|[<img src="https://user-images.githubusercontent.com/46235778/144022930-6b0125e7-8574-4ce6-a3e4-a825487f3dff.png" width="80">](https://github.com/2haein)|[<img src="https://avatars.githubusercontent.com/u/70900028?v=4" width="80">](https://github.com/earth-h)|
 |:---:|:---:|:---:|
 |[이지은](https://github.com/Jane096)|[이해인](https://github.com/2haein)|[황지수](https://github.com/earth-h)|
 
