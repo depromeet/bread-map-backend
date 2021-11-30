@@ -31,7 +31,7 @@
 ### | 운영환경(prod) 인프라 구성
 - AWS ECR
 - AWS Elastic Beanstalk (ALB + EC2(docker))
-- RDS (postgreSQL)
+- AWS RDS (postgreSQL)
 - AWS S3
 - Github Actions CI/CD
 
@@ -41,6 +41,7 @@
 - AWS Elastic Beanstalk (ALB + nginx + EC2(springboot))
 - AWS RDS (postgreSQL)
 - AWS S3
+- AWS Route 53 + AWS Certificate Manager
 - Github Actions CI/CD
 
 <br>
