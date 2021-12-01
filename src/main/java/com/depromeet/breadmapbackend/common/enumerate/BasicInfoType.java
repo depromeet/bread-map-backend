@@ -7,5 +7,6 @@ public enum BasicInfoType {
     PET,
     WIFI,
     PARKING,
-    DELIVERY;
+    DELIVERY,
+    SHIPPING;
 }
