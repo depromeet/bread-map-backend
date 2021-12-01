@@ -24,6 +24,7 @@ public class BakeryDetailResponse {
     private String address;
     private Long flagsCount;
     private Long menuReviewsCount;
+    private Long menusCount;
     private String businessHour;
     private List<String> websiteUrlList = new ArrayList<>();
     private String telNumber;

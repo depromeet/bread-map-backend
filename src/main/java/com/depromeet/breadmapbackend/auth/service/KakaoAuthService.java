@@ -33,10 +33,15 @@ public class KakaoAuthService {
 
         if (member == null) {
             memberRepository.save(kakaoMember);
+            return AuthResponse.builder()
+                    .appToken(appToken.getToken())
+                    .isNewMember(Boolean.TRUE)
+                    .build();
         }
 
         return AuthResponse.builder()
                 .appToken(appToken.getToken())
+                .isNewMember(Boolean.FALSE)
                 .build();
     }
 }

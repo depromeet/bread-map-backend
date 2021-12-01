@@ -39,11 +39,8 @@ public class FlagsService {
         Flags flag = flagsQuerydslRepository.findByBakeryIdMemberId(bakeryId, memberId);
 
         if (flag == null) {
-            flagsRepository.save(Flags.builder()
-                    .members(member.orElseThrow(NullPointerException::new))
-                    .bakeries(bakery.orElseThrow(NullPointerException::new))
-                    .flagType(createFlagsRequest.getFlagType())
-                    .build());
+            Flags newFlag = new Flags(member.orElseThrow(NullPointerException::new), bakery.orElseThrow(NullPointerException::new), createFlagsRequest.getFlagType());
+            flagsRepository.save(newFlag);
         } else {
             flag.updateFlagType(createFlagsRequest.getFlagType());
         }

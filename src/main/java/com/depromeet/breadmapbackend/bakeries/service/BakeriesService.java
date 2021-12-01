@@ -61,6 +61,7 @@ public class BakeriesService {
                 .address(bakeryInfoResponse.getBakeries().getAddress())
                 .flagsCount(bakeryInfoResponse.getFlagsCount())
                 .menuReviewsCount(bakeryInfoResponse.getMenuReviewsCount())
+                .menusCount(bakeryInfoResponse.getMenusCount())
                 .businessHour(bakeryInfoResponse.getBakeries().getBusinessHour())
                 .websiteUrlList(bakeryInfoResponse.getBakeries().getWebsiteUrlList())
                 .telNumber(bakeryInfoResponse.getBakeries().getTelNumber())
