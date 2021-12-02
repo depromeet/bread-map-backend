@@ -8,5 +8,6 @@ public enum BasicInfoType {
     WIFI,
     PARKING,
     DELIVERY,
-    SHIPPING;
+    SHIPPING,
+    PARCEL;
 }
