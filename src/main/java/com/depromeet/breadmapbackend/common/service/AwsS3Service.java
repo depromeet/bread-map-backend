@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -37,20 +38,25 @@ public class AwsS3Service {
         List<String> fileNameList = new ArrayList<>();
 
         multipartFile.forEach(file -> {
-            String fileName = createFileName(file.getOriginalFilename());
-            MultipartFile resizedFile = resizeImage(fileName, file, 768, 768);
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(resizedFile.getSize());
-            objectMetadata.setContentType(file.getContentType());
+            if(Objects.requireNonNull(file.getContentType()).contains("image")) {
+                String fileName = createFileName(file.getOriginalFilename());
+                String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
 
-            try(InputStream inputStream = resizedFile.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch(IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+                MultipartFile resizedFile = resizeImage(fileName, fileFormatName, file, 768);
+
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(resizedFile.getSize());
+                objectMetadata.setContentType(file.getContentType());
+
+                try(InputStream inputStream = resizedFile.getInputStream()) {
+                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                } catch(IOException e) {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+                }
+
+                fileNameList.add(fileName);
             }
-
-            fileNameList.add(fileName);
         });
 
         return fileNameList;
@@ -72,19 +78,26 @@ public class AwsS3Service {
         }
     }
 
-    MultipartFile resizeImage(String fileName, MultipartFile originalImage, int targetWidth, int targetHeight) {
+    MultipartFile resizeImage(String fileName, String fileFormatName, MultipartFile originalImage, int targetWidth) {
         try {
             BufferedImage image = ImageIO.read(originalImage.getInputStream());
+            int originWidth = image.getWidth();
+            int originHeight = image.getHeight();
+
+            if(originWidth < targetWidth)
+                return originalImage;
+
             MarvinImage imageMarvin = new MarvinImage(image);
+
             Scale scale = new Scale();
             scale.load();
             scale.setAttribute("newWidth", targetWidth);
-            scale.setAttribute("newHeight", targetHeight);
+            scale.setAttribute("newHeight", targetWidth * originHeight / originWidth);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(imageNoAlpha, "jpg", baos);
+            ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
 
             return new MockMultipartFile(fileName, baos.toByteArray());
