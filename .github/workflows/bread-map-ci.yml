@@ -34,3 +34,6 @@ jobs:
         if: ${{ always() }}
         with:
           files: build/test-results/**/*.xml
+
+      - name: Report Code Coverage
+        uses: codecov/codecov-action@v1
