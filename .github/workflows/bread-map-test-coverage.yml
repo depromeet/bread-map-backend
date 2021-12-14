@@ -12,7 +12,7 @@ on:
       - 'main'
 
 jobs:
-  build:
+  code-coverage:
     runs-on: ubuntu-latest
 
     steps:
