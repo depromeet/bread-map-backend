@@ -1,12 +1,15 @@
-name: DaeDong-BreadMap CI
+name: DaeDong-BreadMap Code Coverage
 
 on:
   push:
     branches:
-      - 'feature/*'
+      - 'develop'
+      - 'main'
+      - -'feature/132'
   pull_request:
     branches:
-      - 'feature/*'
+      - 'develop'
+      - 'main'
 
 jobs:
   build:
@@ -23,14 +26,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew clean build -x test
-
       - name: Test with Gradle
-        run: ./gradlew test
+        run: ./gradlew build jacocoTestReport
 
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}
+
+      - name: Report to CodeCov
+        uses: codecov/codecov-action@v1
         with:
-          files: build/test-results/**/*.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./build/reports/jacoco/test/jacocoTestReport.xml
