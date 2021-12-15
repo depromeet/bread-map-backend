@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.4.11-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.depromeet'
@@ -20,6 +21,10 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
+}
+
+jacoco {
+    toolVersion = "0.8.7"
 }
 
 dependencies {
@@ -64,4 +69,15 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+    }
 }
