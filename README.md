@@ -53,6 +53,140 @@
 <br>
 <br>
 
+## 개발환경(dockerdev) 로컬에서 띄워보기
+로컬환경에서 띄울 때 하기와 같은 구조로 진행했습니다.
+* 로컬환경에 docker가 이미 설치되어 있다는 가정하에 작성하였으며, MAC 환경에서 테스트하였습니다.
+
+하기와 같은 구조로 파일 생성 및 git clone이 완료되면 docker 설정 최상단 디렉토리(하기 구조라면 dev-docker)에서 하기와 같이 docker-compose를 띄워줍니다.
+```bash
+docker-compose up
+```
+
+<br>
+
+**[로컬 환경 디렉토리 구조]**
+
+```bash
+dev-docker
+│   docker-compose.yml
+│
+│   .env
+│
+└───app/
+│   │
+│   └───bread-map-backend/
+│       │   해당 디렉토리 하위에 git clone을 통해 bread-map-backend 레포를 받아주세요!
+│   
+└───db/
+    │   Dockerfile-postgres
+    │   
+    └───data/
+    │
+    └───init.d/
+        └───init-user-db.sh
+```
+
+**[ .env 파일 ]**
+```bash
+DB_USER_ID=postgres
+DB_USER_PASSWORD=postgres
+APP_DB_USER=dev
+APP_DB_PASS=postgres
+APP_DB_NAME=dev_db
+DB_BUILD_CONTEXT=./db
+POSTGRES_HOME_DIR=./db
+APP_BUILD_CONTEXT=./app/bread-map-backend
+S3_ACCESSKEY=자신의 AWS S3 ACCESSKEY
+S3_SECRETKEY=자신의 AWS S3 SECRETKEY
+S3_RESION=자신의 AWS S3 RESION
+S3_BUCKET=자신의 AWS S3 BUCKET 이름(이미지가 저장될 버킷 디렉토리)
+```
+
+**[ docker-compose.yml ]**
+```yml
+version: "3"
+services:
+  db:
+    container_name: postgres
+    restart: always
+    build:
+      context: "${DB_BUILD_CONTEXT}"
+      dockerfile: Dockerfile-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "${DB_USER_ID}"
+      POSTGRES_PASSWORD: "${DB_USER_PASSWORD}"
+      APP_DB_NAME: "${APP_DB_NAME}"
+      APP_DB_USER: "${APP_DB_USER}"
+      APP_DB_PASS: "${APP_DB_PASS}"
+    volumes:
+      - ${POSTGRES_HOME_DIR}/data:/var/lib/postgresql/data"
+  app:
+    image: adoptopenjdk:8-hotspot
+    container_name: daedong-bread-backend
+    build:
+      context: "${APP_BUILD_CONTEXT}"
+      dockerfile: Dockerfile-dev
+    ports:
+      - "8080:8080"
+    environment:
+      S3_ACCESSKEY: "${S3_ACCESSKEY}"
+      S3_SECRETKEY: "${S3_SECRETKEY}"
+      S3_RESION: "${S3_RESION}"
+      S3_BUCKET: "${S3_BUCKET}"
+      DB_HOSTNAME: db
+      DB_PORT: 5432
+      DB_DBNAME: "${APP_DB_NAME}"
+      DB_USERNAME: "${APP_DB_USER}"
+      DB_PASSWORD: "${APP_DB_PASS}"
+    depends_on:
+      - db
+```
+* app용 dockerfile의 경우, git clone하여 bread-map-backend 레포지토리를 받으면, 레포 최상단에 Dockerfile-dev라고 있습니다.
+  * 운영과 구분하여 사용하기 위해 Dockerfile-dev로 생성하였습니다.
+* app에 설정된 environment는 applciation-dockerdev.yml에서 사용될 변수들입니다.
+  * Dockerfile-dev에 의해 active-profile이 dockerdev로 설정되어집니다.
+
+**[ Dockerfile-postgres ]**
+```bash
+FROM postgres:12.8
+COPY ./init.d /docker-entrypoint-initdb.d
+```
+* postgresql 기본 설치만 진행할 경우에는, postgreSQL용 dockerfile 없이 docker-compose를 통해 가능합니다.
+* 다만, init 시 database 생성 및 extension 생성을 위해 위와 같이 dockerfile을 추가로 구성하였습니다.
+
+**[ init-user-db.sh ]**
+```bash
+#!/bin/bash
+set -e
+echo "START INIT-USER-DB";
+export PGPASSWORD=$POSTGRES_PASSWORD;
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+  CREATE USER $APP_DB_USER WITH PASSWORD '$APP_DB_PASS';
+  CREATE DATABASE $APP_DB_NAME;
+  GRANT ALL PRIVILEGES ON DATABASE $APP_DB_NAME TO $APP_DB_USER;
+  \connect $APP_DB_NAME $APP_DB_USER
+  BEGIN;
+    CREATE TABLE IF NOT EXISTS event (
+	  id CHAR(26) NOT NULL CHECK (CHAR_LENGTH(id) = 26) PRIMARY KEY,
+	  aggregate_id CHAR(26) NOT NULL CHECK (CHAR_LENGTH(aggregate_id) = 26),
+	  event_data JSON NOT NULL,
+	  version INT,
+	  UNIQUE(aggregate_id, version)
+	);
+	CREATE INDEX idx_event_aggregate_id ON event (aggregate_id);
+  COMMIT;
+  \connect $APP_DB_NAME $POSTGRES_USER
+  BEGIN;
+    CREATE EXTENSION CUBE;
+    CREATE EXTENSION EARTHDISTANCE;
+  COMMIT;
+EOSQL
+```
+* app에서 사용할 user 생성 및 database 구성
+* superuser로 스위칭 후 earthdistance용 extension 설치
+
 ## 유의사항
 
 데이터 베이스를 모두 초기화 해야하거나 처음부터 셋팅할 때의 상황을 가정하여 작성했습니다.
