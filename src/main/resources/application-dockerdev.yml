@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${db.hostname}:${db.port}/${db.dbname}
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+swagger-info:
+  title: Daedong BreadMap REST API
+  description: Depromeet 10th Team 7
+  version: 1.0.0
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${s3.accesskey}
+      secret-key: ${s3.secretkey}
+    region:
+      static: ${s3.resion}
+    s3:
+      bucket: ${s3.bucket}
+    stack:
+      auto: false
