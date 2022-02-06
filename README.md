@@ -121,7 +121,7 @@ services:
       APP_DB_USER: "${APP_DB_USER}"
       APP_DB_PASS: "${APP_DB_PASS}"
     volumes:
-      - ${POSTGRES_HOME_DIR}/data:/var/lib/postgresql/data"
+      - ${POSTGRES_HOME_DIR}/data:/var/lib/postgresql/data
   app:
     container_name: daedong-bread-backend
     build:
