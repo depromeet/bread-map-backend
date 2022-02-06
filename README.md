@@ -123,7 +123,6 @@ services:
     volumes:
       - ${POSTGRES_HOME_DIR}/data:/var/lib/postgresql/data"
   app:
-    image: adoptopenjdk:8-hotspot
     container_name: daedong-bread-backend
     build:
       context: "${APP_BUILD_CONTEXT}"
