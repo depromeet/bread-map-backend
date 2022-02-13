@@ -55,11 +55,18 @@
 
 ## 개발환경(dockerdev) 로컬에서 띄워보기
 로컬환경에서 띄울 때 하기와 같은 구조로 진행했습니다.
-* 로컬환경에 docker가 이미 설치되어 있다는 가정하에 작성하였으며, MAC 환경에서 테스트하였습니다.
+* 로컬환경에 docker가 이미 설치되어 있다는 가정하에 작성하였으며, MAC 환경(Intel/Apple M1)에서 테스트하였습니다.
 
-하기와 같은 구조로 파일 생성 및 git clone이 완료되면 docker 설정 최상단 디렉토리(하기 구조라면 dev-docker)에서 하기와 같이 docker-compose를 띄워줍니다.
+하기와 같은 구조로 파일 생성 및 git clone이 완료되면 Gradle bootJar 명령어로 Jar 파일 생성 후,
+docker 설정 최상단 디렉토리(하기 구조라면 dev-docker)에서 하기와 같이 docker-compose를 띄워줍니다.
+
 ```bash
 docker-compose up
+```
+
+**Apple M1 모델의 경우만 아래와 같은 명령어로 실행시켜야 합니다.**
+```bash
+ARCH=arm64 docker-compose -f docker-compose.yml up -d
 ```
 
 <br>
@@ -148,10 +155,18 @@ services:
   * Dockerfile-dev에 의해 active-profile이 dockerdev로 설정되어집니다.
 
 **[ Dockerfile-postgres ]**
+
 ```bash
 FROM postgres:12.8
 COPY ./init.d /docker-entrypoint-initdb.d
 ```
+
+**Apple M1 모델의 경우만 arm64에 맞는 이미지로 pull 되도록 합니다.**
+```bash
+FROM arm64v8/postgres:12.8
+COPY ./init.d /docker-entrypoint-initdb.d
+```
+
 * postgresql 기본 설치만 진행할 경우에는, postgreSQL용 dockerfile 없이 docker-compose를 통해 가능합니다.
 * 다만, init 시 database 생성 및 extension 생성을 위해 위와 같이 dockerfile을 추가로 구성하였습니다.
 
