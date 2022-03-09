@@ -60,8 +60,9 @@
 하기와 같은 구조로 파일 생성 및 git clone이 완료되면 Gradle bootJar 명령어로 Jar 파일 생성 후,
 docker 설정 최상단 디렉토리(하기 구조라면 dev-docker)에서 하기와 같이 docker-compose를 띄워줍니다.
 
+**Intel Mac 기준**
 ```bash
-docker-compose up
+docker compose up -d --build
 ```
 
 **Apple M1 모델의 경우만 아래와 같은 명령어로 실행시켜야 합니다.**
