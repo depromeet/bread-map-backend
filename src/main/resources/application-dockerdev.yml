@@ -34,7 +34,7 @@ cloud:
       access-key: ${s3.accesskey}
       secret-key: ${s3.secretkey}
     region:
-      static: ${s3.resion}
+      static: ${s3.region}
     s3:
       bucket: ${s3.bucket}
     stack:
